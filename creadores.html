@@ -81,8 +81,13 @@
   .mine figure { position: relative; overflow: hidden; border-radius: 12px; border: 1px solid var(--line); background: #0a1020; aspect-ratio: 16 / 10; }
   .mine img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .mine figcaption { position: absolute; inset: auto 0 0 0; padding: 26px 10px 8px; font-size: .78rem; background: linear-gradient(180deg, transparent, rgba(5, 7, 15, .92)); }
-  .mine .x { position: absolute; top: 6px; right: 6px; }
+  .mine .x { position: absolute; top: 6px; right: 6px; background: rgba(5, 7, 15, .8); color: var(--text); backdrop-filter: blur(4px); }
   .empty { margin-top: 14px; color: var(--muted); font-size: .9rem; }
+  details.mod > summary { cursor: pointer; list-style: none; font-size: 1.05rem; font-weight: 300; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  details.mod > summary::-webkit-details-marker { display: none; }
+  details.mod > summary::before { content: "▸"; display: inline-block; margin-right: 10px; color: var(--teal); transition: transform .2s; }
+  details.mod[open] > summary::before { transform: rotate(90deg); }
+  details.mod > summary:hover, details.mod > summary:focus-visible { color: var(--text); outline: none; }
   .box.pend { border-color: rgba(255, 171, 94, .55); box-shadow: 0 0 40px rgba(255, 171, 94, .12); }
   .pendlist { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-top: 16px; }
   .pendcard { border-radius: 14px; border: 1px solid var(--line); background: rgba(255, 255, 255, .04); overflow: hidden; display: flex; flex-direction: column; }
@@ -201,6 +206,13 @@
     <div class="mine" id="mias"></div>
     <p class="empty" id="miasVacio" hidden>Aún no tienes capturas.</p>
   </section>
+
+  <details class="box mod" id="boxMod" hidden>
+    <summary>Moderación · capturas publicadas de otros (<span id="modN">0</span>)</summary>
+    <p class="sub">Solo para administradores. Aquí puedes quitar una captura ya publicada de otro jugador si no debería estar en la galería. Las capturas de la galería original no se pueden borrar desde aquí.</p>
+    <div class="mine" id="mod"></div>
+    <p class="empty" id="modVacio" hidden>Nadie más ha subido capturas publicadas desde el panel.</p>
+  </details>
 </main>
 
 <p id="cargando" class="sub" style="text-align:center;margin-top:20vh">Cargando…</p>
@@ -247,7 +259,7 @@
     if (!mustChange) loadMine();
   }
   function setMustChange(on) {
-    if (on) show($('boxPend'), false);
+    if (on) { show($('boxPend'), false); show($('boxMod'), false); }
     show($('boxClave'), on); show($('claveAviso'), on); show($('boxSubir'), !on); show($('boxMias'), !on);
     $('claveTitulo').textContent = on ? 'Elige tu contraseña' : 'Cambiar contraseña';
     $('btnClaveToggle').hidden = on;
@@ -353,6 +365,7 @@
       var pendientes = isAdmin ? all.filter(function (c) { return c.estado === 'pendiente' && c.usuario !== user.usuario; }) : [];
       var list = all.filter(function (c) { return c.usuario === user.usuario; });
       renderPending(pendientes);
+      renderMod(isAdmin ? all.filter(function (c) { return c.usuario !== user.usuario && c.estado !== 'pendiente'; }) : null);
       var box = $('mias'); box.textContent = '';
       $('miasVacio').hidden = list.length + originales.length > 0;
       list.forEach(function (c) {
@@ -379,6 +392,29 @@
         f.appendChild(bd); f.appendChild(i); f.appendChild(cap); box.appendChild(f);
       });
     }).catch(function () {});
+  }
+
+  // ---------- Moderación: capturas publicadas de otros (solo administrador, plegada por defecto) ----------
+  function renderMod(list) {
+    show($('boxMod'), !!list);
+    if (!list) return;
+    var box = $('mod'); box.textContent = '';
+    $('modN').textContent = list.length; $('modVacio').hidden = list.length > 0;
+    list.forEach(function (c) {
+      var f = document.createElement('figure'), i = document.createElement('img'), cap = document.createElement('figcaption'), b = document.createElement('button');
+      i.src = c.thumb; i.alt = c.title || 'Captura'; i.loading = 'lazy';
+      cap.textContent = c.nombre + ' · ' + (c.title || 'Captura');
+      b.type = 'button'; b.className = 'btn ghost danger sm x'; b.textContent = 'Borrar'; b.setAttribute('aria-label', 'Borrar la captura de ' + c.nombre);
+      b.addEventListener('click', function () {
+        if (busy || !confirm('¿Borrar la captura "' + (c.title || 'Captura') + '" de ' + c.nombre + '? Se quitará de la galería y no se puede deshacer.')) return;
+        busy = true; b.disabled = true;
+        api('capturas/' + encodeURIComponent(c.id) + '?u=' + encodeURIComponent(c.usuario), { method: 'DELETE' })
+          .then(function () { f.remove(); var n = box.children.length; $('modN').textContent = n; $('modVacio').hidden = n > 0; })
+          .catch(function (err) { alert(err.message); b.disabled = false; })
+          .then(function () { busy = false; });
+      });
+      f.appendChild(i); f.appendChild(cap); f.appendChild(b); box.appendChild(f);
+    });
   }
 
   // ---------- Pendientes de aprobar (solo administrador) ----------
