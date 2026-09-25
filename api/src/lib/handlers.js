@@ -3,7 +3,7 @@
 const crypto = require('crypto');
 const auth = require('./auth');
 const store = require('./storage');
-const { describe } = require('./describe');
+const { describe, isTipo } = require('./describe');
 
 const MAX_FAILS = 5;
 const LOCK_MS = 15 * 60 * 1000;
@@ -112,7 +112,9 @@ async function registrar(req) {
     await removeBlobs(u.rowKey, id);
     return out(400, { error: 'La imagen no es válida o es demasiado pesada.' });
   }
-  const d = descripcion ? { titulo: titleFrom(descripcion), texto: descripcion, generada: false } : await describe(view, u.nombre);
+  const tipo = String((req.body && req.body.tipo) || 'otro');
+  if (!isTipo(tipo)) return out(400, { error: 'Tipo de captura no válido.' });
+  const d = descripcion ? { titulo: titleFrom(descripcion), texto: descripcion, generada: false } : describe(tipo, u.nombre);
   await c.shots.createEntity({
     partitionKey: u.rowKey, rowKey: id, nombre: u.nombre,
     titulo: d.titulo, texto: d.texto, generada: d.generada === true,

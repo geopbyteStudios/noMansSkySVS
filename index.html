@@ -772,7 +772,7 @@
       lbCap.appendChild(who);
       if (f.dataset.title) { var t = document.createElement('h4'); t.textContent = f.dataset.title; lbCap.appendChild(t); }
       if (f.dataset.text) { var p = document.createElement('p'); p.textContent = f.dataset.text; lbCap.appendChild(p); }
-      if (f.dataset.auto) { var a = document.createElement('div'); a.className = 'auto'; a.textContent = 'Descripción generada automáticamente; puede contener errores.'; lbCap.appendChild(a); }
+      if (f.dataset.auto) { var a = document.createElement('div'); a.className = 'auto'; a.textContent = 'Descripción automática genérica: no describe esta captura en concreto.'; lbCap.appendChild(a); }
     } else if (c) {
       lbCap.textContent = c.textContent;
     }

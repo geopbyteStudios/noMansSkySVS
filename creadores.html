@@ -38,6 +38,8 @@
   h1::after, h2::after { content: ""; display: block; width: 56px; height: 3px; margin: 10px 0 0; border-radius: 3px; background: linear-gradient(90deg, var(--teal), var(--pink), var(--orange)); }
   .sub { margin-top: 14px; color: var(--muted); font-size: .92rem; }
   label { display: block; margin: 18px 0 6px; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  select { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: #0f1830; color: var(--text); font: inherit; }
+  select:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(77, 227, 208, .18); }
   input[type=text], input[type=password], textarea { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255, 255, 255, .05); color: var(--text); font: inherit; transition: border-color .2s, box-shadow .2s; }
   textarea { resize: vertical; min-height: 96px; }
   input:focus, textarea:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(77, 227, 208, .18); }
@@ -150,8 +152,20 @@
     <div class="preview" id="preview" hidden><img id="previewImg" alt="Vista previa de la captura elegida"><small id="previewInfo"></small></div>
 
     <div id="camposSubida" hidden>
+      <label for="tipo">Tipo de captura (opcional)</label>
+      <select id="tipo">
+        <option value="otro">Otro / no sé</option>
+        <option value="nave">Nave</option>
+        <option value="planeta">Planeta o paisaje</option>
+        <option value="base">Base</option>
+        <option value="estacion">Estación espacial</option>
+        <option value="espacio">En el espacio</option>
+        <option value="criatura">Criatura</option>
+        <option value="personaje">Viajero o personaje</option>
+        <option value="expedicion">Expedición</option>
+      </select>
       <label for="desc">Descripción (opcional)</label>
-      <textarea id="desc" maxlength="600" placeholder="Cuenta qué se ve o qué estabas haciendo. Si lo dejas vacío, se generará una descripción automática."></textarea>
+      <textarea id="desc" maxlength="600" placeholder="Cuenta qué se ve o qué estabas haciendo. Si lo dejas vacío, se usará un texto automático según el tipo de captura."></textarea>
       <div class="count"><span id="cuenta">0</span> / 600</div>
       <div id="subirMsg" class="msg" role="alert" hidden></div>
       <div class="row">
@@ -160,7 +174,7 @@
       </div>
     </div>
     <div class="done" id="listo" hidden>
-      <h3 id="listoTitulo"></h3><p id="listoTexto"></p><span class="tag" id="listoTag" hidden>Descripción generada automáticamente</span>
+      <h3 id="listoTitulo"></h3><p id="listoTexto"></p><span class="tag" id="listoTag" hidden>Descripción automática genérica</span>
       <div class="row"><button class="btn sm" id="btnOtra" type="button">Subir otra</button><a class="btn ghost sm" href="./#svs">Ver la galería</a></div>
     </div>
   </section>
@@ -269,7 +283,7 @@
     $('previewInfo').textContent = f.name + ' · ' + (f.size / 1048576).toFixed(1) + ' MB';
     show($('preview'), true); show($('camposSubida'), true);
   }
-  function resetUpload() { file = null; input.value = ''; $('desc').value = ''; $('cuenta').textContent = '0'; say($('subirMsg'), ''); show($('preview'), false); show($('camposSubida'), false); show($('listo'), false); show($('drop'), true); }
+  function resetUpload() { file = null; input.value = ''; $('desc').value = ''; $('tipo').value = 'otro'; $('cuenta').textContent = '0'; say($('subirMsg'), ''); show($('preview'), false); show($('camposSubida'), false); show($('listo'), false); show($('drop'), true); }
   $('btnCancelar').addEventListener('click', resetUpload);
   $('btnOtra').addEventListener('click', resetUpload);
 
@@ -292,7 +306,7 @@
     Promise.all([shrink(file, 640, .8), shrink(file, 1920, .82)])
       .then(function (r) { thumb = r[0]; view = r[1]; say($('subirMsg'), 'Subiendo…', 'ok'); return api('permiso', { body: {} }); })
       .then(function (p) { perm = p; return Promise.all([put(p.thumbUrl, thumb), put(p.viewUrl, view)]); })
-      .then(function () { say($('subirMsg'), desc ? 'Guardando…' : 'Guardando y generando la descripción…', 'ok'); return api('capturas', { body: { id: perm.id, descripcion: desc } }); })
+      .then(function () { say($('subirMsg'), 'Guardando…', 'ok'); return api('capturas', { body: { id: perm.id, descripcion: desc, tipo: $('tipo').value } }); })
       .then(function (r) {
         resetUpload(); show($('drop'), false);
         $('listoTitulo').textContent = '¡Listo! Tu captura ya está en la galería: ' + r.titulo; $('listoTexto').textContent = r.texto; show($('listoTag'), !!r.generada); show($('listo'), true);
