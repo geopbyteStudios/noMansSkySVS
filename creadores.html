@@ -92,6 +92,7 @@
   .pendcard .info span { display: block; font-size: .78rem; color: var(--orange); letter-spacing: .06em; text-transform: uppercase; }
   .pendcard .info p { margin-top: 6px; font-size: .85rem; color: #cfe0e6; line-height: 1.45; }
   .pendcard .acts { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 14px 14px; }
+  .badge.fija { background: rgba(77, 227, 208, .9); color: #00201c; }
   .badge { position: absolute; top: 6px; left: 6px; padding: 3px 10px; border-radius: 999px; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; background: rgba(255, 171, 94, .9); color: #201200; font-weight: 700; }
 
   @media (max-width: 760px) {
@@ -198,7 +199,7 @@
   <section class="box" id="boxMias">
     <h2 id="misTitulo">Mis capturas</h2>
     <div class="mine" id="mias"></div>
-    <p class="empty" id="miasVacio" hidden>Aún no has subido capturas desde aquí.</p>
+    <p class="empty" id="miasVacio" hidden>Aún no tienes capturas.</p>
   </section>
 </main>
 
@@ -241,7 +242,7 @@
     user = u; show($('cargando'), false); show($('vistaLogin'), false); show($('vistaPanel'), true);
     $('quien').textContent = u.nombre;
     $('rolTag').hidden = u.rol !== 'admin'; $('rolTag').textContent = '· administrador';
-    $('misTitulo').textContent = u.rol === 'admin' ? 'Todas las capturas subidas' : 'Mis capturas';
+    $('misTitulo').textContent = u.rol === 'admin' ? 'Todas las capturas' : 'Mis capturas';
     setMustChange(!!mustChange);
     if (!mustChange) loadMine();
   }
@@ -339,14 +340,20 @@
 
   // ---------- Mis capturas ----------
   function loadMine() {
-    api('mias').then(function (all) {
-      var isAdmin = user && user.rol === 'admin';
+    // Las capturas de la galería original (svs.json) también se muestran aquí, solo para verlas: no se pueden borrar desde el panel
+    var fijas = fetch('svs.json', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; });
+    Promise.all([api('mias'), fijas]).then(function (res) {
+      var all = res[0], isAdmin = user && user.rol === 'admin';
+      var originales = [];
+      (Array.isArray(res[1]) ? res[1] : []).forEach(function (p) {
+        if (isAdmin || String(p.name).toLowerCase() === String(user.nombre).toLowerCase()) p.images.forEach(function (im) { originales.push({ nombre: p.name, title: im.title, thumb: im.thumb }); });
+      });
       // El administrador ve las pendientes en su propia sección; el resto ve las suyas marcadas como "Pendiente"
       var pendientes = isAdmin ? all.filter(function (c) { return c.estado === 'pendiente'; }) : [];
       var list = isAdmin ? all.filter(function (c) { return c.estado !== 'pendiente'; }) : all;
       renderPending(pendientes);
       var box = $('mias'); box.textContent = '';
-      $('miasVacio').hidden = list.length > 0;
+      $('miasVacio').hidden = list.length + originales.length > 0;
       list.forEach(function (c) {
         var f = document.createElement('figure'), i = document.createElement('img'), cap = document.createElement('figcaption'), b = document.createElement('button');
         i.src = c.thumb; i.alt = c.title || 'Captura'; i.loading = 'lazy';
@@ -362,6 +369,13 @@
             .then(function () { busy = false; });
         });
         f.appendChild(i); f.appendChild(cap); f.appendChild(b); box.appendChild(f);
+      });
+      originales.forEach(function (c) {
+        var f = document.createElement('figure'), i = document.createElement('img'), cap = document.createElement('figcaption'), bd = document.createElement('span');
+        i.src = c.thumb; i.alt = c.title || 'Captura'; i.loading = 'lazy';
+        bd.className = 'badge fija'; bd.textContent = 'Galería';
+        cap.textContent = (isAdmin ? c.nombre + ' · ' : '') + (c.title || 'Captura');
+        f.appendChild(bd); f.appendChild(i); f.appendChild(cap); box.appendChild(f);
       });
     }).catch(function () {});
   }
