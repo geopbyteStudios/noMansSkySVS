@@ -1,21 +1,15 @@
 // Administración de cuentas de creadores (solo se usa desde tu PC; NO se publica en el sitio).
 //   node scripts/usuarios.js crear <usuario> <NombreDelJugador> [admin]
-//   node scripts/usuarios.js reiniciar <usuario>      (genera una contraseña nueva)
+//   node scripts/usuarios.js reiniciar <usuario>
 //   node scripts/usuarios.js desactivar <usuario> | activar <usuario>
 //   node scripts/usuarios.js listar
+// La contraseña TEMPORAL de una cuenta nueva (o reiniciada) es igual a su usuario. En el primer ingreso el sitio obliga
+// a cambiarla, y mientras no la cambie la cuenta solo puede hacer eso. Por eso conviene que cada quien entre cuanto antes.
 // Necesita la variable de entorno STORAGE_CONNECTION (usuarios.ps1 la obtiene de Azure por ti).
-// Las contraseñas generadas NO se imprimen: se guardan en scripts/credenciales.txt (ignorado por git).
-const fs = require('fs');
-const path = require('path');
 const auth = require('../api/src/lib/auth');
 const store = require('../api/src/lib/storage');
 
-const FILE = path.join(__dirname, 'credenciales.txt');
 const [cmd, arg1, arg2, arg3] = process.argv.slice(2);
-
-function saveCredential(usuario, nombre, clave, motivo) {
-  fs.appendFileSync(FILE, `[${new Date().toISOString()}] ${motivo}\n  usuario: ${usuario}\n  jugador: ${nombre}\n  contraseña temporal: ${clave}\n\n`);
-}
 
 (async () => {
   if (!process.env.STORAGE_CONNECTION) throw new Error('Falta STORAGE_CONNECTION (usa usuarios.ps1)');
@@ -31,17 +25,15 @@ function saveCredential(usuario, nombre, clave, motivo) {
   if (cmd === 'crear') {
     const nombre = String(arg2 || '').trim();
     if (!/^[A-Za-z0-9 _.-]{2,40}$/.test(nombre)) throw new Error('Indica el nombre del jugador tal como se ve en la galería (p. ej. Maya).');
-    if (await store.getUser(usuario)) throw new Error('Ese usuario ya existe (usa "reiniciar" para darle otra contraseña).');
-    const clave = auth.randomPassword(); const h = auth.hashPassword(clave);
+    if (await store.getUser(usuario)) throw new Error('Ese usuario ya existe (usa "reiniciar" para volver a la contraseña temporal).');
+    const h = auth.hashPassword(usuario);
     await users.createEntity({ partitionKey: 'u', rowKey: usuario, nombre, rol: arg3 === 'admin' ? 'admin' : 'creador', salt: h.salt, hash: h.hash, activo: true, claveCambiada: false, fallos: 0, bloqueadoHasta: 0, creado: new Date().toISOString() });
-    saveCredential(usuario, nombre, clave, 'Cuenta creada');
-    console.log(`Cuenta "${usuario}" creada (${arg3 === 'admin' ? 'admin' : 'creador'}). La contraseña temporal está en ${FILE}`);
+    console.log(`Cuenta "${usuario}" creada (${arg3 === 'admin' ? 'admin' : 'creador'}). Contraseña temporal: la misma que el usuario. Debe cambiarla al entrar.`);
   } else if (cmd === 'reiniciar') {
-    const u = await store.getUser(usuario); if (!u) throw new Error('No existe ese usuario.');
-    const clave = auth.randomPassword(); const h = auth.hashPassword(clave);
+    if (!(await store.getUser(usuario))) throw new Error('No existe ese usuario.');
+    const h = auth.hashPassword(usuario);
     await users.updateEntity({ partitionKey: 'u', rowKey: usuario, salt: h.salt, hash: h.hash, claveCambiada: false, fallos: 0, bloqueadoHasta: 0 }, 'Merge');
-    saveCredential(usuario, u.nombre, clave, 'Contraseña reiniciada');
-    console.log(`Contraseña de "${usuario}" reiniciada. La nueva temporal está en ${FILE}`);
+    console.log(`Cuenta "${usuario}" reiniciada: su contraseña temporal vuelve a ser igual al usuario y deberá cambiarla al entrar.`);
   } else if (cmd === 'desactivar' || cmd === 'activar') {
     if (!(await store.getUser(usuario))) throw new Error('No existe ese usuario.');
     await users.updateEntity({ partitionKey: 'u', rowKey: usuario, activo: cmd === 'activar' }, 'Merge');

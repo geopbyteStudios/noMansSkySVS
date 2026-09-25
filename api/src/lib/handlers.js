@@ -23,6 +23,8 @@ async function currentUser(req) {
   const u = await store.getUser(s.u);          // se relee: si desactivas a alguien, pierde el acceso al momento
   return u && u.activo !== false ? u : null;
 }
+// Mientras alguien tenga la contraseña temporal, solo puede cambiarla: el resto de acciones se bloquea en el servidor
+const mustChange = () => out(403, { error: 'Debes cambiar tu contraseña temporal antes de continuar.', debeCambiarClave: true });
 const publicUser = (u) => ({ usuario: u.rowKey, nombre: u.nombre, rol: u.rol });
 
 async function login(req) {
@@ -66,6 +68,7 @@ async function cambiarClave(req) {
   const problem = auth.passwordProblem(nueva);
   if (problem) return out(400, { error: problem });
   if (nueva === actual) return out(400, { error: 'La nueva contraseña debe ser distinta de la actual.' });
+  if (String(nueva).toLowerCase().includes(u.rowKey)) return out(400, { error: 'La contraseña no puede contener tu nombre de usuario.' });
   const h = auth.hashPassword(nueva);
   await store.clients().users.updateEntity({ partitionKey: 'u', rowKey: u.rowKey, salt: h.salt, hash: h.hash, claveCambiada: true }, 'Merge');
   return out(200, { ok: true });
@@ -77,6 +80,7 @@ const isJpeg = (buf) => buf.length > 3 && buf[0] === 0xff && buf[1] === 0xd8 && 
 async function permisoSubida(req) {
   const u = await currentUser(req);
   if (!u) return out(401, { error: 'Sin sesión.' });
+  if (u.claveCambiada !== true) return mustChange();
   const id = newId();
   return out(200, { id, thumbUrl: store.uploadUrl(`thumbs/${u.rowKey}/${id}.jpg`), viewUrl: store.uploadUrl(`view/${u.rowKey}/${id}.jpg`) });
 }
@@ -97,6 +101,7 @@ function titleFrom(text) {
 async function registrar(req) {
   const u = await currentUser(req);
   if (!u) return out(401, { error: 'Sin sesión.' });
+  if (u.claveCambiada !== true) return mustChange();
   const id = String((req.body && req.body.id) || '');
   if (!/^[a-z0-9]{8,30}$/.test(id)) return out(400, { error: 'Identificador de captura no válido.' });
   const descripcion = String((req.body && req.body.descripcion) || '').replace(/\s+\n/g, '\n').trim();
@@ -155,6 +160,7 @@ async function listar() {
 async function misCapturas(req) {
   const u = await currentUser(req);
   if (!u) return out(401, { error: 'Sin sesión.' });
+  if (u.claveCambiada !== true) return mustChange();
   const list = [];
   const filter = u.rol === 'admin' ? undefined : `PartitionKey eq '${u.rowKey}'`;
   for await (const e of store.clients().shots.listEntities(filter ? { queryOptions: { filter } } : undefined)) list.push({ ...shape(e), nombre: e.nombre });
@@ -165,6 +171,7 @@ async function misCapturas(req) {
 async function borrar(req) {
   const u = await currentUser(req);
   if (!u) return out(401, { error: 'Sin sesión.' });
+  if (u.claveCambiada !== true) return mustChange();
   const id = String(req.params.id || '');
   const owner = auth.normUser(req.query.u || u.rowKey);
   if (!/^[a-z0-9]{8,30}$/.test(id) || !auth.validUser(owner)) return out(400, { error: 'Solicitud no válida.' });
@@ -178,6 +185,7 @@ async function borrar(req) {
 async function aprobar(req) {
   const u = await currentUser(req);
   if (!u) return out(401, { error: 'Sin sesión.' });
+  if (u.claveCambiada !== true) return mustChange();
   if (u.rol !== 'admin') return out(403, { error: 'Solo un administrador puede aprobar capturas.' });
   const id = String((req.body && req.body.id) || '');
   const owner = auth.normUser(req.body && req.body.usuario);
