@@ -1,0 +1,14 @@
+{
+  "platform": {
+    "apiRuntime": "node:20"
+  },
+  "routes": [
+    { "route": "/server.js", "statusCode": 404 },
+    { "route": "/make-thumbs.ps1", "statusCode": 404 },
+    { "route": "/captions.json", "statusCode": 404 },
+    { "route": "/actualizar.ps1", "statusCode": 404 }
+  ],
+  "globalHeaders": {
+    "X-Content-Type-Options": "nosniff"
+  }
+}

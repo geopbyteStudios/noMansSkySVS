@@ -1,0 +1,140 @@
+[
+  {
+    "n": 1, "dir": "01-pioneers", "name": "Pioneers", "date": "31 de marzo de 2021", "patch": true, "shots": ["s1.jpg", "s2.jpg"],
+    "tag": "La primera expedición",
+    "text": "Con la actualización Expeditions nació este modo de temporada. Todos los viajeros empezaron en el mismo planeta, con una nave y equipo a medida, y recorrieron una ruta por la galaxia: explorar, comerciar, construir, minar y encontrarse con otros jugadores a lo largo de cinco planetas.",
+    "rewards": "la nave Golden Vector, un casco Gek dorado y una mochila ligera."
+  },
+  {
+    "n": 2, "dir": "02-beachhead", "name": "Beachhead", "date": "Mayo de 2021", "patch": true, "shots": ["s1.jpg", "s2.jpg"],
+    "tag": "La Normandy llega a No Man's Sky",
+    "text": "Un misterio muy bien hilado y una carrera contra reloj. Gracias a una colaboración con BioWare, jugadores de todo el mundo lograron invocar a la legendaria SSV Normandy SR-1 de Mass Effect, que pudo sumarse a la flota como fragata.",
+    "rewards": "la SSV Normandy SR-1 como fragata."
+  },
+  {
+    "n": 3, "dir": "03-cartographers", "name": "Cartographers", "date": "8 de septiembre de 2021", "patch": true, "shots": ["s1.jpg"],
+    "tag": "Exploración profunda de un solo planeta",
+    "text": "Llegó poco después de la actualización Frontiers. Todos los expedicionarios aparecen en el planeta tóxico Gisto Major, donde su nave a medida necesita reparaciones especializadas para poder despegar.",
+    "rewards": ""
+  },
+  {
+    "n": 4, "dir": "04-emergence", "name": "Emergence", "date": "20 de octubre de 2021", "patch": true, "shots": ["s1.jpg", "s2.jpg"],
+    "tag": "Gusanos titánicos en plena temporada de Halloween",
+    "text": "Fue la primera expedición con una narrativa propia y venía acompañada de una mini-actualización. Colosales gusanos de arena, los Titan Worms, recorren los desiertos oscureciendo el sol y ensuciando el terreno con su polvo maldito.",
+    "rewards": ""
+  },
+  {
+    "n": 5, "dir": "05-exobiology", "name": "Exobiology", "date": "25 de febrero de 2022", "patch": true, "shots": ["s1.jpg"],
+    "tag": "Criaturas, huevos y mucha calma",
+    "text": "De ritmo más tranquilo, gira en torno a descubrir e interactuar con la fauna alienígena. Cada viajero empieza en un sistema solitario, sin vida salvaje, acompañado de una criatura bípeda gigante, y viaja para conocer diplos, recolectar huevos y leche… y hasta impresionar a Iteration Cronus con sus dotes de repostería.",
+    "rewards": ""
+  },
+  {
+    "n": 6, "dir": "06-blighted", "name": "The Blighted", "date": "14 de abril de 2022", "patch": true, "shots": ["s1.jpg", "s2.jpg"],
+    "tag": "Tras el tesoro de los piratas",
+    "text": "Ligada a la actualización Outlaws. Los viajeros siguen el rastro de The Blight, una facción pirata, y de su misterioso tesoro: reúnen pistas y descifran hitos. Empiezan atrapados en las colinas radiactivas de Issh 77/R6 y deben reparar su nave para llegar, entre estrellas exóticas y territorio centinela, hasta el legendario botín.",
+    "rewards": ""
+  },
+  {
+    "n": 7, "dir": "07-leviathan", "name": "Leviathan", "date": "25 de mayo de 2022", "patch": true, "shots": ["s1.jpg", "s2.jpg"],
+    "tag": "Un ciclo del que cuesta escapar",
+    "text": "Los propios desarrolladores la consideraron especialmente distinta: una expedición de bucle temporal, al estilo roguelike y con muerte permanente, en la que la historia se reinicia una y otra vez mientras los viajeros buscan romper el ciclo.",
+    "rewards": ""
+  },
+  {
+    "n": 8, "dir": "08-polestar", "name": "Polestar", "date": "27 de julio de 2022", "patch": true, "shots": ["s1.jpg", "s2.jpg"],
+    "tag": "Capitán de un carguero interestelar",
+    "text": "Llegó tras la actualización Endurance. Los viajeros toman el mando de un pesado carguero y lo hacen saltar por la galaxia; durante el viaje reparan su tecnología a medida y descubren las misteriosas circunstancias que lo dejaron en apuros.",
+    "rewards": ""
+  },
+  {
+    "n": 9, "dir": "09-utopia", "name": "Utopia", "date": "23 de febrero de 2023", "patch": true, "shots": ["s1.jpg", "s2.jpg"],
+    "tag": "Reconstruir un sistema solar entre todos",
+    "text": "Llegó junto con la actualización Fractal (de ahí las imágenes). Propuso un giro de juego único y unió a la comunidad bajo un proyecto universal de habitación, la Utopia Foundation, que buscaba levantar de nuevo un sistema solar.",
+    "rewards": ""
+  },
+  {
+    "n": 10, "dir": "10-singularity", "name": "Singularity", "date": "7 de junio de 2023", "patch": true, "shots": ["s1.jpg", "s2.jpg"],
+    "tag": "Máquinas, memoria y misterio",
+    "text": "Segundo capítulo de la historia iniciada en Interceptor. Los viajeros parten de un campamento armónico en las montañas de Ahei XV para desvelar el origen de esos campamentos, un misterio sobre inteligencia artificial y la voluntad de existir. Nada y Polo ayudan a construir un constructo robótico.",
+    "rewards": ""
+  },
+  {
+    "n": 11, "dir": "11-voyagers", "name": "Voyagers", "date": "1 de septiembre de 2023", "patch": true, "shots": ["s1.jpg", "s2.jpg"],
+    "tag": "Un viaje tranquilo por mundos extraordinarios",
+    "text": "Llegó una semana después de la actualización Echoes. Es una travesía relajada que invita a buscar mundos notables, alcanzar cumbres y fondos marinos, y catalogar los hallazgos.",
+    "rewards": ""
+  },
+  {
+    "n": 12, "dir": "12-omega", "name": "Omega", "date": "15 de febrero de 2024", "patch": true, "shots": ["s1.jpg", "s2.jpg"],
+    "tag": "Gratis para todos… y un sistema renovado",
+    "text": "Con la actualización Omega el juego pudo probarse gratis durante un fin de semana, con esta expedición como puerta de entrada. Además, las expediciones se integraron por completo en el juego principal: puedes unirte con provisiones propias, llevar tus naves y multiherramientas y volver a tu partida con el botín.",
+    "rewards": "el renovado «Camino del Atlas», con objetos como un bastón del Atlas."
+  },
+  {
+    "n": 13, "dir": "13-adrift", "name": "Adrift", "date": "29 de mayo de 2024", "patch": true, "shots": ["s1.jpg", "s2.jpg"],
+    "tag": "Solo en el universo",
+    "text": "Por primera vez puedes estar verdaderamente solo: sin otras formas de vida, sin tiendas ni ayuda, como en las primeras versiones del juego. Un universo alternativo y abandonado donde solo quedan gusanos de arena y naves fantasma.",
+    "rewards": ""
+  },
+  {
+    "n": 14, "dir": "14-liquidators", "name": "Liquidators", "date": "24 de julio de 2024", "patch": true, "shots": ["s1.jpg", "s2.jpg"],
+    "tag": "Exterminar horrores biológicos",
+    "text": "Una expedición de combate: los viajeros empiezan en el exuberante planeta Eardog Sigma y deben llegar a distintas zonas de aterrizaje para liquidar nidos de horrores biológicos, centinelas y crías de la Vile Brood a lo largo de varias fases.",
+    "rewards": ""
+  },
+  {
+    "n": 15, "dir": "15-aquarius", "name": "Aquarius", "date": "4 de septiembre de 2024", "patch": true, "shots": ["s1.jpg", "s2.jpg"],
+    "tag": "Pesca alienígena",
+    "text": "La actualización Aquarius trajo la pesca al juego, y su expedición propone una aventura acuática por la galaxia: cañas, botes, criaturas marinas que catalogar y personalización de buceo con trajes submarinos.",
+    "rewards": ""
+  },
+  {
+    "n": 16, "dir": "16-cursed", "name": "The Cursed", "date": "23 de octubre de 2024", "patch": true, "shots": ["s1.jpg", "s2.jpg"],
+    "tag": "Una realidad a punto de romperse",
+    "text": "Expedición dieciséis, pensada para Halloween. Sucede en una especie de reino crepuscular entre dimensiones, donde los viajeros luchan por no perder el control de la realidad mientras los acechan visiones y voces de otro mundo.",
+    "rewards": ""
+  },
+  {
+    "n": 17, "dir": "17-titan", "name": "Titan", "date": "12 de febrero de 2025", "patch": true, "shots": ["s1.jpg", "s2.jpg"],
+    "tag": "Un gigante gaseoso rodeado de lunas",
+    "text": "Los viajeros despiertan en New Aftesfi, un titánico gigante gaseoso asolado por tornados y rodeado de lunas, y trazan una ruta entre puntos de encuentro hacia nuevas estrellas y mundos. Duró unas seis semanas.",
+    "rewards": "carteles, rayas «Titan» para naves Fighter y Hauler, una capa de topógrafo y el bastón «Pilar de Titan»."
+  },
+  {
+    "n": 18, "dir": "18-relics", "name": "Relics", "date": "28 de marzo de 2025", "patch": true, "shots": ["s1.jpg", "s2.jpg"],
+    "tag": "Paleontología espacial",
+    "text": "Junto con la actualización Relics, que trajo los fósiles y los esqueletos armables, esta expedición reta a los jugadores a competir por los hallazgos más raros. Hay que excavar con cuidado: criaturas-artefacto guardan los mayores tesoros y se despiertan con facilidad.",
+    "rewards": ""
+  },
+  {
+    "n": 19, "dir": "19-corvette", "name": "Corvette", "date": "3 de septiembre de 2025", "patch": false, "shots": ["s1.jpg", "s2.jpg"],
+    "tag": "Solo se vuela en corbeta",
+    "text": "Nació de la actualización Voyagers y sirve para estrenar las Corvettes, naves gigantes que se diseñan pieza a pieza y tienen interiores por los que caminar. En la expedición no puedes usar una nave normal: solo la corbeta que armas con las piezas y planos que te dan.",
+    "rewards": ""
+  },
+  {
+    "n": 20, "dir": "20-breach", "name": "Breach", "date": "22 de octubre de 2025", "patch": false, "shots": ["s1.jpg", "s2.jpg"],
+    "tag": "Naufragios en un universo abandonado",
+    "text": "Pensada para Halloween, mezcla ensamblaje de naves, paseos espaciales y caídas libres. Los viajeros recorren un universo desolado y sombrío y rescatan módulos de las ruinas de corbetas siniestradas, entre ellas la Fireship Arcadia, tras un salto de fe hacia la oscuridad.",
+    "rewards": "módulos de nave con temática del Atlas."
+  },
+  {
+    "n": 21, "dir": "21-remnant", "name": "Remnant", "date": "11 de febrero de 2026", "patch": false, "shots": ["s1.jpg", "s2.jpg"],
+    "tag": "Convoyes de chatarra",
+    "text": "Junto con la actualización Remnant y su pistola de gravedad, los viajeros forman convoyes para limpiar y recuperar un planeta cubierto de restos: puedes ser transportista, parte de la cuadrilla con la pistola de gravedad o encargado de un desguace.",
+    "rewards": "decenas de piezas para vehículos y un conjunto de armadura de estilo steampunk."
+  },
+  {
+    "n": 22, "dir": "22-swarm", "name": "The Swarm", "date": "27 de mayo de 2026", "patch": false, "shots": ["s1.jpg", "s2.jpg"],
+    "tag": "Tres equipos contra el enjambre",
+    "text": "Los viajeros se reparten en tres equipos, cada uno con nave y uniforme de su color, para hacer frente a una enorme amenaza sobre los planetas. Deben cooperar para construir el Núcleo Prismático completando misiones de Purga, Restauración y Sabotaje, y así desbloquear la batalla final.",
+    "rewards": "el rifle y la mochila de vuelo Direwasp, un conjunto de seis piezas, carteles, calcomanías y títulos."
+  },
+  {
+    "n": 23, "dir": "23-journey", "name": "Our Journey Continues", "date": "16 de septiembre de 2026", "patch": false, "shots": ["s1.jpg", "s2.jpg"], "now": true,
+    "tag": "La expedición del 10.º aniversario",
+    "text": "Celebra diez años de No Man's Sky con comentarios de los desarrolladores, recompensas de nostalgia y elementos resucitados de versiones antiguas del juego, con guiños escondidos para los veteranos. Dura unas seis semanas.",
+    "rewards": "nueve cuadros con portadas de actualizaciones históricas, un muñeco para la cabina, la multiherramienta Starbound v0.27, la nave dorada Rasamama S36, un Interceptor Sentinel de época y un diplodocus de compañía."
+  }
+]

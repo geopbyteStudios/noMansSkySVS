@@ -178,7 +178,72 @@
   #lightbox .cap .who { color: var(--pink); font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; }
   #lightbox .cap h4 { margin: 2px 0 4px; color: var(--text); font-size: 1.05rem; font-weight: 600; letter-spacing: .04em; }
   #lightbox .cap p { color: #cfe0e6; line-height: 1.55; }
-  #lightbox img { max-width: 100%; max-height: 62vh; object-fit: contain; border-radius: 12px; box-shadow: 0 0 80px rgba(77, 227, 208, .3); }
+  #lightbox img { max-width: 100%; max-height: 62vh; object-fit: contain; border-radius: 12px; box-shadow: 0 0 80px rgba(77, 227, 208, .3); cursor: default; }
+  #lightbox .pos { position: absolute; top: 24px; left: 24px; color: var(--muted); font-size: .85rem; letter-spacing: .14em; }
+  .lb-btn { position: absolute; z-index: 2; width: 46px; height: 46px; padding: 0 0 4px; border-radius: 50%; border: 1px solid var(--line); background: rgba(12, 20, 40, .75); color: var(--text); font: inherit; font-size: 1.9rem; line-height: 1; cursor: pointer; backdrop-filter: blur(4px); transition: border-color .2s, box-shadow .2s, background .2s; }
+  .lb-btn:hover, .lb-btn:focus-visible { border-color: var(--teal); background: rgba(77, 227, 208, .2); box-shadow: 0 0 20px rgba(77, 227, 208, .4); outline: none; }
+  .lb-close { top: 16px; right: 16px; }
+  .lb-nav { top: 38%; transform: translateY(-50%); }
+  .lb-prev { left: clamp(8px, 2vw, 28px); }
+  .lb-next { right: clamp(8px, 2vw, 28px); }
+  #lightbox.single .lb-nav { display: none; }
+  @media (max-width: 600px) { .lb-nav { width: 40px; height: 40px; font-size: 1.6rem; } }
+
+  /* Expediciones: escenario con fondo, ficha y tira de insignias (todo se navega sin hacer scroll) */
+  #expediciones { padding: 84px 0 36px; }
+  #expediciones .lead { max-width: 1000px; }
+  .exp { margin-top: 22px; }
+  .exp-stage { position: relative; isolation: isolate; overflow: hidden; height: clamp(420px, 56vh, 540px); border-radius: var(--radius); border: 1px solid var(--line); background: #0a1020; outline: none; }
+  .exp-stage:focus-visible { border-color: var(--teal); box-shadow: 0 0 0 2px rgba(77, 227, 208, .4); }
+  .exp-bg { position: absolute; inset: 0; z-index: -3; }
+  .exp-bg img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .7s ease; }
+  .exp-bg img.on { opacity: 1; }
+  .exp-shade { position: absolute; inset: 0; z-index: -2; background: linear-gradient(90deg, rgba(5, 7, 15, .92) 0%, rgba(5, 7, 15, .72) 38%, rgba(5, 7, 15, .12) 75%), linear-gradient(0deg, rgba(5, 7, 15, .55), transparent 40%); }
+  .exp-info { position: absolute; left: clamp(64px, 7vw, 96px); top: 50%; transform: translateY(-50%); width: min(500px, calc(100% - 180px)); }
+  .exp-head { display: flex; align-items: center; gap: 18px; }
+  .exp-badge { flex: none; width: 92px; height: 92px; display: grid; place-items: center; filter: drop-shadow(0 4px 16px rgba(0, 0, 0, .7)); }
+  .exp-badge img { max-width: 100%; max-height: 100%; }
+  .exp-badge .num-badge { width: 84px; height: 84px; display: grid; place-items: center; font-size: 1.9rem; font-weight: 700; color: #ffd98a; background: linear-gradient(160deg, #3a2a10, #14100a); clip-path: polygon(25% 3%, 75% 3%, 98% 50%, 75% 97%, 25% 97%, 2% 50%); box-shadow: inset 0 0 0 3px #d9a441; }
+  .exp-num { font-size: .78rem; letter-spacing: .22em; text-transform: uppercase; color: var(--teal); }
+  .exp-info h3 { font-size: clamp(1.7rem, 3.6vw, 2.5rem); font-weight: 300; letter-spacing: .1em; text-transform: uppercase; line-height: 1.15; text-shadow: 0 0 30px rgba(77, 227, 208, .45); }
+  .exp-date { font-size: .85rem; color: var(--orange); }
+  .exp-tag { margin-top: 16px; font-size: 1.05rem; font-weight: 600; color: #fff; }
+  .exp-text { margin-top: 8px; font-size: .95rem; color: #d3e2e8; line-height: 1.6; }
+  .exp-rew { margin-top: 12px; font-size: .85rem; color: var(--muted); }
+  .exp-rew:empty { display: none; }
+  .exp-rew b { color: var(--pink); font-weight: 600; letter-spacing: .06em; }
+  .exp-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 3; width: 46px; height: 46px; padding: 0 0 4px; border-radius: 50%; border: 1px solid var(--line); background: rgba(12, 20, 40, .7); color: var(--text); font: inherit; font-size: 1.9rem; line-height: 1; cursor: pointer; backdrop-filter: blur(4px); transition: border-color .2s, background .2s, box-shadow .2s; }
+  .exp-arrow:hover, .exp-arrow:focus-visible { border-color: var(--teal); background: rgba(77, 227, 208, .2); box-shadow: 0 0 20px rgba(77, 227, 208, .4); outline: none; }
+  .exp-prev { left: 12px; }
+  .exp-next { right: 12px; }
+  .exp-shots { position: absolute; right: 72px; bottom: 18px; display: flex; gap: 10px; }
+  .exp-shots button { width: 132px; aspect-ratio: 16 / 9; padding: 0; border-radius: 10px; border: 2px solid rgba(255, 255, 255, .25); background: #0a1020; overflow: hidden; cursor: pointer; opacity: .8; transition: opacity .2s, border-color .2s, transform .2s; }
+  .exp-shots button img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .exp-shots button:hover { opacity: 1; transform: translateY(-2px); }
+  .exp-shots button.on { opacity: 1; border-color: var(--pink); }
+  .exp-strip { display: flex; gap: 10px; margin-top: 14px; padding: 8px 4px 10px; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: thin; scrollbar-color: rgba(77, 227, 208, .4) transparent; }
+  .exp-strip button { flex: none; scroll-snap-align: center; width: 76px; padding: 8px 4px 6px; border-radius: 14px; border: 1px solid transparent; background: transparent; color: var(--muted); font: inherit; font-size: .7rem; letter-spacing: .08em; text-align: center; cursor: pointer; transition: background .2s, border-color .2s, color .2s, transform .2s; }
+  .exp-strip button .ico { display: grid; place-items: center; height: 52px; margin-bottom: 4px; }
+  .exp-strip button .ico img { max-width: 52px; max-height: 52px; filter: saturate(.7) brightness(.85); transition: filter .2s, transform .2s; }
+  .exp-strip button .ico .num-badge { width: 46px; height: 46px; display: grid; place-items: center; font-size: 1.05rem; font-weight: 700; color: #ffd98a; background: linear-gradient(160deg, #3a2a10, #14100a); clip-path: polygon(25% 3%, 75% 3%, 98% 50%, 75% 97%, 25% 97%, 2% 50%); box-shadow: inset 0 0 0 2px #d9a441; opacity: .8; }
+  .exp-strip button:hover { background: rgba(255, 255, 255, .05); color: var(--text); }
+  .exp-strip button:hover .ico img { filter: none; }
+  .exp-strip button[aria-current="true"] { background: rgba(77, 227, 208, .14); border-color: var(--teal); color: var(--text); box-shadow: 0 0 20px rgba(77, 227, 208, .2); }
+  .exp-strip button[aria-current="true"] .ico img { filter: none; transform: scale(1.12); }
+  .exp-strip button[aria-current="true"] .ico .num-badge { opacity: 1; }
+  .exp-strip button:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+  @media (max-width: 760px) {
+    .exp-stage { height: auto; display: flex; flex-direction: column; }
+    .exp-bg { position: relative; inset: auto; height: 210px; order: -1; z-index: 0; }
+    .exp-shade { display: none; }
+    .exp-info { position: static; transform: none; width: auto; padding: 18px 18px 8px; }
+    .exp-shots { position: static; padding: 0 18px 18px; }
+    .exp-shots button { width: calc(50% - 5px); }
+    .exp-arrow { top: 105px; }
+    .exp-badge { width: 72px; height: 72px; }
+    .exp-badge .num-badge { width: 66px; height: 66px; font-size: 1.5rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { .exp-bg img { transition: none; } }
 
   /* Plataformas y línea de tiempo */
   .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
@@ -224,6 +289,7 @@
     <li><a href="#mision">Misión</a></li>
     <li><a href="#galeria">Galería</a></li>
     <li><a href="#svs">SVS</a></li>
+    <li><a href="#expediciones">Expediciones</a></li>
     <li><a href="#historia">Historia</a></li>
   </ul>
 </nav>
@@ -354,6 +420,42 @@
     </div>
   </section>
 
+  <section id="expediciones">
+    <div class="wrap">
+      <h2 class="reveal">Expediciones</h2>
+      <p class="lead reveal">
+        Las expediciones son eventos de temporada, por tiempo limitado, en los que todos los viajeros empiezan en el mismo lugar con una nave y equipo
+        predefinidos y avanzan por <strong>fases e hitos</strong>. Al completarlas se ganan recompensas exclusivas (naves, trajes, mochilas, carteles)
+        que se canjean gratis en cualquier partida desde la Anomalía Espacial. Desde 2021 ya van 23: elige una abajo o usa las flechas.
+      </p>
+
+      <div class="exp reveal" id="exp">
+        <div class="exp-stage" id="expStage" tabindex="0" aria-label="Expediciones de No Man's Sky. Usa las flechas del teclado para cambiar de expedición.">
+          <div class="exp-bg"><img class="on" alt=""><img alt=""></div>
+          <div class="exp-shade"></div>
+          <button type="button" class="exp-arrow exp-prev" aria-label="Expedición anterior">&#8249;</button>
+          <button type="button" class="exp-arrow exp-next" aria-label="Expedición siguiente">&#8250;</button>
+          <article class="exp-info" aria-live="polite">
+            <div class="exp-head">
+              <div class="exp-badge" id="expBadge"></div>
+              <div>
+                <div class="exp-num" id="expNum"></div>
+                <h3 id="expName"></h3>
+                <div class="exp-date" id="expDate"></div>
+              </div>
+            </div>
+            <p class="exp-tag" id="expTag"></p>
+            <p class="exp-text" id="expText"></p>
+            <p class="exp-rew" id="expRew"></p>
+          </article>
+          <div class="exp-shots" id="expShots"></div>
+        </div>
+        <div class="exp-strip" id="expStrip" role="group" aria-label="Lista de expediciones"></div>
+      </div>
+      <p class="live-note" id="expNote">Cargando expediciones…</p>
+    </div>
+  </section>
+
   <section id="historia">
     <div class="wrap">
       <h2 class="reveal">Un juego que sigue creciendo</h2>
@@ -385,11 +487,17 @@
       pertenecen a sus respectivos dueños (Hello Games Ltd.). Todos los derechos reservados a sus titulares. Uso personal y
       educativo; si eres titular de derechos y quieres que algún contenido se retire, se eliminará.
     </div>
-    <small>Fuentes: Steam, Wikipedia, No Man's Sky Wiki (Fandom y Miraheze).</small>
+    <small>Fuentes: Steam, nomanssky.com, Wikipedia, No Man's Sky Wiki (Fandom y Miraheze) y Assistant for No Man's Sky.</small>
   </div>
 </footer>
 
-<div id="lightbox" role="dialog" aria-label="Imagen ampliada"><img alt=""><div class="cap"></div></div>
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Imagen ampliada">
+  <button type="button" class="lb-btn lb-close" aria-label="Cerrar (Esc)">&times;</button>
+  <button type="button" class="lb-btn lb-nav lb-prev" aria-label="Imagen anterior">&#8249;</button>
+  <button type="button" class="lb-btn lb-nav lb-next" aria-label="Imagen siguiente">&#8250;</button>
+  <div class="pos" aria-live="polite"></div>
+  <img alt=""><div class="cap"></div>
+</div>
 
 <script>
   // Campo de estrellas animado
@@ -478,7 +586,7 @@
     load(); setInterval(load, 60000);
   })();
 
-  // Galería SVS: lee las carpetas de img/Players a través de server.js -> /api/svs
+  // Galería SVS: lee svs.json (lo genera server.js a partir de img/Players y captions.json; en Azure es un archivo estático)
   (function () {
     var filters = document.getElementById('svsFilters'), grid = document.getElementById('svsGallery'), note = document.getElementById('svsNote');
     var HINT = 'Elige un jugador para ver sus capturas.';
@@ -515,7 +623,7 @@
       });
       note.textContent = HINT;
     }
-    fetch('/api/svs', { cache: 'no-store' })
+    fetch('svs.json', { cache: 'no-store' })
       .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(build)
       .catch(function () {
@@ -525,12 +633,103 @@
       });
   })();
 
-  // Lightbox (delegado, para incluir también las imágenes cargadas dinámicamente)
-  var lb = document.getElementById('lightbox'), lbImg = lb.querySelector('img'), lbCap = lb.querySelector('.cap');
-  document.addEventListener('click', function (e) {
-    var f = e.target.closest && e.target.closest('.gallery figure');
-    if (!f) return;
-    var i = f.querySelector('img'), c = f.querySelector('figcaption');
+  // Expediciones: datos en expeditions.json, imágenes en img/expediciones/<carpeta>/ (insignia + capturas).
+  // Todo se navega en el mismo lugar: flechas, tira de insignias, teclado o deslizando.
+  (function () {
+    var stage = document.getElementById('expStage'), strip = document.getElementById('expStrip'), note = document.getElementById('expNote');
+    var bg = stage.querySelectorAll('.exp-bg img'), shots = document.getElementById('expShots');
+    var list = [], cur = -1, front = 0, shotIdx = 0;
+    var SRC = 'img/expediciones/';
+    function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt) e.textContent = txt; return e; }
+    function pad(n) { return n < 10 ? '0' + n : '' + n; }
+    function patch(x, cls) {
+      var box = el('span', cls);
+      if (x.patch) { var i = el('img'); i.src = SRC + x.dir + '/patch.png'; i.alt = ''; i.loading = 'lazy'; box.appendChild(i); }
+      else box.appendChild(el('span', 'num-badge', pad(x.n)));
+      return box;
+    }
+    function setBg(src) {
+      var back = bg[1 - front];
+      back.onload = function () { bg[front].classList.remove('on'); back.classList.add('on'); front = 1 - front; };
+      back.src = src;
+      if (back.complete && back.naturalWidth) back.onload();
+    }
+    function pickShot(i) {
+      var x = list[cur]; shotIdx = i;
+      setBg(SRC + x.dir + '/' + x.shots[i]);
+      Array.prototype.forEach.call(shots.children, function (b, k) { b.classList.toggle('on', k === i); });
+    }
+    function show(i) {
+      cur = (i + list.length) % list.length;
+      var x = list[cur];
+      var b = document.getElementById('expBadge'); b.textContent = ''; b.appendChild(patch(x, 'ico'));
+      document.getElementById('expNum').textContent = 'Expedición ' + pad(x.n) + (x.now ? ' · la más reciente' : '');
+      document.getElementById('expName').textContent = x.name;
+      document.getElementById('expDate').textContent = x.date;
+      document.getElementById('expTag').textContent = x.tag;
+      document.getElementById('expText').textContent = x.text;
+      var r = document.getElementById('expRew'); r.textContent = '';
+      if (x.rewards) { var lb = el('b', '', 'Recompensas: '); r.appendChild(lb); r.appendChild(document.createTextNode(x.rewards)); }
+      shots.textContent = '';
+      x.shots.forEach(function (s, k) {
+        var btn = el('button'), im = el('img');
+        btn.type = 'button'; btn.setAttribute('aria-label', 'Ver imagen ' + (k + 1) + ' de ' + x.name);
+        im.src = SRC + x.dir + '/' + s; im.alt = ''; btn.appendChild(im);
+        btn.addEventListener('click', function () { pickShot(k); });
+        shots.appendChild(btn);
+      });
+      pickShot(0);
+      Array.prototype.forEach.call(strip.children, function (c, k) {
+        if (k === cur) {
+          c.setAttribute('aria-current', 'true');
+          // Centrar la insignia activa dentro de la tira sin mover la página
+          strip.scrollTo({ left: c.offsetLeft - (strip.clientWidth - c.offsetWidth) / 2, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+        } else c.removeAttribute('aria-current');
+      });
+      // Precarga la anterior y la siguiente
+      [-1, 1].forEach(function (d) { var y = list[(cur + d + list.length) % list.length]; new Image().src = SRC + y.dir + '/' + y.shots[0]; });
+    }
+    function build(data) {
+      list = data;
+      list.forEach(function (x, k) {
+        var b = el('button'); b.type = 'button'; b.title = x.name; b.setAttribute('aria-label', 'Expedición ' + x.n + ': ' + x.name);
+        b.appendChild(patch(x, 'ico')); b.appendChild(el('span', '', pad(x.n)));
+        b.addEventListener('click', function () { show(k); });
+        strip.appendChild(b);
+      });
+      note.textContent = 'Datos e imágenes de los anuncios oficiales de Hello Games (Steam / nomanssky.com) y de la wiki de la comunidad; las insignias vienen de Assistant for No Man’s Sky. Las fechas son aproximadas.';
+      show(list.length - 1);
+    }
+    stage.querySelector('.exp-prev').addEventListener('click', function () { show(cur - 1); });
+    stage.querySelector('.exp-next').addEventListener('click', function () { show(cur + 1); });
+    document.getElementById('exp').addEventListener('keydown', function (e) {
+      if (!list.length) return;
+      if (e.key === 'ArrowLeft') { show(cur - 1); e.preventDefault(); }
+      else if (e.key === 'ArrowRight') { show(cur + 1); e.preventDefault(); }
+    });
+    var sx = 0, sy = 0;
+    stage.addEventListener('touchstart', function (e) { sx = e.changedTouches[0].clientX; sy = e.changedTouches[0].clientY; }, { passive: true });
+    stage.addEventListener('touchend', function (e) {
+      var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+      if (list.length && Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) show(cur + (dx < 0 ? 1 : -1));
+    }, { passive: true });
+    fetch('expeditions.json', { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(build)
+      .catch(function () {
+        note.textContent = location.protocol === 'file:'
+          ? 'Para ver las expediciones abre la página con el servidor: ejecuta "node server.js" y entra a http://localhost:8080'
+          : 'No se pudieron cargar las expediciones ahora.';
+      });
+  })();
+
+  // Lightbox (delegado, para incluir también las imágenes cargadas dinámicamente).
+  // Se puede navegar entre las imágenes de la misma galería sin cerrarlo: botones, flechas del teclado o deslizando.
+  var lb = document.getElementById('lightbox'), lbImg = lb.querySelector('img'), lbCap = lb.querySelector('.cap'), lbPos = lb.querySelector('.pos');
+  var lbList = [], lbIdx = 0;
+  function lbShow(n) {
+    lbIdx = (n + lbList.length) % lbList.length;
+    var f = lbList[lbIdx], i = f.querySelector('img'), c = f.querySelector('figcaption');
     lbImg.src = f.dataset.view || i.currentSrc || i.src; lbImg.alt = i.alt;
     lbCap.textContent = '';
     if (f.dataset.player) {
@@ -542,10 +741,41 @@
     } else if (c) {
       lbCap.textContent = c.textContent;
     }
+    lbCap.scrollTop = 0;
+    lbPos.textContent = lbList.length > 1 ? (lbIdx + 1) + ' / ' + lbList.length : '';
+    lb.classList.toggle('single', lbList.length < 2);
+    // Precarga la anterior y la siguiente para que el cambio sea inmediato
+    [-1, 1].forEach(function (d) {
+      var g = lbList[(lbIdx + d + lbList.length) % lbList.length];
+      if (g && g !== f) new Image().src = g.dataset.view || g.querySelector('img').src;
+    });
+  }
+  function lbClose() { lb.classList.remove('open'); lbImg.removeAttribute('src'); }
+  document.addEventListener('click', function (e) {
+    var f = e.target.closest && e.target.closest('.gallery figure');
+    if (!f) return;
+    // La "galería" actual son las imágenes visibles junto a la pulsada (p. ej. solo las del jugador elegido)
+    lbList = Array.prototype.filter.call(f.parentElement.children, function (el) { return el.tagName === 'FIGURE'; });
+    lbShow(lbList.indexOf(f));
     lb.classList.add('open');
   });
-  lb.addEventListener('click', function () { lb.classList.remove('open'); });
-  addEventListener('keydown', function (e) { if (e.key === 'Escape') lb.classList.remove('open'); });
+  lb.addEventListener('click', function (e) { if (e.target === lb) lbClose(); });
+  lb.querySelector('.lb-close').addEventListener('click', lbClose);
+  lb.querySelector('.lb-prev').addEventListener('click', function () { lbShow(lbIdx - 1); });
+  lb.querySelector('.lb-next').addEventListener('click', function () { lbShow(lbIdx + 1); });
+  addEventListener('keydown', function (e) {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') lbClose();
+    else if (e.key === 'ArrowLeft' && lbList.length > 1) lbShow(lbIdx - 1);
+    else if (e.key === 'ArrowRight' && lbList.length > 1) lbShow(lbIdx + 1);
+  });
+  // Deslizar con el dedo en pantallas táctiles
+  var tx = 0, ty = 0;
+  lb.addEventListener('touchstart', function (e) { tx = e.changedTouches[0].clientX; ty = e.changedTouches[0].clientY; }, { passive: true });
+  lb.addEventListener('touchend', function (e) {
+    var dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+    if (lbList.length > 1 && Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) lbShow(lbIdx + (dx < 0 ? 1 : -1));
+  }, { passive: true });
 </script>
 </body>
 </html>

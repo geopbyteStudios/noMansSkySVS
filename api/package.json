@@ -1,0 +1,10 @@
+{
+  "name": "nms-svs-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "API de Azure Static Web Apps: intermediario de la misión comunitaria de No Man's Sky",
+  "main": "src/functions/*.js",
+  "dependencies": {
+    "@azure/functions": "^4.5.0"
+  }
+}

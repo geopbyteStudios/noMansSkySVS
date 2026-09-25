@@ -1,0 +1,9 @@
+# Las capturas originales pesan cientos de MB (Azure Static Web Apps admite máximo 250 MB por app).
+# La página solo usa las versiones ligeras de img/thumbs e img/view, que sí se suben.
+img/Players/
+
+# Dependencias y archivos locales
+node_modules/
+api/node_modules/
+api/local.settings.json
+_preview.html

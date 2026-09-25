@@ -67,7 +67,7 @@ async function getPlayers() {
         const light = (dir) => (fs.existsSync(path.join(ROOT, 'img', dir, d.name, f + '.jpg')) ? 'img/' + dir + '/' + enc + '.jpg' : null);
         const full = 'img/Players/' + enc;
         const cap = captions[d.name + '/' + f] || {};
-        return { full, view: light('view') || full, thumb: light('thumbs') || full, title: cap.title || '', text: cap.text || '' };
+        return { view: light('view') || full, thumb: light('thumbs') || full, title: cap.title || '', text: cap.text || '' };
       });
       // Imagen de fondo del botón del jugador: la primera, o la que se indique en captions.json -> "_covers": { "Jugador": "archivo.png" }
       const pick = files.indexOf((captions._covers || {})[d.name]);
@@ -77,12 +77,20 @@ async function getPlayers() {
   return players.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
 }
 
+// La página pide svs.json. En local se genera al momento; además se guarda en disco, y ese archivo es el que
+// se publica en Azure Static Web Apps (allí no corre este servidor, solo se sirven archivos).
+async function writeSvsJson() {
+  const players = await getPlayers();
+  fs.writeFileSync(path.join(ROOT, 'svs.json'), JSON.stringify(players, null, 2) + '\n');
+  return players;
+}
+
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://localhost');
 
-  if (url.pathname === '/api/svs') {
+  if (url.pathname === '/svs.json' || url.pathname === '/api/svs') {
     try {
-      const players = await getPlayers();
+      const players = await writeSvsJson();
       res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
       res.end(JSON.stringify(players));
     } catch (err) {
@@ -124,20 +132,34 @@ const server = http.createServer(async (req, res) => {
   });
 });
 
-// Al arrancar, genera las miniaturas de las capturas nuevas (solo Windows, usa PowerShell).
+// Genera las miniaturas de las capturas nuevas (solo Windows, usa PowerShell). Devuelve una promesa.
 function makeThumbs() {
-  if (process.platform !== 'win32') return;
-  const ps = spawn('powershell.exe', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', path.join(ROOT, 'make-thumbs.ps1')], { windowsHide: true });
-  let out = '';
-  ps.stdout.on('data', (b) => { out += b; });
-  ps.on('error', (e) => console.log('No se pudieron generar miniaturas: ' + e.message));
-  ps.on('close', (code) => {
-    const last = out.trim().split(/\r?\n/).pop();
-    console.log(code === 0 ? last : 'make-thumbs.ps1 terminó con código ' + code);
+  return new Promise((resolve) => {
+    if (process.platform !== 'win32') return resolve();
+    const ps = spawn('powershell.exe', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', path.join(ROOT, 'make-thumbs.ps1')], { windowsHide: true });
+    let out = '';
+    ps.stdout.on('data', (b) => { out += b; });
+    ps.on('error', (e) => { console.log('No se pudieron generar miniaturas: ' + e.message); resolve(); });
+    ps.on('close', (code) => {
+      const last = out.trim().split(/\r?\n/).pop();
+      console.log(code === 0 ? last : 'make-thumbs.ps1 terminó con código ' + code);
+      resolve();
+    });
   });
 }
 
-server.listen(PORT, '127.0.0.1', () => {
-  console.log('Test_NoMansSky listo en http://localhost:' + PORT);
-  makeThumbs();
-});
+async function prepare() {
+  await makeThumbs();
+  const players = await writeSvsJson();
+  console.log('svs.json actualizado: ' + players.reduce((n, p) => n + p.images.length, 0) + ' capturas de ' + players.length + ' jugadores.');
+}
+
+if (process.argv.includes('--build')) {
+  // node server.js --build  ->  solo genera miniaturas y svs.json (para publicar) y termina
+  prepare().catch((e) => { console.error('Error: ' + e.message); process.exitCode = 1; });
+} else {
+  server.listen(PORT, '127.0.0.1', () => {
+    console.log('Test_NoMansSky listo en http://localhost:' + PORT);
+    prepare().catch((e) => console.log('No se pudo actualizar svs.json: ' + e.message));
+  });
+}
