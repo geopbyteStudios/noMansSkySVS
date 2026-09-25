@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>No Man's Sky · Fan Page de prueba</title>
+<meta name="description" content="Página de prueba sobre No Man's Sky, el juego de exploración y supervivencia de Hello Games.">
+<style>
+  :root {
+    --bg: #05070f;
+    --bg-2: #0a1020;
+    --panel: rgba(12, 20, 40, .62);
+    --line: rgba(120, 220, 230, .22);
+    --text: #e8f1f5;
+    --muted: #9db3bd;
+    --teal: #4de3d0;
+    --pink: #ff6fa8;
+    --orange: #ffab5e;
+    --radius: 18px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  /* Fondo: nebulosa + estrellas */
+  .nebula {
+    position: fixed; inset: 0; z-index: -2;
+    background:
+      radial-gradient(60% 50% at 15% 20%, rgba(255, 111, 168, .22), transparent 70%),
+      radial-gradient(55% 45% at 85% 15%, rgba(77, 227, 208, .22), transparent 70%),
+      radial-gradient(70% 55% at 60% 95%, rgba(255, 171, 94, .16), transparent 70%),
+      linear-gradient(180deg, #060a18 0%, #0a1226 55%, #08101e 100%);
+  }
+  #stars { position: fixed; inset: 0; z-index: -1; width: 100%; height: 100%; }
+
+  a { color: var(--teal); }
+  .wrap { width: min(1100px, 100% - 32px); margin-inline: auto; }
+
+  /* Barra de navegación */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px clamp(16px, 4vw, 40px);
+    background: linear-gradient(180deg, rgba(5, 7, 15, .85), transparent);
+    backdrop-filter: blur(6px);
+  }
+  nav .logo { letter-spacing: .28em; font-weight: 600; font-size: .85rem; text-transform: uppercase; }
+  nav ul { display: flex; gap: clamp(12px, 3vw, 28px); list-style: none; }
+  nav a { text-decoration: none; color: var(--muted); font-size: .9rem; transition: color .2s; }
+  nav a:hover { color: var(--teal); }
+
+  /* Portada */
+  header.hero {
+    position: relative; min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+    text-align: center; padding: 0 16px 9vh;
+    background:
+      linear-gradient(180deg, rgba(5, 7, 15, .15) 0%, rgba(5, 7, 15, .35) 55%, var(--bg) 100%),
+      url("img/hero.jpg") center 30% / cover no-repeat;
+    isolation: isolate;
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 8vw, 6rem);
+    letter-spacing: .18em; font-weight: 300; text-transform: uppercase;
+    text-shadow: 0 0 40px rgba(77, 227, 208, .55), 0 4px 24px rgba(0, 0, 0, .6);
+  }
+  .hero h1 b { font-weight: 700; color: #fff; }
+  .hero p.tag {
+    margin: 12px auto 28px; max-width: 640px; color: #d6e8ee;
+    font-size: clamp(1rem, 2.4vw, 1.3rem); text-shadow: 0 2px 12px rgba(0, 0, 0, .7);
+  }
+  .btn {
+    display: inline-block; padding: 13px 30px; border-radius: 999px;
+    border: 1px solid var(--teal); color: var(--text); text-decoration: none;
+    background: rgba(77, 227, 208, .12); backdrop-filter: blur(4px);
+    transition: transform .2s, background .2s, box-shadow .2s;
+  }
+  .btn:hover { transform: translateY(-2px); background: rgba(77, 227, 208, .28); box-shadow: 0 0 28px rgba(77, 227, 208, .45); }
+  .scroll-hint { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: var(--muted); font-size: .8rem; letter-spacing: .3em; animation: bob 2.2s ease-in-out infinite; }
+  @keyframes bob { 50% { transform: translate(-50%, 8px); } }
+
+  section { padding: clamp(60px, 10vw, 110px) 0; }
+  h2 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 300; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 8px; }
+  h2::after { content: ""; display: block; width: 64px; height: 3px; margin-top: 12px; border-radius: 3px; background: linear-gradient(90deg, var(--teal), var(--pink), var(--orange)); }
+  .lead { color: var(--muted); max-width: 720px; margin-top: 18px; }
+
+  /* Sobre el juego */
+  .about { display: grid; grid-template-columns: 300px 1fr; gap: clamp(24px, 5vw, 56px); align-items: start; }
+  .poster img { width: 100%; border-radius: var(--radius); border: 1px solid var(--line); box-shadow: 0 20px 60px rgba(0, 0, 0, .55), 0 0 60px rgba(77, 227, 208, .15); }
+  .about p { margin-top: 16px; }
+  .about p:first-of-type { margin-top: 0; }
+  .quote { margin-top: 22px; padding: 14px 18px; border-left: 3px solid var(--pink); background: var(--panel); border-radius: 0 12px 12px 0; color: #cfe0e6; font-style: italic; }
+
+  /* Pilares */
+  .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; margin-top: 34px; }
+  .card {
+    padding: 24px; border-radius: var(--radius); background: var(--panel);
+    border: 1px solid var(--line); backdrop-filter: blur(8px);
+    transition: transform .25s, border-color .25s, box-shadow .25s;
+  }
+  .card:hover { transform: translateY(-6px); border-color: var(--teal); box-shadow: 0 12px 40px rgba(77, 227, 208, .18); }
+  .card .ico { font-size: 1.9rem; }
+  .card h3 { margin: 10px 0 6px; font-weight: 600; letter-spacing: .06em; }
+  .card p { color: var(--muted); font-size: .95rem; }
+
+  /* Estadísticas */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; margin-top: 34px; text-align: center; }
+  .stat { padding: 26px 16px; border-radius: var(--radius); background: var(--panel); border: 1px solid var(--line); }
+  .stat .num { font-size: clamp(1.7rem, 4vw, 2.5rem); font-weight: 700; background: linear-gradient(90deg, var(--teal), var(--pink)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .stat .lbl { color: var(--muted); font-size: .9rem; }
+
+  /* Misión comunitaria (datos en vivo) */
+  .live { margin-top: 34px; padding: clamp(22px, 4vw, 38px); border-radius: var(--radius); background: var(--panel); border: 1px solid var(--line); backdrop-filter: blur(8px); }
+  .live-head { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+  .live-head h3 { font-weight: 600; letter-spacing: .06em; font-size: 1.2rem; }
+  .pill { display: inline-flex; align-items: center; gap: 8px; padding: 5px 14px; border-radius: 999px; font-size: .8rem; border: 1px solid var(--line); color: var(--muted); }
+  .pill i { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+  .pill.ok { color: var(--teal); border-color: rgba(77, 227, 208, .5); }
+  .pill.ok i { background: var(--teal); box-shadow: 0 0 10px var(--teal); animation: pulse 1.6s infinite; }
+  .pill.stale { color: var(--orange); border-color: rgba(255, 171, 94, .5); }
+  .pill.stale i { background: var(--orange); }
+  .pill.err { color: var(--pink); border-color: rgba(255, 111, 168, .5); }
+  .pill.err i { background: var(--pink); }
+  @keyframes pulse { 50% { opacity: .35; } }
+  .live-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-top: 24px; text-align: center; }
+  .live-grid .box { padding: 16px 10px; border-radius: 14px; background: rgba(255, 255, 255, .04); border: 1px solid var(--line); }
+  .live-grid .v { font-size: 1.9rem; font-weight: 700; color: var(--text); }
+  .live-grid .l { font-size: .82rem; color: var(--muted); }
+  .bar { margin-top: 24px; height: 16px; border-radius: 999px; background: rgba(255, 255, 255, .08); overflow: hidden; border: 1px solid var(--line); }
+  .bar > span { display: block; height: 100%; width: 0; border-radius: 999px; background: linear-gradient(90deg, var(--teal), var(--pink), var(--orange)); transition: width 1s ease; }
+  .tiers { display: flex; gap: 8px; margin-top: 14px; }
+  .tiers span { flex: 1; height: 8px; border-radius: 8px; background: rgba(255, 255, 255, .1); }
+  .tiers span.done { background: var(--teal); box-shadow: 0 0 10px rgba(77, 227, 208, .5); }
+  .live-note { margin-top: 16px; font-size: .82rem; color: var(--muted); }
+
+  /* Galería */
+  .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; margin-top: 34px; }
+  .gallery figure { position: relative; overflow: hidden; border-radius: var(--radius); border: 1px solid var(--line); cursor: zoom-in; aspect-ratio: 16 / 9; background: #0a1020; }
+  .gallery img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s; display: block; }
+  .gallery figure:hover img { transform: scale(1.07); }
+  .gallery figcaption { position: absolute; inset: auto 0 0 0; padding: 30px 14px 12px; font-size: .88rem; background: linear-gradient(180deg, transparent, rgba(5, 7, 15, .9)); }
+  /* Sección SVS (comunidad) */
+  .rss { margin-top: 30px; padding: clamp(20px, 4vw, 32px); border-radius: var(--radius); background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--pink); backdrop-filter: blur(8px); }
+  .rss-head h3 { font-weight: 600; letter-spacing: .08em; font-size: 1.25rem; }
+  .rss-head h3 span { color: var(--pink); font-weight: 400; }
+  .rss-head .chips { margin: 12px 0 4px; }
+  .rss p { margin-top: 14px; color: #cfe0e6; }
+  .rss p.live-note { margin-top: 14px; font-size: .82rem; color: var(--muted); }
+  .svs-sub { margin-top: 48px; font-weight: 300; letter-spacing: .12em; text-transform: uppercase; font-size: 1.15rem; }
+
+  /* Tarjetas de jugador (con una imagen de su galería de fondo) */
+  .svs-filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; margin-top: 22px; }
+  .player-card { position: relative; isolation: isolate; overflow: hidden; height: 150px; padding: 0; border-radius: var(--radius); border: 1px solid var(--line); background: #0a1020; color: var(--text); cursor: pointer; text-align: left; font: inherit; transition: transform .25s, border-color .25s, box-shadow .25s; }
+  .player-card img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; transition: transform .6s, filter .3s; filter: saturate(1.05) brightness(.85); }
+  .player-card::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(5, 7, 15, .05) 25%, rgba(5, 7, 15, .88) 100%); }
+  .player-card .who { position: absolute; left: 16px; right: 16px; bottom: 14px; display: flex; flex-direction: column; }
+  .player-card .name { font-size: 1.35rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; overflow-wrap: anywhere; text-shadow: 0 0 18px rgba(77, 227, 208, .7), 0 2px 10px rgba(0, 0, 0, .95); }
+  .player-card .count { margin-top: 2px; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--teal); text-shadow: 0 2px 8px rgba(0, 0, 0, .9); }
+  .player-card:hover, .player-card:focus-visible { transform: translateY(-4px); border-color: var(--teal); box-shadow: 0 12px 36px rgba(77, 227, 208, .25); outline: none; }
+  .player-card:hover img { transform: scale(1.08); filter: saturate(1.15) brightness(1); }
+  .player-card[aria-pressed="true"] { border-color: var(--pink); box-shadow: 0 0 0 2px var(--pink), 0 12px 40px rgba(255, 111, 168, .35); }
+  .player-card[aria-pressed="true"] img { filter: saturate(1.15) brightness(1); }
+  .player-card[aria-pressed="true"] .count::before { content: "\25CF  "; color: var(--pink); }
+  @media (prefers-reduced-motion: reduce) { .player-card, .player-card img { transition: none; } .player-card:hover { transform: none; } .player-card:hover img { transform: none; } }
+  .svs-gallery { margin-top: 22px; }
+  .svs-gallery figcaption { display: flex; align-items: center; gap: 8px; }
+  .svs-gallery figcaption::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--pink); box-shadow: 0 0 10px var(--pink); }
+  #lightbox { position: fixed; inset: 0; z-index: 50; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: rgba(3, 5, 12, .92); padding: 20px; cursor: zoom-out; }
+  #lightbox.open { display: flex; }
+  #lightbox .cap { width: min(820px, 100%); max-height: 28vh; overflow-y: auto; color: var(--muted); font-size: .9rem; text-align: center; cursor: default; }
+  #lightbox .cap:empty { display: none; }
+  #lightbox .cap .who { color: var(--pink); font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; }
+  #lightbox .cap h4 { margin: 2px 0 4px; color: var(--text); font-size: 1.05rem; font-weight: 600; letter-spacing: .04em; }
+  #lightbox .cap p { color: #cfe0e6; line-height: 1.55; }
+  #lightbox img { max-width: 100%; max-height: 62vh; object-fit: contain; border-radius: 12px; box-shadow: 0 0 80px rgba(77, 227, 208, .3); }
+
+  /* Plataformas y línea de tiempo */
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+  .chip { padding: 8px 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); font-size: .9rem; }
+  .timeline { list-style: none; margin-top: 34px; border-left: 2px solid var(--line); padding-left: 26px; }
+  .timeline li { position: relative; margin-bottom: 22px; }
+  .timeline li::before { content: ""; position: absolute; left: -33px; top: 7px; width: 12px; height: 12px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 14px var(--teal); }
+  .timeline b { color: var(--orange); }
+
+  footer { padding: 40px 0 60px; text-align: center; color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); }
+  footer small { display: block; margin-top: 8px; opacity: .8; }
+  /* El logo tiene fondo casi negro: "lighten" lo funde con el fondo de la página */
+  footer .studio-logo { display: block; width: 110px; height: 110px; margin: 10px auto 0; object-fit: cover; mix-blend-mode: lighten; }
+  footer .disclaimer { max-width: 760px; margin: 18px auto 0; padding: 16px 20px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); text-align: left; line-height: 1.6; }
+  footer .disclaimer strong:first-child { display: block; margin-bottom: 4px; color: var(--orange); letter-spacing: .1em; text-transform: uppercase; font-size: .8rem; }
+  .fan-note { margin-top: 18px; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-shadow: 0 2px 10px rgba(0, 0, 0, .8); }
+
+  /* Aparición al hacer scroll */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .8s, transform .8s; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 760px) {
+    .about { grid-template-columns: 1fr; }
+    .poster { max-width: 280px; margin-inline: auto; }
+    nav ul { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .scroll-hint { animation: none; }
+  }
+</style>
+</head>
+<body>
+<div class="nebula"></div>
+<canvas id="stars"></canvas>
+
+<nav>
+  <div class="logo">Test · No Man's Sky</div>
+  <ul>
+    <li><a href="#juego">El juego</a></li>
+    <li><a href="#pilares">Pilares</a></li>
+    <li><a href="#mision">Misión</a></li>
+    <li><a href="#galeria">Galería</a></li>
+    <li><a href="#svs">SVS</a></li>
+    <li><a href="#historia">Historia</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div>
+    <h1>No Man's <b>Sky</b></h1>
+    <p class="tag">Un universo infinito, generado proceduralmente, esperando a que lo explores.</p>
+    <a class="btn" href="#juego">Comenzar el viaje</a>
+    <p class="fan-note">Fan page no oficial · Sin relación con Hello Games</p>
+  </div>
+  <span class="scroll-hint">DESCUBRE ↓</span>
+</header>
+
+<main>
+  <section id="juego">
+    <div class="wrap about">
+      <div class="poster reveal"><img src="img/portada.jpg" alt="Portada oficial de No Man's Sky"></div>
+      <div class="reveal">
+        <h2>¿De qué trata?</h2>
+        <p style="margin-top:18px">
+          <strong>No Man's Sky</strong> es un juego de exploración y supervivencia desarrollado y publicado por el estudio
+          independiente <strong>Hello Games</strong>. Despiertas como un viajero solo, junto a una nave averiada, en un planeta
+          desconocido. Desde ahí, todo depende de ti: reparar tu nave, despegar y explorar una galaxia entera.
+        </p>
+        <p>
+          El universo se genera de forma <strong>procedural</strong>: existen más de <strong>18 quintillones de planetas</strong>,
+          cada uno con su propio ecosistema, con flora y fauna únicas. Puedes aterrizar en cualquiera, minar recursos, catalogar
+          criaturas y plantas para ganar créditos, comerciar con razas alienígenas o pelear contra piratas y centinelas.
+        </p>
+        <p>
+          Detrás de todo hay un misterio: <strong>Atlas</strong>, una entidad en el centro de la galaxia. Seguir su rastro es la
+          historia principal, pero puedes ignorarla y simplemente vivir a tu ritmo: construir bases, criar mascotas, coleccionar
+          naves o jugar con amigos en línea.
+        </p>
+        <div class="quote">
+          Su creador, Sean Murray, quería capturar la sensación de asombro y optimismo de la ciencia ficción de los años 70 y 80.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pilares">
+    <div class="wrap">
+      <h2 class="reveal">Los cuatro pilares</h2>
+      <p class="lead reveal">Todo lo que haces en el juego gira alrededor de estas cuatro ideas.</p>
+      <div class="pillars">
+        <article class="card reveal"><div class="ico">🪐</div><h3>Exploración</h3><p>Viaja entre estrellas, aterriza en mundos distintos y descubre formas de vida que nadie ha visto antes.</p></article>
+        <article class="card reveal"><div class="ico">⚙️</div><h3>Supervivencia</h3><p>Mina recursos, fabrica equipo y mantén a raya el clima extremo, la radiación y la falta de oxígeno.</p></article>
+        <article class="card reveal"><div class="ico">🚀</div><h3>Combate</h3><p>Enfréntate a piratas espaciales, centinelas y criaturas hostiles, en tierra y en batallas entre naves.</p></article>
+        <article class="card reveal"><div class="ico">💠</div><h3>Comercio</h3><p>Compra y vende recursos en estaciones espaciales, mejora tu nave y crea tu propia fortuna.</p></article>
+      </div>
+
+      <div class="stats">
+        <div class="stat reveal"><div class="num" id="planetCount">18 quintillones+</div><div class="lbl">planetas posibles</div></div>
+        <div class="stat reveal"><div class="num">2016</div><div class="lbl">año de lanzamiento (12 de agosto)</div></div>
+        <div class="stat reveal"><div class="num">Hello Games</div><div class="lbl">estudio independiente creador</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="mision">
+    <div class="wrap">
+      <h2 class="reveal">Misión comunitaria</h2>
+      <p class="lead reveal">Cada cierto tiempo, todos los jugadores colaboran en una misma meta. Aquí ves cómo va la actual, casi en tiempo real.</p>
+      <div class="live reveal">
+        <div class="live-head">
+          <h3>Misión <span id="mId">—</span></h3>
+          <span class="pill" id="mStatus"><i></i><span id="mStatusTxt">Conectando…</span></span>
+        </div>
+        <div class="live-grid">
+          <div class="box"><div class="v" id="mTier">—</div><div class="l">fase actual</div></div>
+          <div class="box"><div class="v" id="mPct">—</div><div class="l">progreso</div></div>
+          <div class="box"><div class="v" id="mState">—</div><div class="l">estado</div></div>
+        </div>
+        <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="mBar"><span id="mBarFill"></span></div>
+        <div class="tiers" id="mTiers"></div>
+        <p class="live-note" id="mNote">Datos de la comunidad (Assistant for No Man's Sky), no oficiales de Hello Games. Se actualizan cada minuto.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="galeria">
+    <div class="wrap">
+      <h2 class="reveal">Galería</h2>
+      <p class="lead reveal">Haz clic en una imagen para verla en grande.</p>
+      <div class="gallery">
+        <figure class="reveal"><img src="img/captura1.jpg" alt="Un explorador camina hacia su nave sobre un planeta verde" loading="lazy"><figcaption>Aterrizaje en un planeta con islas flotantes</figcaption></figure>
+        <figure class="reveal"><img src="img/captura2.jpg" alt="Un astronauta usa un láser minero sobre una estructura industrial" loading="lazy"><figcaption>Minería y construcción en el espacio</figcaption></figure>
+        <figure class="reveal"><img src="img/captura3.jpg" alt="Plataformas rocosas flotantes entre nebulosas" loading="lazy"><figcaption>Asentamiento entre asteroides y nebulosas</figcaption></figure>
+        <figure class="reveal"><img src="img/captura4.jpg" alt="Cinco exploradores frente a una gigantesca nave sobre un planeta helado" loading="lazy"><figcaption>Expedición en un mundo helado</figcaption></figure>
+        <figure class="reveal"><img src="img/captura5.jpg" alt="Interior de una gran estación con hologramas de criaturas" loading="lazy"><figcaption>La Nexus: punto de encuentro de viajeros</figcaption></figure>
+        <figure class="reveal"><img src="img/captura6.jpg" alt="Explorador frente a una torre y una nave en un cielo verde" loading="lazy"><figcaption>Base y hangar bajo un cielo alienígena</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="svs">
+    <div class="wrap">
+      <h2 class="reveal">SVS · Nuestra comunidad</h2>
+      <p class="lead reveal">SVS es nuestra pequeña comunidad de jugadores, y con orgullo pertenecemos a la <strong>Royal Space Society</strong>. Aquí compartimos las capturas de nuestras propias aventuras por la galaxia.</p>
+
+      <aside class="rss reveal">
+        <div class="rss-head">
+          <h3>Royal Space Society <span>(RSS)</span></h3>
+          <div class="chips">
+            <span class="chip">Comunidad hispanohablante</span><span class="chip">+4.500 miembros</span><span class="chip">Estatus Nexus</span><span class="chip">Discord</span>
+          </div>
+        </div>
+        <p>
+          La RSS es una comunidad reconocida como <strong>HUB de Espacio Civilizado</strong>: un refugio y una guía para viajeros
+          hispanohablantes, tanto nuevos como veteranos. Tiene presencia en la galaxia Euclides, Eissentam, la Dimensión Hilbert y otras,
+          y su meta es ocupar al menos una región en cada galaxia del universo.
+        </p>
+        <p>
+          A sus miembros les ofrece minas de recursos valiosos, enlaces de transporte intergaláctico, coordenadas de lugares de interés
+          y una gran base de conocimiento. En agosto de 2025 alcanzó el <strong>estatus Nexus</strong> al registrar 100 bases de sus miembros,
+          y su canal oficial de comunicación es un servidor de Discord.
+        </p>
+        <p class="live-note">Datos tomados de la <a href="https://nomanssky.fandom.com/wiki/Royal_Space_Society" target="_blank" rel="noopener">wiki de No Man's Sky</a>; las cifras pueden haber cambiado. No somos el sitio oficial de la RSS.</p>
+      </aside>
+
+      <h3 class="svs-sub reveal">Galerías de los jugadores</h3>
+      <p class="lead reveal" style="margin-top:6px">Elige un jugador para ver su galería y haz clic en una imagen para verla en grande, con una breve explicación de lo que muestra.</p>
+      <div class="svs-filters" id="svsFilters" role="group" aria-label="Elegir jugador"></div>
+      <div class="gallery svs-gallery" id="svsGallery"></div>
+      <p class="live-note" id="svsNote">Cargando capturas…</p>
+    </div>
+  </section>
+
+  <section id="historia">
+    <div class="wrap">
+      <h2 class="reveal">Un juego que sigue creciendo</h2>
+      <p class="lead reveal">Desde su lanzamiento, Hello Games ha seguido ampliando y mejorando el juego con actualizaciones gratuitas.</p>
+      <ul class="timeline reveal">
+        <li><b>Agosto de 2016</b> · Lanzamiento en PlayStation 4 y Windows.</li>
+        <li><b>Julio de 2018</b> · Llega a Xbox One.</li>
+        <li><b>Noviembre de 2020</b> · PlayStation 5, Xbox Series X y Series S.</li>
+        <li><b>Octubre de 2022</b> · Nintendo Switch.</li>
+        <li><b>Junio de 2023</b> · macOS.</li>
+        <li><b>Junio de 2025</b> · Nintendo Switch 2.</li>
+      </ul>
+      <div class="chips reveal">
+        <span class="chip">PC (Steam)</span><span class="chip">PlayStation</span><span class="chip">Xbox</span>
+        <span class="chip">Nintendo Switch</span><span class="chip">macOS</span><span class="chip">Multijugador</span><span class="chip">Un jugador</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    Página de prueba hecha con cariño por <strong>Geopbyte Studios</strong>.
+    <img class="studio-logo" src="img/GeopByteStudios.jpeg" alt="Logo de Geopbyte Studios">
+    <div class="disclaimer">
+      <strong>Aviso legal</strong>
+      Esta es únicamente una <strong>fan page no oficial</strong>, creada por un fan y sin fines de lucro. No está afiliada,
+      patrocinada ni respaldada por Hello Games. <em>No Man's Sky</em>, su nombre, logotipos, imágenes y demás material
+      pertenecen a sus respectivos dueños (Hello Games Ltd.). Todos los derechos reservados a sus titulares. Uso personal y
+      educativo; si eres titular de derechos y quieres que algún contenido se retire, se eliminará.
+    </div>
+    <small>Fuentes: Steam, Wikipedia, No Man's Sky Wiki (Fandom y Miraheze).</small>
+  </div>
+</footer>
+
+<div id="lightbox" role="dialog" aria-label="Imagen ampliada"><img alt=""><div class="cap"></div></div>
+
+<script>
+  // Campo de estrellas animado
+  (function () {
+    var canvas = document.getElementById('stars'), ctx = canvas.getContext('2d');
+    var stars = [], W, H, reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function resize() {
+      W = canvas.width = innerWidth; H = canvas.height = innerHeight;
+      stars = [];
+      var n = Math.min(260, Math.floor(W * H / 6500));
+      for (var i = 0; i < n; i++) stars.push({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.4 + .2, s: Math.random() * .25 + .03, t: Math.random() * 6.28 });
+    }
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < stars.length; i++) {
+        var s = stars[i];
+        if (!reduce) { s.y += s.s; s.t += .03; if (s.y > H) { s.y = 0; s.x = Math.random() * W; } }
+        ctx.globalAlpha = .45 + .45 * Math.sin(s.t);
+        ctx.fillStyle = i % 7 === 0 ? '#ffb3d1' : (i % 5 === 0 ? '#9ff3ea' : '#ffffff');
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.28); ctx.fill();
+      }
+      if (!reduce) requestAnimationFrame(draw);
+    }
+    addEventListener('resize', function () { resize(); if (reduce) draw(); });
+    resize(); draw();
+  })();
+
+  // Aparición al hacer scroll
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .12 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+
+  // Contador de planetas (18 quintillones = 18 seguido de 18 ceros)
+  // Cuenta de 0 a 18 al aparecer en pantalla
+  (function () {
+    var el = document.getElementById('planetCount'), done = false;
+    var final = el.textContent;
+    new IntersectionObserver(function (es, obs) {
+      if (done || !es[0].isIntersecting) return;
+      done = true; obs.disconnect();
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var start = performance.now(), dur = 1800;
+      (function tick(now) {
+        var p = Math.min(1, (now - start) / dur), v = Math.floor(18 * (1 - Math.pow(1 - p, 3)));
+        el.textContent = p < 1 ? v + ' quintillones' : final;
+        if (p < 1) requestAnimationFrame(tick);
+      })(start);
+    }, { threshold: .6 }).observe(el);
+  })();
+
+  // Misión comunitaria en vivo (a través de server.js -> /api/mision-comunitaria)
+  (function () {
+    var $ = function (id) { return document.getElementById(id); };
+    var NOTE = $('mNote').textContent;
+    function setStatus(kind, txt) { $('mStatus').className = 'pill ' + kind; $('mStatusTxt').textContent = txt; }
+    function render(d) {
+      var pct = Math.max(0, Math.min(100, Number(d.percentage) || 0));
+      var total = Number(d.totalTiers) || 0, cur = Number(d.currentTier) || 0;
+      var complete = pct >= 100 && total > 0 && cur >= total;
+      $('mId').textContent = '#' + d.missionId;
+      $('mTier').textContent = cur + ' / ' + total;
+      $('mPct').textContent = pct + '%';
+      $('mState').textContent = complete ? 'Completada' : 'En curso';
+      $('mBarFill').style.width = pct + '%';
+      $('mBar').setAttribute('aria-valuenow', pct);
+      var t = '';
+      for (var i = 1; i <= total; i++) t += '<span class="' + (i < cur || complete ? 'done' : '') + '"></span>';
+      $('mTiers').innerHTML = t;
+      $('mNote').textContent = NOTE;
+      var hora = new Date().toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+      if (d.stale) setStatus('stale', 'Dato guardado · ' + hora);
+      else setStatus('ok', 'En vivo · ' + hora);
+    }
+    function load() {
+      fetch('/api/mision-comunitaria', { cache: 'no-store' })
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(render)
+        .catch(function () {
+          setStatus('err', 'Sin conexión');
+          $('mNote').textContent = location.protocol === 'file:'
+            ? 'Para ver datos en vivo abre la página con el servidor: ejecuta "node server.js" y entra a http://localhost:8080'
+            : 'No se pudo obtener la misión ahora. Reintentando…';
+        });
+    }
+    load(); setInterval(load, 60000);
+  })();
+
+  // Galería SVS: lee las carpetas de img/Players a través de server.js -> /api/svs
+  (function () {
+    var filters = document.getElementById('svsFilters'), grid = document.getElementById('svsGallery'), note = document.getElementById('svsNote');
+    var HINT = 'Elige un jugador para ver sus capturas.';
+    function show(p) {
+      grid.innerHTML = '';
+      p.images.forEach(function (im, n) {
+        var fig = document.createElement('figure'), img = document.createElement('img'), cap = document.createElement('figcaption');
+        img.src = im.thumb; img.loading = 'lazy'; img.decoding = 'async';
+        img.alt = im.title ? im.title + ' (captura de ' + p.name + ')' : 'Captura de ' + p.name + ' (' + (n + 1) + ')';
+        fig.dataset.view = im.view;
+        fig.dataset.player = p.name;
+        fig.dataset.title = im.title || '';
+        fig.dataset.text = im.text || '';
+        cap.textContent = im.title || p.name;
+        fig.appendChild(img); fig.appendChild(cap); grid.appendChild(fig);
+      });
+      note.textContent = p.name + ': ' + p.images.length + (p.images.length === 1 ? ' captura' : ' capturas') + '. Las imágenes son de cada jugador; No Man’s Sky pertenece a Hello Games.';
+    }
+    function build(players) {
+      if (!players.length) { note.textContent = 'Aún no hay capturas. Añade imágenes en img/Players/<jugador>/.'; return; }
+      players.forEach(function (p) {
+        var b = document.createElement('button'), bg = document.createElement('img'), who = document.createElement('span');
+        var nm = document.createElement('span'), ct = document.createElement('span');
+        b.type = 'button'; b.className = 'player-card'; b.setAttribute('aria-pressed', 'false');
+        bg.src = p.cover || p.images[0].thumb; bg.alt = ''; bg.loading = 'lazy'; bg.decoding = 'async';
+        who.className = 'who'; nm.className = 'name'; nm.textContent = p.name;
+        ct.className = 'count'; ct.textContent = p.images.length + (p.images.length === 1 ? ' captura' : ' capturas');
+        who.appendChild(nm); who.appendChild(ct); b.appendChild(bg); b.appendChild(who);
+        b.addEventListener('click', function () {
+          Array.prototype.forEach.call(filters.children, function (c) { c.setAttribute('aria-pressed', 'false'); });
+          b.setAttribute('aria-pressed', 'true'); show(p);
+        });
+        filters.appendChild(b);
+      });
+      note.textContent = HINT;
+    }
+    fetch('/api/svs', { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(build)
+      .catch(function () {
+        note.textContent = location.protocol === 'file:'
+          ? 'Para ver las capturas de SVS abre la página con el servidor: ejecuta "node server.js" y entra a http://localhost:8080'
+          : 'No se pudieron cargar las capturas ahora.';
+      });
+  })();
+
+  // Lightbox (delegado, para incluir también las imágenes cargadas dinámicamente)
+  var lb = document.getElementById('lightbox'), lbImg = lb.querySelector('img'), lbCap = lb.querySelector('.cap');
+  document.addEventListener('click', function (e) {
+    var f = e.target.closest && e.target.closest('.gallery figure');
+    if (!f) return;
+    var i = f.querySelector('img'), c = f.querySelector('figcaption');
+    lbImg.src = f.dataset.view || i.currentSrc || i.src; lbImg.alt = i.alt;
+    lbCap.textContent = '';
+    if (f.dataset.player) {
+      // Captura de un jugador SVS: nombre, título y explicación
+      var who = document.createElement('div'); who.className = 'who'; who.textContent = 'SVS · ' + f.dataset.player;
+      lbCap.appendChild(who);
+      if (f.dataset.title) { var t = document.createElement('h4'); t.textContent = f.dataset.title; lbCap.appendChild(t); }
+      if (f.dataset.text) { var p = document.createElement('p'); p.textContent = f.dataset.text; lbCap.appendChild(p); }
+    } else if (c) {
+      lbCap.textContent = c.textContent;
+    }
+    lb.classList.add('open');
+  });
+  lb.addEventListener('click', function () { lb.classList.remove('open'); });
+  addEventListener('keydown', function (e) { if (e.key === 'Escape') lb.classList.remove('open'); });
+</script>
+</body>
+</html>
