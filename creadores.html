@@ -83,6 +83,16 @@
   .mine figcaption { position: absolute; inset: auto 0 0 0; padding: 26px 10px 8px; font-size: .78rem; background: linear-gradient(180deg, transparent, rgba(5, 7, 15, .92)); }
   .mine .x { position: absolute; top: 6px; right: 6px; }
   .empty { margin-top: 14px; color: var(--muted); font-size: .9rem; }
+  .box.pend { border-color: rgba(255, 171, 94, .55); box-shadow: 0 0 40px rgba(255, 171, 94, .12); }
+  .pendlist { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-top: 16px; }
+  .pendcard { border-radius: 14px; border: 1px solid var(--line); background: rgba(255, 255, 255, .04); overflow: hidden; display: flex; flex-direction: column; }
+  .pendcard img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; display: block; background: #0a1020; }
+  .pendcard .info { padding: 12px 14px 0; flex: 1; }
+  .pendcard .info b { display: block; }
+  .pendcard .info span { display: block; font-size: .78rem; color: var(--orange); letter-spacing: .06em; text-transform: uppercase; }
+  .pendcard .info p { margin-top: 6px; font-size: .85rem; color: #cfe0e6; line-height: 1.45; }
+  .pendcard .acts { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 14px 14px; }
+  .badge { position: absolute; top: 6px; left: 6px; padding: 3px 10px; border-radius: 999px; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; background: rgba(255, 171, 94, .9); color: #201200; font-weight: 700; }
 
   @media (max-width: 760px) {
     .login { grid-template-columns: 1fr; margin-top: 1vh; }
@@ -115,7 +125,7 @@
     <div class="pw"><input type="password" id="clave" name="password" autocomplete="current-password" required><button type="button" data-toggle="clave">Ver</button></div>
     <div id="loginMsg" class="msg err" role="alert" hidden></div>
     <button class="btn main" id="btnLogin" type="submit">Entrar</button>
-    <p class="fine">Esta zona no es pública: las capturas que subas aparecerán en la galería de tu jugador.</p>
+    <p class="fine">Esta zona no es pública: las capturas que subas se publican en la galería de tu jugador cuando un administrador las aprueba.</p>
   </form>
 </main>
 
@@ -140,6 +150,12 @@
       <div id="claveMsg" class="msg" role="alert" hidden></div>
       <div class="row"><button class="btn" type="submit" id="btnClave">Guardar contraseña</button></div>
     </form>
+  </section>
+
+  <section class="box pend" id="boxPend" hidden>
+    <h2 id="pendTitulo">Pendientes de aprobar</h2>
+    <p class="sub">Revisa cada captura antes de publicarla: que sea de No Man's Sky y que no tenga nada inapropiado. Si tienes dudas, recházala.</p>
+    <div class="pendlist" id="pend"></div>
   </section>
 
   <section class="box" id="boxSubir">
@@ -230,6 +246,7 @@
     if (!mustChange) loadMine();
   }
   function setMustChange(on) {
+    if (on) show($('boxPend'), false);
     show($('boxClave'), on); show($('claveAviso'), on); show($('boxSubir'), !on); show($('boxMias'), !on);
     $('claveTitulo').textContent = on ? 'Elige tu contraseña' : 'Cambiar contraseña';
     $('btnClaveToggle').hidden = on;
@@ -309,7 +326,10 @@
       .then(function () { say($('subirMsg'), 'Guardando…', 'ok'); return api('capturas', { body: { id: perm.id, descripcion: desc, tipo: $('tipo').value } }); })
       .then(function (r) {
         resetUpload(); show($('drop'), false);
-        $('listoTitulo').textContent = '¡Listo! Tu captura ya está en la galería: ' + r.titulo; $('listoTexto').textContent = r.texto; show($('listoTag'), !!r.generada); show($('listo'), true);
+        var pend = r.estado === 'pendiente';
+        $('listoTitulo').textContent = pend ? '¡Recibida! Quedó pendiente de aprobación: ' + r.titulo : '¡Listo! Tu captura ya está en la galería: ' + r.titulo;
+        $('listoTexto').textContent = (pend ? 'Aparecerá en la galería cuando un administrador la apruebe. ' : '') + r.texto;
+        show($('listoTag'), !!r.generada); show($('listo'), true);
         loadMine();
       })
       .catch(function (err) { say($('subirMsg'), err.message); if (err.status === 401) { showLogin(); } })
@@ -319,13 +339,19 @@
 
   // ---------- Mis capturas ----------
   function loadMine() {
-    api('mias').then(function (list) {
+    api('mias').then(function (all) {
+      var isAdmin = user && user.rol === 'admin';
+      // El administrador ve las pendientes en su propia sección; el resto ve las suyas marcadas como "Pendiente"
+      var pendientes = isAdmin ? all.filter(function (c) { return c.estado === 'pendiente'; }) : [];
+      var list = isAdmin ? all.filter(function (c) { return c.estado !== 'pendiente'; }) : all;
+      renderPending(pendientes);
       var box = $('mias'); box.textContent = '';
       $('miasVacio').hidden = list.length > 0;
       list.forEach(function (c) {
         var f = document.createElement('figure'), i = document.createElement('img'), cap = document.createElement('figcaption'), b = document.createElement('button');
         i.src = c.thumb; i.alt = c.title || 'Captura'; i.loading = 'lazy';
-        cap.textContent = (user.rol === 'admin' ? c.nombre + ' · ' : '') + (c.title || 'Captura');
+        if (c.estado === 'pendiente') { var bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = 'Pendiente'; f.appendChild(bd); }
+        cap.textContent = (isAdmin ? c.nombre + ' · ' : '') + (c.title || 'Captura');
         b.type = 'button'; b.className = 'btn ghost danger sm x'; b.textContent = 'Borrar'; b.setAttribute('aria-label', 'Borrar la captura ' + (c.title || ''));
         b.addEventListener('click', function () {
           if (busy || !confirm('¿Borrar esta captura? Se quitará de la galería y no se puede deshacer.')) return;
@@ -338,6 +364,37 @@
         f.appendChild(i); f.appendChild(cap); f.appendChild(b); box.appendChild(f);
       });
     }).catch(function () {});
+  }
+
+  // ---------- Pendientes de aprobar (solo administrador) ----------
+  function renderPending(list) {
+    var box = $('pend'); box.textContent = '';
+    show($('boxPend'), list.length > 0);
+    $('pendTitulo').textContent = 'Pendientes de aprobar (' + list.length + ')';
+    list.forEach(function (c) {
+      var card = document.createElement('div'), img = document.createElement('img'), info = document.createElement('div'), acts = document.createElement('div');
+      card.className = 'pendcard'; info.className = 'info'; acts.className = 'acts';
+      img.src = c.view; img.alt = 'Captura pendiente de ' + c.nombre; img.loading = 'lazy';
+      var who = document.createElement('span'); who.textContent = c.nombre;
+      var t = document.createElement('b'); t.textContent = c.title || 'Captura';
+      var p = document.createElement('p'); p.textContent = c.text || '';
+      info.appendChild(who); info.appendChild(t); info.appendChild(p);
+      var big = document.createElement('a'); big.className = 'btn ghost sm'; big.href = c.view; big.target = '_blank'; big.rel = 'noopener'; big.textContent = 'Ver grande';
+      var ok = document.createElement('button'); ok.type = 'button'; ok.className = 'btn sm'; ok.textContent = 'Aprobar';
+      var no = document.createElement('button'); no.type = 'button'; no.className = 'btn ghost danger sm'; no.textContent = 'Rechazar';
+      function done() { busy = false; ok.disabled = no.disabled = false; }
+      ok.addEventListener('click', function () {
+        if (busy) return; busy = true; ok.disabled = no.disabled = true;
+        api('aprobar', { body: { id: c.id, usuario: c.usuario } }).then(function () { loadMine(); }).catch(function (err) { alert(err.message); }).then(done);
+      });
+      no.addEventListener('click', function () {
+        if (busy || !confirm('¿Rechazar esta captura? Se borrará y no se puede deshacer.')) return;
+        busy = true; ok.disabled = no.disabled = true;
+        api('capturas/' + encodeURIComponent(c.id) + '?u=' + encodeURIComponent(c.usuario), { method: 'DELETE' }).then(function () { loadMine(); }).catch(function (err) { alert(err.message); }).then(done);
+      });
+      acts.appendChild(big); acts.appendChild(ok); acts.appendChild(no);
+      card.appendChild(img); card.appendChild(info); card.appendChild(acts); box.appendChild(card);
+    });
   }
 
   // ---------- Inicio: ¿ya hay sesión? ----------

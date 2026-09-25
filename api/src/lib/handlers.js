@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const auth = require('./auth');
 const store = require('./storage');
 const { describe, isTipo } = require('./describe');
+const notify = require('./notify');
 
 const MAX_FAILS = 5;
 const LOCK_MS = 15 * 60 * 1000;
@@ -115,25 +116,33 @@ async function registrar(req) {
   const tipo = String((req.body && req.body.tipo) || 'otro');
   if (!isTipo(tipo)) return out(400, { error: 'Tipo de captura no válido.' });
   const d = descripcion ? { titulo: titleFrom(descripcion), texto: descripcion, generada: false } : describe(tipo, u.nombre);
+  // Las capturas de los creadores quedan pendientes hasta que un administrador las apruebe; las del admin se publican solas
+  const estado = u.rol === 'admin' ? 'aprobada' : 'pendiente';
   await c.shots.createEntity({
     partitionKey: u.rowKey, rowKey: id, nombre: u.nombre,
     titulo: d.titulo, texto: d.texto, generada: d.generada === true,
-    creado: new Date().toISOString()
+    estado, creado: new Date().toISOString()
   });
-  return out(201, { ok: true, id, titulo: d.titulo, texto: d.texto, generada: d.generada === true });
+  if (estado === 'pendiente') {
+    const host = req.headers['x-forwarded-host'] || req.headers.host || '';
+    await notify.capturaPendiente({ nombre: u.nombre, titulo: d.titulo, panelUrl: (process.env.SITE_URL || 'https://' + host) + '/creadores.html' });
+  }
+  return out(201, { ok: true, id, estado, titulo: d.titulo, texto: d.texto, generada: d.generada === true });
 }
 
 const shape = (e) => ({
   id: e.rowKey, usuario: e.partitionKey,
   thumb: store.blobUrl(`thumbs/${e.partitionKey}/${e.rowKey}.jpg`),
   view: store.blobUrl(`view/${e.partitionKey}/${e.rowKey}.jpg`),
-  title: e.titulo || '', text: e.texto || '', auto: e.generada === true, creado: e.creado
+  title: e.titulo || '', text: e.texto || '', auto: e.generada === true, creado: e.creado,
+  estado: e.estado || 'aprobada'   // las anteriores a la revisión cuentan como aprobadas
 });
 
 // Público: capturas subidas por creadores, agrupadas por jugador (misma forma que svs.json)
 async function listar() {
   const byName = new Map();
   for await (const e of store.clients().shots.listEntities()) {
+    if (e.estado === 'pendiente') continue;   // lo pendiente NO se muestra públicamente
     const arr = byName.get(e.nombre) || []; arr.push(shape(e)); byName.set(e.nombre, arr);
   }
   const players = [...byName.entries()].map(([name, images]) => {
@@ -165,4 +174,17 @@ async function borrar(req) {
   return out(200, { ok: true });
 }
 
-module.exports = { login, logout, yo, cambiarClave, permisoSubida, registrar, listar, misCapturas, borrar };
+// Solo administradores: publica una captura pendiente. (Rechazar = borrar, que ya existe.)
+async function aprobar(req) {
+  const u = await currentUser(req);
+  if (!u) return out(401, { error: 'Sin sesión.' });
+  if (u.rol !== 'admin') return out(403, { error: 'Solo un administrador puede aprobar capturas.' });
+  const id = String((req.body && req.body.id) || '');
+  const owner = auth.normUser(req.body && req.body.usuario);
+  if (!/^[a-z0-9]{8,30}$/.test(id) || !auth.validUser(owner)) return out(400, { error: 'Solicitud no válida.' });
+  try { await store.clients().shots.updateEntity({ partitionKey: owner, rowKey: id, estado: 'aprobada' }, 'Merge'); }
+  catch (e) { if (e.statusCode === 404) return out(404, { error: 'La captura ya no existe.' }); throw e; }
+  return out(200, { ok: true });
+}
+
+module.exports = { login, logout, yo, cambiarClave, permisoSubida, registrar, listar, misCapturas, borrar, aprobar };
