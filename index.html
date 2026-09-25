@@ -178,6 +178,7 @@
   #lightbox .cap .who { color: var(--pink); font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; }
   #lightbox .cap h4 { margin: 2px 0 4px; color: var(--text); font-size: 1.05rem; font-weight: 600; letter-spacing: .04em; }
   #lightbox .cap p { color: #cfe0e6; line-height: 1.55; }
+  #lightbox .cap .auto { margin-top: 6px; font-size: .72rem; color: var(--muted); font-style: italic; }
   #lightbox img { max-width: 100%; max-height: 62vh; object-fit: contain; border-radius: 12px; box-shadow: 0 0 80px rgba(77, 227, 208, .3); cursor: default; }
   #lightbox .pos { position: absolute; top: 24px; left: 24px; color: var(--muted); font-size: .85rem; letter-spacing: .14em; }
   .lb-btn { position: absolute; z-index: 2; width: 46px; height: 46px; padding: 0 0 4px; border-radius: 50%; border: 1px solid var(--line); background: rgba(12, 20, 40, .75); color: var(--text); font: inherit; font-size: 1.9rem; line-height: 1; cursor: pointer; backdrop-filter: blur(4px); transition: border-color .2s, box-shadow .2s, background .2s; }
@@ -262,7 +263,10 @@
   /* El logo tiene fondo casi negro: "lighten" lo funde con el fondo de la barra */
   .studio-bar img { display: block; height: 44px; width: auto; mix-blend-mode: lighten; }
   .studio-bar span { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
-  @media (max-width: 640px) { .studio-bar span { display: none; } }
+  .creators-link { position: absolute; right: clamp(12px, 2.5vw, 28px); padding: 5px 14px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); font-size: .74rem; letter-spacing: .08em; text-decoration: none; white-space: nowrap; transition: color .2s, border-color .2s, box-shadow .2s; }
+  .creators-link:hover, .creators-link:focus-visible { color: var(--teal); border-color: var(--teal); box-shadow: 0 0 16px rgba(77, 227, 208, .25); outline: none; }
+  @media (max-width: 900px) { .studio-bar span { display: none; } }
+  @media (max-width: 520px) { .studio-bar { justify-content: flex-start; } .creators-link { font-size: .68rem; padding: 5px 10px; } }
   footer .disclaimer { max-width: 760px; margin: 18px auto 0; padding: 16px 20px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); text-align: left; line-height: 1.6; }
   footer .disclaimer strong:first-child { display: block; margin-bottom: 4px; color: var(--orange); letter-spacing: .1em; text-transform: uppercase; font-size: .8rem; }
   .fan-note { margin-top: 18px; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-shadow: 0 2px 10px rgba(0, 0, 0, .8); }
@@ -499,6 +503,7 @@
 <div class="studio-bar">
   <img src="img/geopbyte-barra.png" alt="Logo de Geopbyte Studio" width="174" height="44">
   <span>Fan page no oficial · No Man's Sky es de Hello Games</span>
+  <a class="creators-link" href="creadores.html" rel="nofollow">Acceso para creadores</a>
 </div>
 
 <div id="lightbox" role="dialog" aria-modal="true" aria-label="Imagen ampliada">
@@ -610,6 +615,7 @@
         fig.dataset.player = p.name;
         fig.dataset.title = im.title || '';
         fig.dataset.text = im.text || '';
+        if (im.auto) fig.dataset.auto = '1';
         cap.textContent = im.title || p.name;
         fig.appendChild(img); fig.appendChild(cap); grid.appendChild(fig);
       });
@@ -639,8 +645,20 @@
       });
       note.textContent = HINT;
     }
+    // Une las capturas fijas (svs.json) con las que suben los creadores (/api/capturas, en Azure).
+    // Si la API no responde (p. ej. en local) se muestran solo las fijas.
+    function merge(base, extra) {
+      var out = base.slice();
+      (extra || []).forEach(function (p) {
+        var t = null; out.forEach(function (q) { if (q.name === p.name) t = q; });
+        if (t) t.images = t.images.concat(p.images); else out.push({ name: p.name, cover: p.cover, images: p.images.slice() });
+      });
+      return out.sort(function (a, b) { return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }); });
+    }
+    var extra = fetch('/api/capturas').then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; });
     fetch('svs.json', { cache: 'no-store' })
       .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function (base) { return extra.then(function (more) { return merge(base, Array.isArray(more) ? more : []); }); })
       .then(build)
       .catch(function () {
         note.textContent = location.protocol === 'file:'
@@ -754,6 +772,7 @@
       lbCap.appendChild(who);
       if (f.dataset.title) { var t = document.createElement('h4'); t.textContent = f.dataset.title; lbCap.appendChild(t); }
       if (f.dataset.text) { var p = document.createElement('p'); p.textContent = f.dataset.text; lbCap.appendChild(p); }
+      if (f.dataset.auto) { var a = document.createElement('div'); a.className = 'auto'; a.textContent = 'Descripción generada automáticamente; puede contener errores.'; lbCap.appendChild(a); }
     } else if (c) {
       lbCap.textContent = c.textContent;
     }

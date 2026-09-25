@@ -6,4 +6,5 @@ img/Players/
 node_modules/
 api/node_modules/
 api/local.settings.json
+scripts/credenciales.txt
 _preview.html

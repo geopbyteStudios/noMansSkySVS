@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Acceso para creadores · SVS</title>
+<style>
+  :root {
+    --bg: #05070f; --panel: rgba(12, 20, 40, .72); --line: rgba(120, 220, 230, .22);
+    --text: #e8f1f5; --muted: #9db3bd; --teal: #4de3d0; --pink: #ff6fa8; --orange: #ffab5e; --radius: 18px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif; line-height: 1.6; min-height: 100vh; overflow-x: hidden; }
+  .nebula { position: fixed; inset: 0; z-index: -2; background:
+    radial-gradient(60% 50% at 15% 20%, rgba(255, 111, 168, .22), transparent 70%),
+    radial-gradient(55% 45% at 85% 15%, rgba(77, 227, 208, .22), transparent 70%),
+    radial-gradient(70% 55% at 60% 95%, rgba(255, 171, 94, .16), transparent 70%),
+    linear-gradient(180deg, #060a18 0%, #0a1226 55%, #08101e 100%); }
+  #stars { position: fixed; inset: 0; z-index: -1; width: 100%; height: 100%; }
+  a { color: var(--teal); }
+  [hidden] { display: none !important; }
+
+  .top { display: flex; justify-content: space-between; align-items: center; padding: 14px clamp(16px, 4vw, 40px); }
+  .top .logo { letter-spacing: .28em; font-weight: 600; font-size: .85rem; text-transform: uppercase; }
+  .top a { text-decoration: none; color: var(--muted); font-size: .9rem; }
+  .top a:hover { color: var(--teal); }
+
+  /* Acceso: imagen a la izquierda, formulario a la derecha */
+  .login { display: grid; grid-template-columns: 1.15fr 1fr; gap: 0; width: min(1000px, 100% - 32px); margin: 3vh auto 60px; border-radius: 22px; overflow: hidden; border: 1px solid var(--line); background: var(--panel); backdrop-filter: blur(10px); box-shadow: 0 30px 80px rgba(0, 0, 0, .55), 0 0 80px rgba(77, 227, 208, .12); }
+  .login .art { position: relative; min-height: 460px; background: #0a1020 url("img/view/MuteAyanami/8762a981-9272-43cd-8345-5f390e0aa18a.png.jpg") center / cover no-repeat; }
+  .login .art::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(5, 7, 15, .05) 30%, rgba(5, 7, 15, .85) 100%), linear-gradient(90deg, transparent 60%, rgba(12, 20, 40, .7)); }
+  .login .art p { position: absolute; z-index: 1; left: 24px; right: 24px; bottom: 22px; font-size: .95rem; color: #d6e8ee; text-shadow: 0 2px 12px rgba(0, 0, 0, .8); }
+  .login .art b { display: block; font-size: 1.15rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; color: #fff; }
+  .card { padding: clamp(24px, 4vw, 40px); display: flex; flex-direction: column; justify-content: center; }
+  h1 { font-size: 1.5rem; font-weight: 300; letter-spacing: .12em; text-transform: uppercase; }
+  h1::after, h2::after { content: ""; display: block; width: 56px; height: 3px; margin: 10px 0 0; border-radius: 3px; background: linear-gradient(90deg, var(--teal), var(--pink), var(--orange)); }
+  .sub { margin-top: 14px; color: var(--muted); font-size: .92rem; }
+  label { display: block; margin: 18px 0 6px; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  input[type=text], input[type=password], textarea { width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255, 255, 255, .05); color: var(--text); font: inherit; transition: border-color .2s, box-shadow .2s; }
+  textarea { resize: vertical; min-height: 96px; }
+  input:focus, textarea:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(77, 227, 208, .18); }
+  .pw { position: relative; }
+  .pw button { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); padding: 6px 10px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); font: inherit; font-size: .8rem; cursor: pointer; }
+  .pw button:hover { color: var(--teal); }
+  .btn { display: inline-block; padding: 12px 26px; border-radius: 999px; border: 1px solid var(--teal); color: var(--text); background: rgba(77, 227, 208, .14); font: inherit; cursor: pointer; text-decoration: none; transition: transform .2s, background .2s, box-shadow .2s, opacity .2s; }
+  .btn:hover:not(:disabled) { transform: translateY(-2px); background: rgba(77, 227, 208, .3); box-shadow: 0 0 26px rgba(77, 227, 208, .4); }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+  .btn.ghost { border-color: var(--line); background: transparent; color: var(--muted); }
+  .btn.ghost:hover:not(:disabled) { color: var(--text); border-color: var(--teal); box-shadow: none; }
+  .btn.danger:hover:not(:disabled) { border-color: var(--pink); box-shadow: 0 0 20px rgba(255, 111, 168, .35); }
+  .btn.sm { padding: 6px 14px; font-size: .82rem; }
+  .card .btn.main { margin-top: 24px; width: 100%; }
+  .msg { margin-top: 16px; padding: 10px 14px; border-radius: 12px; font-size: .9rem; border: 1px solid var(--line); }
+  .msg.err { border-color: rgba(255, 111, 168, .5); color: #ffc2d8; background: rgba(255, 111, 168, .08); }
+  .msg.ok { border-color: rgba(77, 227, 208, .5); color: #bff5ee; background: rgba(77, 227, 208, .08); }
+  .fine { margin-top: 20px; font-size: .78rem; color: var(--muted); }
+
+  /* Panel */
+  .panel { width: min(900px, 100% - 32px); margin: 2vh auto 70px; }
+  .bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .bar .hi { font-size: 1.05rem; } .bar .hi b { color: var(--teal); }
+  .bar .acts { display: flex; flex-wrap: wrap; gap: 10px; }
+  .box { padding: clamp(20px, 3vw, 30px); border-radius: var(--radius); background: var(--panel); border: 1px solid var(--line); backdrop-filter: blur(10px); margin-top: 18px; }
+  h2 { font-size: 1.15rem; font-weight: 300; letter-spacing: .1em; text-transform: uppercase; }
+  .drop { display: grid; place-items: center; text-align: center; gap: 6px; margin-top: 16px; padding: 28px 16px; border-radius: 14px; border: 2px dashed var(--line); color: var(--muted); cursor: pointer; transition: border-color .2s, background .2s; min-height: 150px; }
+  .drop:hover, .drop.over, .drop:focus-visible { border-color: var(--teal); background: rgba(77, 227, 208, .07); outline: none; }
+  .drop strong { color: var(--text); font-weight: 600; }
+  .preview { margin-top: 16px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .preview img { width: 100%; max-height: 360px; object-fit: contain; border-radius: 12px; background: #0a1020; border: 1px solid var(--line); }
+  .preview small { color: var(--muted); }
+  .count { text-align: right; font-size: .75rem; color: var(--muted); margin-top: 4px; }
+  .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 18px; }
+  .done { margin-top: 16px; padding: 16px; border-radius: 14px; border: 1px solid rgba(77, 227, 208, .4); background: rgba(77, 227, 208, .07); }
+  .done h3 { font-size: 1rem; } .done p { margin-top: 6px; color: #cfe0e6; font-size: .92rem; }
+  .done .tag { display: inline-block; margin-top: 8px; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--pink); }
+  .mine { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; margin-top: 16px; }
+  .mine figure { position: relative; overflow: hidden; border-radius: 12px; border: 1px solid var(--line); background: #0a1020; aspect-ratio: 16 / 10; }
+  .mine img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .mine figcaption { position: absolute; inset: auto 0 0 0; padding: 26px 10px 8px; font-size: .78rem; background: linear-gradient(180deg, transparent, rgba(5, 7, 15, .92)); }
+  .mine .x { position: absolute; top: 6px; right: 6px; }
+  .empty { margin-top: 14px; color: var(--muted); font-size: .9rem; }
+
+  @media (max-width: 760px) {
+    .login { grid-template-columns: 1fr; margin-top: 1vh; }
+    .login .art { min-height: 200px; }
+    .login .art p { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } }
+</style>
+</head>
+<body>
+<div class="nebula"></div>
+<canvas id="stars"></canvas>
+
+<div class="top">
+  <div class="logo">SVS · Creadores</div>
+  <a href="./">← Volver a la página</a>
+</div>
+
+<!-- ACCESO -->
+<main id="vistaLogin" class="login" hidden>
+  <div class="art" role="img" aria-label="Captura de una nave frente a una estrella, hecha por un jugador de SVS">
+    <p><b>Acceso para creadores</b>Aquí los jugadores de SVS suben sus propias capturas a la galería.</p>
+  </div>
+  <form class="card" id="formLogin" autocomplete="on" novalidate>
+    <h1>Entrar</h1>
+    <p class="sub">Solo para miembros de SVS con cuenta. Si no tienes una, pídesela a Geop.</p>
+    <label for="usuario">Usuario</label>
+    <input type="text" id="usuario" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+    <label for="clave">Contraseña</label>
+    <div class="pw"><input type="password" id="clave" name="password" autocomplete="current-password" required><button type="button" data-toggle="clave">Ver</button></div>
+    <div id="loginMsg" class="msg err" role="alert" hidden></div>
+    <button class="btn main" id="btnLogin" type="submit">Entrar</button>
+    <p class="fine">Esta zona no es pública: las capturas que subas aparecerán en la galería de tu jugador.</p>
+  </form>
+</main>
+
+<!-- PANEL -->
+<main id="vistaPanel" class="panel" hidden>
+  <div class="bar">
+    <div class="hi">Hola, <b id="quien"></b> <span id="rolTag" class="fine" hidden></span></div>
+    <div class="acts">
+      <button class="btn ghost sm" id="btnClaveToggle" type="button">Cambiar contraseña</button>
+      <button class="btn ghost sm" id="btnSalir" type="button">Cerrar sesión</button>
+    </div>
+  </div>
+
+  <section class="box" id="boxClave" hidden>
+    <h2 id="claveTitulo">Cambiar contraseña</h2>
+    <p class="sub" id="claveAviso" hidden>Estás usando una contraseña temporal. Antes de subir capturas, elige una tuya (mínimo 10 caracteres y que no uses en otros sitios).</p>
+    <form id="formClave" autocomplete="off" novalidate>
+      <label for="claveActual">Contraseña actual</label>
+      <input type="password" id="claveActual" autocomplete="current-password">
+      <label for="claveNueva">Contraseña nueva</label>
+      <input type="password" id="claveNueva" autocomplete="new-password">
+      <div id="claveMsg" class="msg" role="alert" hidden></div>
+      <div class="row"><button class="btn" type="submit" id="btnClave">Guardar contraseña</button></div>
+    </form>
+  </section>
+
+  <section class="box" id="boxSubir">
+    <h2>Subir una captura</h2>
+    <div class="drop" id="drop" tabindex="0" role="button" aria-label="Elegir una imagen para subir">
+      <div><strong>Haz clic o arrastra una imagen aquí</strong></div>
+      <div>PNG, JPG o WebP · se reduce automáticamente antes de subirse</div>
+    </div>
+    <input type="file" id="archivo" accept="image/png,image/jpeg,image/webp" hidden>
+    <div class="preview" id="preview" hidden><img id="previewImg" alt="Vista previa de la captura elegida"><small id="previewInfo"></small></div>
+
+    <div id="camposSubida" hidden>
+      <label for="desc">Descripción (opcional)</label>
+      <textarea id="desc" maxlength="600" placeholder="Cuenta qué se ve o qué estabas haciendo. Si lo dejas vacío, se generará una descripción automática."></textarea>
+      <div class="count"><span id="cuenta">0</span> / 600</div>
+      <div id="subirMsg" class="msg" role="alert" hidden></div>
+      <div class="row">
+        <button class="btn" id="btnSubir" type="button">Subir captura</button>
+        <button class="btn ghost" id="btnCancelar" type="button">Cancelar</button>
+      </div>
+    </div>
+    <div class="done" id="listo" hidden>
+      <h3 id="listoTitulo"></h3><p id="listoTexto"></p><span class="tag" id="listoTag" hidden>Descripción generada automáticamente</span>
+      <div class="row"><button class="btn sm" id="btnOtra" type="button">Subir otra</button><a class="btn ghost sm" href="./#svs">Ver la galería</a></div>
+    </div>
+  </section>
+
+  <section class="box" id="boxMias">
+    <h2 id="misTitulo">Mis capturas</h2>
+    <div class="mine" id="mias"></div>
+    <p class="empty" id="miasVacio" hidden>Aún no has subido capturas desde aquí.</p>
+  </section>
+</main>
+
+<p id="cargando" class="sub" style="text-align:center;margin-top:20vh">Cargando…</p>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var user = null, file = null, busy = false;
+
+  // ---------- Fondo de estrellas ----------
+  (function () {
+    var cv = $('stars'), cx = cv.getContext('2d'), st = [], W, H, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function size() { W = cv.width = innerWidth; H = cv.height = innerHeight; st = []; var n = Math.min(200, Math.floor(W * H / 7000)); for (var i = 0; i < n; i++) st.push({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.3 + .2, s: Math.random() * .2 + .03, t: Math.random() * 6.28 }); }
+    function draw() { cx.clearRect(0, 0, W, H); for (var i = 0; i < st.length; i++) { var s = st[i]; if (!reduce) { s.y += s.s; s.t += .03; if (s.y > H) { s.y = 0; s.x = Math.random() * W; } } cx.globalAlpha = .45 + .45 * Math.sin(s.t); cx.fillStyle = i % 7 === 0 ? '#ffb3d1' : (i % 5 === 0 ? '#9ff3ea' : '#fff'); cx.beginPath(); cx.arc(s.x, s.y, s.r, 0, 6.28); cx.fill(); } if (!reduce) requestAnimationFrame(draw); }
+    addEventListener('resize', function () { size(); if (reduce) draw(); }); size(); draw();
+  })();
+
+  // ---------- Utilidades ----------
+  function show(el, on) { el.hidden = !on; }
+  function say(el, text, kind) { el.textContent = text || ''; el.className = 'msg ' + (kind || 'err'); el.hidden = !text; }
+  function api(path, opt) {
+    opt = opt || {};
+    var init = { method: opt.method || 'GET', credentials: 'same-origin', headers: {} };
+    if (opt.body !== undefined) { init.method = opt.method || 'POST'; init.headers['Content-Type'] = 'application/json'; init.body = JSON.stringify(opt.body); }
+    else if (init.method === 'POST') { init.headers['Content-Type'] = 'application/json'; init.body = '{}'; }
+    return fetch('/api/creadores/' + path, init).then(function (r) {
+      return r.text().then(function (t) {
+        var j = null; try { j = t ? JSON.parse(t) : null; } catch (e) {}
+        if (r.status === 404 && !j) throw Object.assign(new Error('El acceso para creadores solo funciona en el sitio publicado (no en el servidor local).'), { status: 404 });
+        if (!r.ok) throw Object.assign(new Error((j && j.error) || 'Error ' + r.status), { status: r.status });
+        return j;
+      });
+    }, function () { throw new Error('No se pudo conectar. Revisa tu conexión e inténtalo de nuevo.'); });
+  }
+
+  // ---------- Vistas ----------
+  function showLogin() { user = null; show($('cargando'), false); show($('vistaPanel'), false); show($('vistaLogin'), true); $('clave').value = ''; setTimeout(function () { $('usuario').focus(); }, 50); }
+  function showPanel(u, mustChange) {
+    user = u; show($('cargando'), false); show($('vistaLogin'), false); show($('vistaPanel'), true);
+    $('quien').textContent = u.nombre;
+    $('rolTag').hidden = u.rol !== 'admin'; $('rolTag').textContent = '· administrador';
+    $('misTitulo').textContent = u.rol === 'admin' ? 'Todas las capturas subidas' : 'Mis capturas';
+    setMustChange(!!mustChange);
+    if (!mustChange) loadMine();
+  }
+  function setMustChange(on) {
+    show($('boxClave'), on); show($('claveAviso'), on); show($('boxSubir'), !on); show($('boxMias'), !on);
+    $('claveTitulo').textContent = on ? 'Elige tu contraseña' : 'Cambiar contraseña';
+    $('btnClaveToggle').hidden = on;
+  }
+
+  // ---------- Acceso ----------
+  $('formLogin').addEventListener('submit', function (e) {
+    e.preventDefault(); if (busy) return;
+    var u = $('usuario').value.trim(), p = $('clave').value;
+    if (!u || !p) { say($('loginMsg'), 'Escribe tu usuario y tu contraseña.'); return; }
+    busy = true; $('btnLogin').disabled = true; say($('loginMsg'), '');
+    api('login', { body: { usuario: u, clave: p } })
+      .then(function (r) { $('clave').value = ''; showPanel(r.usuario, r.debeCambiarClave); })
+      .catch(function (err) { say($('loginMsg'), err.message); $('clave').value = ''; $('clave').focus(); })
+      .then(function () { busy = false; $('btnLogin').disabled = false; });
+  });
+  document.querySelectorAll('[data-toggle]').forEach(function (b) {
+    b.addEventListener('click', function () { var i = $(b.dataset.toggle), t = i.type === 'password'; i.type = t ? 'text' : 'password'; b.textContent = t ? 'Ocultar' : 'Ver'; });
+  });
+  $('btnSalir').addEventListener('click', function () { api('logout', { body: {} }).catch(function () {}).then(function () { resetUpload(); showLogin(); }); });
+
+  // ---------- Cambiar contraseña ----------
+  $('btnClaveToggle').addEventListener('click', function () { var on = $('boxClave').hidden; show($('boxClave'), on); if (on) $('claveActual').focus(); });
+  $('formClave').addEventListener('submit', function (e) {
+    e.preventDefault(); if (busy) return;
+    var a = $('claveActual').value, n = $('claveNueva').value;
+    if (n.length < 10) { say($('claveMsg'), 'La contraseña nueva debe tener al menos 10 caracteres.'); return; }
+    busy = true; $('btnClave').disabled = true; say($('claveMsg'), '');
+    api('clave', { body: { actual: a, nueva: n } })
+      .then(function () { $('claveActual').value = ''; $('claveNueva').value = ''; say($('claveMsg'), 'Contraseña guardada.', 'ok'); setMustChange(false); loadMine(); setTimeout(function () { show($('boxClave'), false); say($('claveMsg'), ''); }, 1800); })
+      .catch(function (err) { say($('claveMsg'), err.message); })
+      .then(function () { busy = false; $('btnClave').disabled = false; });
+  });
+
+  // ---------- Elegir imagen ----------
+  var drop = $('drop'), input = $('archivo');
+  drop.addEventListener('click', function () { input.click(); });
+  drop.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); } });
+  ['dragenter', 'dragover'].forEach(function (t) { drop.addEventListener(t, function (e) { e.preventDefault(); drop.classList.add('over'); }); });
+  ['dragleave', 'drop'].forEach(function (t) { drop.addEventListener(t, function (e) { e.preventDefault(); drop.classList.remove('over'); }); });
+  drop.addEventListener('drop', function (e) { if (e.dataTransfer.files[0]) pick(e.dataTransfer.files[0]); });
+  input.addEventListener('change', function () { if (input.files[0]) pick(input.files[0]); });
+  $('desc').addEventListener('input', function () { $('cuenta').textContent = this.value.length; });
+
+  function pick(f) {
+    say($('subirMsg'), ''); show($('listo'), false);
+    if (!/^image\/(png|jpeg|webp)$/.test(f.type)) { file = null; show($('camposSubida'), true); say($('subirMsg'), 'Solo se admiten imágenes PNG, JPG o WebP.'); $('btnSubir').disabled = true; return; }
+    if (f.size > 40 * 1024 * 1024) { file = null; show($('camposSubida'), true); say($('subirMsg'), 'La imagen pesa más de 40 MB.'); $('btnSubir').disabled = true; return; }
+    file = f; $('btnSubir').disabled = false;
+    var url = URL.createObjectURL(f); $('previewImg').src = url;
+    $('previewInfo').textContent = f.name + ' · ' + (f.size / 1048576).toFixed(1) + ' MB';
+    show($('preview'), true); show($('camposSubida'), true);
+  }
+  function resetUpload() { file = null; input.value = ''; $('desc').value = ''; $('cuenta').textContent = '0'; say($('subirMsg'), ''); show($('preview'), false); show($('camposSubida'), false); show($('listo'), false); show($('drop'), true); }
+  $('btnCancelar').addEventListener('click', resetUpload);
+  $('btnOtra').addEventListener('click', resetUpload);
+
+  // ---------- Reducir y subir ----------
+  function shrink(f, maxW, q) {
+    return createImageBitmap(f).then(function (bmp) {
+      var w = Math.min(maxW, bmp.width), h = Math.round(bmp.height * w / bmp.width);
+      var cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+      var c = cv.getContext('2d'); c.fillStyle = '#000'; c.fillRect(0, 0, w, h); c.imageSmoothingQuality = 'high'; c.drawImage(bmp, 0, 0, w, h); bmp.close && bmp.close();
+      return new Promise(function (ok, no) { cv.toBlob(function (b) { b ? ok(b) : no(new Error('No se pudo procesar la imagen.')); }, 'image/jpeg', q); });
+    });
+  }
+  function put(url, blob) {
+    return fetch(url, { method: 'PUT', headers: { 'x-ms-blob-type': 'BlockBlob', 'Content-Type': 'image/jpeg' }, body: blob })
+      .then(function (r) { if (!r.ok) throw new Error('No se pudo subir la imagen (' + r.status + ').'); }, function () { throw new Error('No se pudo subir la imagen. Revisa tu conexión.'); });
+  }
+  $('btnSubir').addEventListener('click', function () {
+    if (busy || !file) return; busy = true; $('btnSubir').disabled = true; $('btnCancelar').disabled = true; say($('subirMsg'), 'Preparando la imagen…', 'ok');
+    var desc = $('desc').value.trim(), thumb, view, perm;
+    Promise.all([shrink(file, 640, .8), shrink(file, 1920, .82)])
+      .then(function (r) { thumb = r[0]; view = r[1]; say($('subirMsg'), 'Subiendo…', 'ok'); return api('permiso', { body: {} }); })
+      .then(function (p) { perm = p; return Promise.all([put(p.thumbUrl, thumb), put(p.viewUrl, view)]); })
+      .then(function () { say($('subirMsg'), desc ? 'Guardando…' : 'Guardando y generando la descripción…', 'ok'); return api('capturas', { body: { id: perm.id, descripcion: desc } }); })
+      .then(function (r) {
+        resetUpload(); show($('drop'), false);
+        $('listoTitulo').textContent = '¡Listo! Tu captura ya está en la galería: ' + r.titulo; $('listoTexto').textContent = r.texto; show($('listoTag'), !!r.generada); show($('listo'), true);
+        loadMine();
+      })
+      .catch(function (err) { say($('subirMsg'), err.message); if (err.status === 401) { showLogin(); } })
+      .then(function () { busy = false; $('btnSubir').disabled = !file; $('btnCancelar').disabled = false; });
+  });
+  $('btnOtra').addEventListener('click', function () { show($('drop'), true); });
+
+  // ---------- Mis capturas ----------
+  function loadMine() {
+    api('mias').then(function (list) {
+      var box = $('mias'); box.textContent = '';
+      $('miasVacio').hidden = list.length > 0;
+      list.forEach(function (c) {
+        var f = document.createElement('figure'), i = document.createElement('img'), cap = document.createElement('figcaption'), b = document.createElement('button');
+        i.src = c.thumb; i.alt = c.title || 'Captura'; i.loading = 'lazy';
+        cap.textContent = (user.rol === 'admin' ? c.nombre + ' · ' : '') + (c.title || 'Captura');
+        b.type = 'button'; b.className = 'btn ghost danger sm x'; b.textContent = 'Borrar'; b.setAttribute('aria-label', 'Borrar la captura ' + (c.title || ''));
+        b.addEventListener('click', function () {
+          if (busy || !confirm('¿Borrar esta captura? Se quitará de la galería y no se puede deshacer.')) return;
+          busy = true; b.disabled = true;
+          api('capturas/' + encodeURIComponent(c.id) + '?u=' + encodeURIComponent(c.usuario), { method: 'DELETE' })
+            .then(function () { f.remove(); if (!box.children.length) $('miasVacio').hidden = false; })
+            .catch(function (err) { alert(err.message); b.disabled = false; })
+            .then(function () { busy = false; });
+        });
+        f.appendChild(i); f.appendChild(cap); f.appendChild(b); box.appendChild(f);
+      });
+    }).catch(function () {});
+  }
+
+  // ---------- Inicio: ¿ya hay sesión? ----------
+  api('yo').then(function (u) { showPanel(u, u.debeCambiarClave); }).catch(function (err) {
+    showLogin(); if (err.status === 404) say($('loginMsg'), err.message);
+  });
+})();
+</script>
+</body>
+</html>
