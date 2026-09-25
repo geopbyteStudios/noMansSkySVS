@@ -626,6 +626,12 @@
         ct.className = 'count'; ct.textContent = p.images.length + (p.images.length === 1 ? ' captura' : ' capturas');
         who.appendChild(nm); who.appendChild(ct); b.appendChild(bg); b.appendChild(who);
         b.addEventListener('click', function () {
+          // Segundo clic sobre el jugador ya abierto: se esconde su galería
+          if (b.getAttribute('aria-pressed') === 'true') {
+            b.setAttribute('aria-pressed', 'false');
+            grid.innerHTML = ''; note.textContent = HINT;
+            return;
+          }
           Array.prototype.forEach.call(filters.children, function (c) { c.setAttribute('aria-pressed', 'false'); });
           b.setAttribute('aria-pressed', 'true'); show(p);
         });
