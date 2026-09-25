@@ -242,7 +242,7 @@
     user = u; show($('cargando'), false); show($('vistaLogin'), false); show($('vistaPanel'), true);
     $('quien').textContent = u.nombre;
     $('rolTag').hidden = u.rol !== 'admin'; $('rolTag').textContent = '· administrador';
-    $('misTitulo').textContent = u.rol === 'admin' ? 'Todas las capturas' : 'Mis capturas';
+    $('misTitulo').textContent = 'Mis capturas';
     setMustChange(!!mustChange);
     if (!mustChange) loadMine();
   }
@@ -344,13 +344,14 @@
     var fijas = fetch('svs.json', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; });
     Promise.all([api('mias'), fijas]).then(function (res) {
       var all = res[0], isAdmin = user && user.rol === 'admin';
+      // "Mis capturas" muestra SOLO las de esta persona, también para el administrador
       var originales = [];
       (Array.isArray(res[1]) ? res[1] : []).forEach(function (p) {
-        if (isAdmin || String(p.name).toLowerCase() === String(user.nombre).toLowerCase()) p.images.forEach(function (im) { originales.push({ nombre: p.name, title: im.title, thumb: im.thumb }); });
+        if (String(p.name).toLowerCase() === String(user.nombre).toLowerCase()) p.images.forEach(function (im) { originales.push({ nombre: p.name, title: im.title, thumb: im.thumb }); });
       });
-      // El administrador ve las pendientes en su propia sección; el resto ve las suyas marcadas como "Pendiente"
-      var pendientes = isAdmin ? all.filter(function (c) { return c.estado === 'pendiente'; }) : [];
-      var list = isAdmin ? all.filter(function (c) { return c.estado !== 'pendiente'; }) : all;
+      // El administrador recibe además las pendientes de TODOS, que se revisan en su propia sección
+      var pendientes = isAdmin ? all.filter(function (c) { return c.estado === 'pendiente' && c.usuario !== user.usuario; }) : [];
+      var list = all.filter(function (c) { return c.usuario === user.usuario; });
       renderPending(pendientes);
       var box = $('mias'); box.textContent = '';
       $('miasVacio').hidden = list.length + originales.length > 0;
@@ -358,7 +359,7 @@
         var f = document.createElement('figure'), i = document.createElement('img'), cap = document.createElement('figcaption'), b = document.createElement('button');
         i.src = c.thumb; i.alt = c.title || 'Captura'; i.loading = 'lazy';
         if (c.estado === 'pendiente') { var bd = document.createElement('span'); bd.className = 'badge'; bd.textContent = 'Pendiente'; f.appendChild(bd); }
-        cap.textContent = (isAdmin ? c.nombre + ' · ' : '') + (c.title || 'Captura');
+        cap.textContent = c.title || 'Captura';
         b.type = 'button'; b.className = 'btn ghost danger sm x'; b.textContent = 'Borrar'; b.setAttribute('aria-label', 'Borrar la captura ' + (c.title || ''));
         b.addEventListener('click', function () {
           if (busy || !confirm('¿Borrar esta captura? Se quitará de la galería y no se puede deshacer.')) return;
@@ -374,7 +375,7 @@
         var f = document.createElement('figure'), i = document.createElement('img'), cap = document.createElement('figcaption'), bd = document.createElement('span');
         i.src = c.thumb; i.alt = c.title || 'Captura'; i.loading = 'lazy';
         bd.className = 'badge fija'; bd.textContent = 'Galería';
-        cap.textContent = (isAdmin ? c.nombre + ' · ' : '') + (c.title || 'Captura');
+        cap.textContent = c.title || 'Captura';
         f.appendChild(bd); f.appendChild(i); f.appendChild(cap); box.appendChild(f);
       });
     }).catch(function () {});
