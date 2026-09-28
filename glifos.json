@@ -1,0 +1,482 @@
+{
+  "generado": "2026-09-28",
+  "fuente": {
+    "nombre": "The Portal Repository",
+    "url": "https://portalrepository.com/"
+  },
+  "plantas": [
+    {
+      "id": "star-bulb",
+      "nombre": "Star Bulb",
+      "bioma": "Planetas exuberantes (Lush)",
+      "entradas": [
+        {
+          "id": 26056,
+          "nombre": "Nanystrit Tau",
+          "hex": "60E201927EA0",
+          "fecha": "2026-09-24",
+          "url": "https://portalrepository.com/2026/09/24/nanystrit-tau/",
+          "galaxia": "07 Budullangr",
+          "plataforma": "PC",
+          "etiquetas": [
+            "Base"
+          ]
+        },
+        {
+          "id": 26047,
+          "nombre": "Seraphim",
+          "hex": "502201FFDFF8",
+          "fecha": "2026-09-22",
+          "url": "https://portalrepository.com/2026/09/22/seraphim/",
+          "galaxia": "10 Eissentam",
+          "plataforma": "PC",
+          "etiquetas": [
+            "Base",
+            "Turismo"
+          ]
+        },
+        {
+          "id": 26045,
+          "nombre": "Laver Omega",
+          "hex": "116EFBA72BD4",
+          "fecha": "2026-09-22",
+          "url": "https://portalrepository.com/2026/09/22/laver-omega/",
+          "galaxia": "01 Euclid",
+          "plataforma": "Xbox",
+          "etiquetas": [
+            "Base",
+            "Multijugador"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gamma-root",
+      "nombre": "Gamma Root",
+      "bioma": "Planetas radiactivos",
+      "entradas": [
+        {
+          "id": 25960,
+          "nombre": "Iellyor",
+          "hex": "3059076B6E9B",
+          "fecha": "2026-07-14",
+          "url": "https://portalrepository.com/2026/07/14/iellyor/",
+          "galaxia": "01 Euclid",
+          "plataforma": "PC",
+          "etiquetas": [
+            "Base",
+            "Base junto al portal"
+          ]
+        },
+        {
+          "id": 25912,
+          "nombre": "Kumbay O40",
+          "hex": "4046011FB943",
+          "fecha": "2026-05-31",
+          "url": "https://portalrepository.com/2026/05/31/kumbay-o40/",
+          "galaxia": "01 Euclid",
+          "plataforma": "Nintendo Switch",
+          "etiquetas": [
+            "Base",
+            "Base junto al portal"
+          ]
+        },
+        {
+          "id": 25739,
+          "nombre": "Bino 63/F1",
+          "hex": "204C003B35FB",
+          "fecha": "2026-02-01",
+          "url": "https://portalrepository.com/2026/02/01/bino-63-f1/",
+          "galaxia": "01 Euclid",
+          "plataforma": "PC",
+          "etiquetas": [
+            "Base"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "solanium",
+      "nombre": "Solanium",
+      "bioma": "Planetas cálidos (Hot)",
+      "entradas": [
+        {
+          "id": 25893,
+          "nombre": "Galactic core Euclid",
+          "hex": "11C004FF9001",
+          "fecha": "2026-05-11",
+          "url": "https://portalrepository.com/2026/05/11/galactic-core-euclid/",
+          "galaxia": "01 Euclid",
+          "plataforma": "Xbox",
+          "etiquetas": [
+            "Base",
+            "Multijugador"
+          ]
+        },
+        {
+          "id": 25844,
+          "nombre": "Blood and Sweat",
+          "hex": "2011D6662593",
+          "fecha": "2026-04-27",
+          "url": "https://portalrepository.com/2026/04/27/blood-and-sweat/",
+          "galaxia": "01 Euclid",
+          "plataforma": "Xbox Series X",
+          "etiquetas": [
+            "Base",
+            "Clima extremo",
+            "Granja"
+          ]
+        },
+        {
+          "id": 25814,
+          "nombre": "New Bogano",
+          "hex": "617B01978DA7",
+          "fecha": "2026-04-05",
+          "url": "https://portalrepository.com/2026/04/05/new-bogano/",
+          "galaxia": "02 Hilbert Dimension",
+          "plataforma": "Xbox Series X",
+          "etiquetas": [
+            "Base",
+            "Asentamiento",
+            "Turismo"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "frostwort",
+      "nombre": "Frostwort",
+      "bioma": "Planetas fríos (Cold)",
+      "entradas": [
+        {
+          "id": 25767,
+          "nombre": "Edim T6",
+          "hex": "204A0668722B",
+          "fecha": "2026-02-19",
+          "url": "https://portalrepository.com/2026/02/19/edim-t6/",
+          "galaxia": "01 Euclid",
+          "plataforma": "PC",
+          "etiquetas": [
+            "Base",
+            "Base junto al portal",
+            "Asentamiento"
+          ]
+        },
+        {
+          "id": 25708,
+          "nombre": "Jolisk",
+          "hex": "205FF963D2DC",
+          "fecha": "2026-01-11",
+          "url": "https://portalrepository.com/2026/01/11/jolisk/",
+          "galaxia": "01 Euclid",
+          "plataforma": "Xbox Series X",
+          "etiquetas": [
+            "Base",
+            "Asentamiento"
+          ]
+        },
+        {
+          "id": 25707,
+          "nombre": "Qedarlesby Gerol",
+          "hex": "50D2FF07C8FE",
+          "fecha": "2026-01-11",
+          "url": "https://portalrepository.com/2026/01/11/qedarlesby-gerol/",
+          "galaxia": "01 Euclid",
+          "plataforma": "PC",
+          "etiquetas": [
+            "Base"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fungal-mold",
+      "nombre": "Fungal Mould",
+      "bioma": "Planetas tóxicos",
+      "entradas": [
+        {
+          "id": 26037,
+          "nombre": "New Mombasa",
+          "hex": "40E50795FE41",
+          "fecha": "2026-09-17",
+          "url": "https://portalrepository.com/2026/09/17/new-mombasa/",
+          "galaxia": "01 Euclid",
+          "plataforma": "PC",
+          "etiquetas": [
+            "Base"
+          ]
+        },
+        {
+          "id": 26022,
+          "nombre": "New Agforda",
+          "hex": "100C096212C0",
+          "fecha": "2026-09-13",
+          "url": "https://portalrepository.com/2026/09/13/new-agforda/",
+          "galaxia": "01 Euclid",
+          "plataforma": "PS5",
+          "etiquetas": [
+            "Base"
+          ]
+        },
+        {
+          "id": 25981,
+          "nombre": "Oishi 35/U3",
+          "hex": "205AFC6DFEDD",
+          "fecha": "2026-08-03",
+          "url": "https://portalrepository.com/2026/08/03/oishi-35-u3/",
+          "galaxia": "01 Euclid",
+          "plataforma": "Xbox",
+          "etiquetas": [
+            "Base",
+            "Clima extremo",
+            "Terminal galáctica",
+            "Asentamiento"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cactus-flesh",
+      "nombre": "Cactus Flesh",
+      "bioma": "Planetas secos (Dry)",
+      "entradas": [
+        {
+          "id": 25935,
+          "nombre": "Mechalia",
+          "hex": "20B110E679AA",
+          "fecha": "2026-06-17",
+          "url": "https://portalrepository.com/2026/06/17/mechalia/",
+          "galaxia": "01 Euclid",
+          "plataforma": "Nintendo Switch",
+          "etiquetas": [
+            "Base",
+            "Asentamiento",
+            "Granja"
+          ]
+        },
+        {
+          "id": 25891,
+          "nombre": "Urob 48/A3",
+          "hex": "118BFDE3A93B",
+          "fecha": "2026-05-11",
+          "url": "https://portalrepository.com/2026/05/11/urob-48-a3/",
+          "galaxia": "01 Euclid",
+          "plataforma": "PC",
+          "etiquetas": [
+            "Base",
+            "Base junto al portal"
+          ]
+        },
+        {
+          "id": 25745,
+          "nombre": "Lostr Major",
+          "hex": "61C1039060B9",
+          "fecha": "2026-02-13",
+          "url": "https://portalrepository.com/2026/02/13/lostr-major/",
+          "galaxia": "01 Euclid",
+          "plataforma": "Nintendo Switch",
+          "etiquetas": [
+            "Base",
+            "Multijugador"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nipnip",
+      "nombre": "Nipnip Buds",
+      "bioma": "Bases que cultivan Nipnip",
+      "entradas": [
+        {
+          "id": 25698,
+          "nombre": "CalNay MMXXIV",
+          "hex": "142102FFDFF8",
+          "fecha": "2026-01-01",
+          "url": "https://portalrepository.com/2026/01/01/calnay-mmxxiv/",
+          "galaxia": "01 Euclid",
+          "plataforma": "PC",
+          "etiquetas": [
+            "Base",
+            "Terminal galáctica",
+            "Asentamiento",
+            "Sistema rico",
+            "Multijugador",
+            "Turismo"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sac-venom",
+      "nombre": "Sac Venom",
+      "bioma": "Planetas y bases donde se cultiva",
+      "entradas": [
+        {
+          "id": 25819,
+          "nombre": "Leolus Omoro",
+          "hex": "1065FA480531",
+          "fecha": "2026-04-08",
+          "url": "https://portalrepository.com/2026/04/08/leolus-omoro/",
+          "galaxia": "01 Euclid",
+          "plataforma": "Xbox Series X",
+          "etiquetas": [
+            "Base",
+            "Terminal galáctica",
+            "Asentamiento"
+          ]
+        }
+      ]
+    }
+  ],
+  "naves": [
+    {
+      "id": 25983,
+      "nombre": "S-class exotic  (white and silver)",
+      "hex": "1006FD532B7E",
+      "fecha": "2026-08-04",
+      "url": "https://portalrepository.com/2026/08/04/s-class-exotic-white-and-silver/",
+      "galaxia": "01 Euclid",
+      "plataforma": "PC",
+      "etiquetas": [],
+      "tipos": [
+        "Exótica clase S"
+      ],
+      "imagen": "img/glifos/naves/25983.png"
+    },
+    {
+      "id": 25965,
+      "nombre": "S class ship space station",
+      "hex": "20C17F4EF478",
+      "fecha": "2026-07-17",
+      "url": "https://portalrepository.com/2026/07/17/s-class-ship-space-station/",
+      "galaxia": "01 Euclid",
+      "plataforma": "PS5",
+      "etiquetas": [],
+      "tipos": [
+        "Exótica clase S"
+      ],
+      "imagen": "img/glifos/naves/25965.jpeg"
+    },
+    {
+      "id": 25862,
+      "nombre": "Ezhin",
+      "hex": "1069FF693E08",
+      "fecha": "2026-05-05",
+      "url": "https://portalrepository.com/2026/05/05/ezhin/",
+      "galaxia": "10 Eissentam",
+      "plataforma": "PC",
+      "etiquetas": [],
+      "tipos": [
+        "Exótica clase S"
+      ],
+      "imagen": "img/glifos/naves/25862.jpg"
+    },
+    {
+      "id": 25812,
+      "nombre": "Space Station",
+      "hex": "10F6F8BDA52F",
+      "fecha": "2026-04-05",
+      "url": "https://portalrepository.com/2026/04/05/space-station-25/",
+      "galaxia": "01 Euclid",
+      "plataforma": "PC",
+      "etiquetas": [],
+      "tipos": [
+        "Calamar (Squid)"
+      ],
+      "imagen": "img/glifos/naves/25812.png"
+    },
+    {
+      "id": 25802,
+      "nombre": "Dunwich",
+      "hex": "204CFDC295C8",
+      "fecha": "2026-03-20",
+      "url": "https://portalrepository.com/2026/03/20/dunwich/",
+      "galaxia": "01 Euclid",
+      "plataforma": "PC",
+      "etiquetas": [],
+      "tipos": [
+        "Exótica clase S"
+      ],
+      "imagen": "img/glifos/naves/25802.png"
+    },
+    {
+      "id": 25771,
+      "nombre": "Port Royal",
+      "hex": "2169090AE931",
+      "fecha": "2026-02-21",
+      "url": "https://portalrepository.com/2026/02/21/port-royal/",
+      "galaxia": "10 Eissentam",
+      "plataforma": "PC",
+      "etiquetas": [],
+      "tipos": [
+        "Exótica clase S",
+        "Velero solar"
+      ],
+      "imagen": "img/glifos/naves/25771.png"
+    },
+    {
+      "id": 25753,
+      "nombre": "Space Station",
+      "hex": "10D9FA06593E",
+      "fecha": "2026-02-15",
+      "url": "https://portalrepository.com/2026/02/15/space-station-24/",
+      "galaxia": "01 Euclid",
+      "plataforma": "PC",
+      "etiquetas": [],
+      "tipos": [
+        "Calamar (Squid)"
+      ],
+      "imagen": "img/glifos/naves/25753.png"
+    },
+    {
+      "id": 25676,
+      "nombre": "Madac 70/04",
+      "hex": "1084FFA98BF9",
+      "fecha": "2025-12-18",
+      "url": "https://portalrepository.com/2025/12/18/madac-70-04/",
+      "galaxia": "Other",
+      "plataforma": "Specify in notes section",
+      "etiquetas": [
+        "Base"
+      ],
+      "tipos": [
+        "Exótica clase S"
+      ],
+      "imagen": "img/glifos/naves/25676.jpg"
+    },
+    {
+      "id": 25668,
+      "nombre": "Sol system space station",
+      "hex": "10C001518465",
+      "fecha": "2025-12-08",
+      "url": "https://portalrepository.com/2025/12/08/sol-system-space-station/",
+      "galaxia": "10 Eissentam",
+      "plataforma": "Xbox Series X",
+      "etiquetas": [
+        "Base",
+        "Asentamiento",
+        "Granja",
+        "Multijugador",
+        "Turismo"
+      ],
+      "tipos": [
+        "Exótica clase S"
+      ],
+      "imagen": "img/glifos/naves/25668.png"
+    },
+    {
+      "id": 25612,
+      "nombre": "Nadalmet Space Station",
+      "hex": "1419056B91B9",
+      "fecha": "2025-11-02",
+      "url": "https://portalrepository.com/2025/11/02/nadalmet-space-station/",
+      "galaxia": "01 Euclid",
+      "plataforma": "PS5",
+      "etiquetas": [],
+      "tipos": [
+        "Exótica clase S"
+      ],
+      "imagen": "img/glifos/naves/25612.jpg"
+    }
+  ]
+}

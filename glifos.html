@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glifos · No Man's Sky · Fan Page</title>
+<meta name="description" content="Direcciones de portal (glifos) recientes de No Man's Sky: bases para farmear plantas y sistemas con naves clase S.">
+<style>
+  :root {
+    --bg: #05070f;
+    --bg-2: #0a1020;
+    --panel: rgba(12, 20, 40, .62);
+    --line: rgba(120, 220, 230, .22);
+    --text: #e8f1f5;
+    --muted: #9db3bd;
+    --teal: #4de3d0;
+    --pink: #ff6fa8;
+    --orange: #ffab5e;
+    --radius: 18px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    line-height: 1.65;
+    overflow-x: hidden;
+    padding-bottom: 60px;
+  }
+  .nebula {
+    position: fixed; inset: 0; z-index: -2;
+    background:
+      radial-gradient(60% 50% at 15% 20%, rgba(255, 111, 168, .22), transparent 70%),
+      radial-gradient(55% 45% at 85% 15%, rgba(77, 227, 208, .22), transparent 70%),
+      radial-gradient(70% 55% at 60% 95%, rgba(255, 171, 94, .16), transparent 70%),
+      linear-gradient(180deg, #060a18 0%, #0a1226 55%, #08101e 100%);
+  }
+  #stars { position: fixed; inset: 0; z-index: -1; width: 100%; height: 100%; }
+  a { color: var(--teal); }
+  .wrap { width: min(1100px, 100% - 32px); margin-inline: auto; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px clamp(16px, 4vw, 40px);
+    background: linear-gradient(180deg, rgba(5, 7, 15, .85), transparent);
+    backdrop-filter: blur(6px);
+  }
+  nav .logo { letter-spacing: .28em; font-weight: 600; font-size: .85rem; text-transform: uppercase; color: var(--text); text-decoration: none; }
+  nav ul { display: flex; gap: clamp(12px, 3vw, 28px); list-style: none; }
+  nav a { text-decoration: none; color: var(--muted); font-size: .9rem; transition: color .2s; }
+  nav ul a:hover, nav ul a[aria-current="page"] { color: var(--teal); }
+
+  header.top { padding: 120px 0 10px; text-align: center; }
+  header.top h1 { font-size: clamp(2.2rem, 7vw, 4.6rem); letter-spacing: .18em; font-weight: 300; text-transform: uppercase; text-shadow: 0 0 40px rgba(77, 227, 208, .55), 0 4px 24px rgba(0, 0, 0, .6); }
+  header.top h1 b { font-weight: 700; color: #fff; }
+  header.top p { margin: 12px auto 0; max-width: 680px; color: #d6e8ee; }
+
+  section { padding: clamp(40px, 7vw, 70px) 0; }
+  h2 { font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 300; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 8px; }
+  h2::after { content: ""; display: block; width: 64px; height: 3px; margin-top: 12px; border-radius: 3px; background: linear-gradient(90deg, var(--teal), var(--pink), var(--orange)); }
+  .lead { color: var(--muted); max-width: 760px; margin-top: 18px; }
+  .lead + .lead { margin-top: 10px; }
+
+  /* Explicación y leyenda de los 16 glifos */
+  .info { margin-top: 26px; padding: clamp(20px, 4vw, 32px); border-radius: var(--radius); background: var(--panel); border: 1px solid var(--line); border-left: 3px solid var(--pink); backdrop-filter: blur(8px); }
+  .info p { color: #cfe0e6; }
+  .info p + p { margin-top: 12px; }
+  .legend { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 10px; margin-top: 22px; }
+  .legend div { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 4px; border-radius: 12px; background: rgba(255, 255, 255, .04); border: 1px solid var(--line); font-size: .78rem; color: var(--muted); }
+  .legend img { width: 44px; height: 44px; border-radius: 8px; image-rendering: auto; }
+  .legend b { color: var(--text); font-family: Consolas, "Courier New", monospace; font-size: .95rem; }
+
+  /* Tarjetas de dirección */
+  .plant { margin-top: 40px; }
+  .plant h3 { font-size: 1.25rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+  .plant h3 span { display: block; margin-top: 2px; font-size: .78rem; font-weight: 400; letter-spacing: .12em; color: var(--pink); }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 16px; margin-top: 16px; }
+  .addr { display: flex; flex-direction: column; overflow: hidden; border-radius: var(--radius); background: var(--panel); border: 1px solid var(--line); backdrop-filter: blur(8px); transition: border-color .25s, box-shadow .25s, transform .25s; }
+  .addr:hover { transform: translateY(-4px); border-color: var(--teal); box-shadow: 0 12px 36px rgba(77, 227, 208, .18); }
+  .addr .shot { position: relative; overflow: hidden; aspect-ratio: 16 / 10; background: #0a1020; }
+  /* "contain": hay capturas verticales y horizontales; así siempre se ve la nave completa */
+  .addr .shot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; }
+  .addr .body { display: flex; flex-direction: column; gap: 12px; padding: 18px; flex: 1; }
+  .addr h4 { font-size: 1.05rem; font-weight: 600; letter-spacing: .04em; overflow-wrap: anywhere; }
+  .addr .meta { font-size: .8rem; color: var(--muted); }
+  .glyphs { display: grid; grid-template-columns: repeat(6, minmax(0, 46px)); justify-content: center; gap: 6px; padding: 12px; border-radius: 14px; background: rgba(0, 0, 0, .28); border: 1px solid var(--line); }
+  .glyphs figure { position: relative; }
+  .glyphs img { display: block; width: 100%; aspect-ratio: 1; border-radius: 8px; }
+  .glyphs figcaption { position: absolute; top: 1px; left: 3px; font-size: .58rem; line-height: 1; color: rgba(255, 255, 255, .55); }
+  .code { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .code code { font-family: Consolas, "Courier New", monospace; font-size: 1.05rem; letter-spacing: .14em; color: var(--text); }
+  .copy { padding: 5px 14px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--muted); font: inherit; font-size: .78rem; cursor: pointer; transition: color .2s, border-color .2s, box-shadow .2s; }
+  .copy:hover, .copy:focus-visible { color: var(--teal); border-color: var(--teal); box-shadow: 0 0 14px rgba(77, 227, 208, .3); outline: none; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tags span { padding: 2px 10px; border-radius: 999px; border: 1px solid var(--line); font-size: .72rem; color: #cfe0e6; }
+  .tags .kind { border-color: rgba(255, 111, 168, .5); color: var(--pink); }
+  .addr .src { margin-top: auto; font-size: .78rem; }
+
+  .note { margin-top: 30px; padding: 14px 18px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); font-size: .85rem; color: var(--muted); }
+  .empty { margin-top: 20px; color: var(--muted); }
+
+  footer { padding: 40px 0 60px; text-align: center; color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); }
+  footer small { display: block; margin-top: 8px; opacity: .8; }
+  footer .disclaimer { max-width: 760px; margin: 18px auto 0; padding: 16px 20px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); text-align: left; line-height: 1.6; }
+  footer .disclaimer strong:first-child { display: block; margin-bottom: 4px; color: var(--orange); letter-spacing: .1em; text-transform: uppercase; font-size: .8rem; }
+  .studio-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; height: 60px; display: flex; align-items: center; justify-content: center; gap: clamp(14px, 3vw, 32px); padding: 0 16px; background: rgba(5, 7, 15, .9); border-top: 1px solid var(--line); backdrop-filter: blur(10px); }
+  .studio-bar::before { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 1px; background: linear-gradient(90deg, transparent, var(--teal), var(--pink), transparent); opacity: .7; }
+  .studio-bar img { display: block; height: 44px; width: auto; mix-blend-mode: lighten; }
+  .studio-bar span { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+  .creators-link { position: absolute; right: clamp(12px, 2.5vw, 28px); padding: 5px 14px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); font-size: .74rem; letter-spacing: .08em; text-decoration: none; white-space: nowrap; transition: color .2s, border-color .2s, box-shadow .2s; }
+  .creators-link:hover, .creators-link:focus-visible { color: var(--teal); border-color: var(--teal); box-shadow: 0 0 16px rgba(77, 227, 208, .25); outline: none; }
+  @media (max-width: 900px) { .studio-bar span { display: none; } }
+  @media (max-width: 520px) { .studio-bar { justify-content: flex-start; } .creators-link { font-size: .68rem; padding: 5px 10px; } }
+  @media (max-width: 760px) { nav ul { display: none; } }
+
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .8s, transform .8s; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .addr, .addr:hover { transition: none; transform: none; }
+  }
+</style>
+</head>
+<body>
+<div class="nebula"></div>
+<canvas id="stars"></canvas>
+
+<nav>
+  <a class="logo" href="index.html">No Man's Sky</a>
+  <ul>
+    <li><a href="index.html">Inicio</a></li>
+    <li><a href="#que-son">¿Qué son?</a></li>
+    <li><a href="#plantas">Plantas</a></li>
+    <li><a href="#naves">Naves</a></li>
+    <li><a href="glifos.html" aria-current="page">Glifos</a></li>
+  </ul>
+</nav>
+
+<header class="top">
+  <div class="wrap">
+    <h1>Gli<b>fos</b></h1>
+    <p>Direcciones de portal recientes para viajar directo a bases donde cultivar plantas y a sistemas con naves clase S.</p>
+  </div>
+</header>
+
+<main>
+  <section id="que-son">
+    <div class="wrap">
+      <h2 class="reveal">¿Qué son los glifos?</h2>
+      <div class="info reveal">
+        <p>
+          Los <strong>glifos</strong> son los <strong>16 símbolos alienígenas</strong> que usan los portales de <em>No Man's Sky</em>.
+          Una <strong>dirección de portal</strong> es una secuencia de <strong>12 glifos</strong>: el primero indica el planeta,
+          los tres siguientes el sistema estelar y los ocho últimos la región de la galaxia. Si los introduces en un portal,
+          en orden y de izquierda a derecha, viajas al instante a ese lugar, sin importar la distancia.
+        </p>
+        <p>
+          Para que sea fácil compartirlos, cada glifo tiene un dígito hexadecimal (0 a F), así que una dirección se puede escribir
+          como 12 caracteres, por ejemplo <code>60E201927EA0</code>. Abajo tienes la equivalencia; en cada tarjeta los glifos ya están dibujados
+          en el orden en que debes ponerlos (de 1 a 12).
+        </p>
+        <div class="legend" id="legend" aria-label="Equivalencia entre dígitos y glifos"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="plantas">
+    <div class="wrap">
+      <h2 class="reveal">Bases para farmear plantas</h2>
+      <p class="lead reveal">
+        Cada planta crece de forma natural en un tipo de planeta (bioma). Aquí van las direcciones más recientes de bases en planetas de cada bioma,
+        para que llegues directo a un lugar donde ya se puede cultivar o recolectar esa planta.
+      </p>
+      <div id="plantasBox"></div>
+    </div>
+  </section>
+
+  <section id="naves">
+    <div class="wrap">
+      <h2 class="reveal">Naves clase S</h2>
+      <p class="lead reveal">
+        Sistemas donde se han visto aparecer naves clase S (exóticas, calamar, veleros solares…). Son las publicaciones más recientes que traen
+        una captura donde se ve la nave. No es un ranking de «las mejores»: la fuente no las puntúa, así que se ordenan de la más nueva a la más antigua.
+      </p>
+      <div class="cards" id="navesBox"></div>
+      <p class="note reveal" id="navesNote">
+        Las naves aparecen en el sistema al que lleva la dirección (suelen estar en la estación espacial o en los puestos comerciales) y no siempre están disponibles a la vez.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <p class="note" id="fuente">Cargando datos…</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    Hecha con cariño por <strong>Geopbyte Studio</strong>.
+    <div class="disclaimer">
+      <strong>Aviso legal</strong>
+      Esta es únicamente una <strong>fan page no oficial</strong>, creada por un fan y sin fines de lucro. No está afiliada,
+      patrocinada ni respaldada por Hello Games. <em>No Man's Sky</em>, su nombre, los glifos, logotipos, imágenes y demás material
+      pertenecen a sus respectivos dueños (Hello Games Ltd.). Las direcciones y capturas de esta página las comparte la comunidad en
+      <a href="https://portalrepository.com/" rel="noopener">The Portal Repository</a>, que tampoco está afiliado a Hello Games.
+      Uso personal y educativo; si eres titular de derechos y quieres que algún contenido se retire, se eliminará.
+    </div>
+    <small>Fuentes: The Portal Repository (direcciones, capturas y glifos) y No Man's Sky Wiki.</small>
+  </div>
+</footer>
+
+<div class="studio-bar">
+  <img src="img/geopbyte-barra.png" alt="Logo de Geopbyte Studio" width="174" height="44">
+  <span>Fan page no oficial · No Man's Sky es de Hello Games</span>
+  <a class="creators-link" href="creadores.html" rel="nofollow">Acceso SVS</a>
+</div>
+
+<script>
+  // Campo de estrellas animado
+  (function () {
+    var canvas = document.getElementById('stars'), ctx = canvas.getContext('2d');
+    var stars = [], W, H, reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function resize() {
+      W = canvas.width = innerWidth; H = canvas.height = innerHeight;
+      stars = [];
+      var n = Math.min(260, Math.floor(W * H / 6500));
+      for (var i = 0; i < n; i++) stars.push({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.4 + .2, s: Math.random() * .25 + .03, t: Math.random() * 6.28 });
+    }
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < stars.length; i++) {
+        var s = stars[i];
+        if (!reduce) { s.y += s.s; s.t += .03; if (s.y > H) { s.y = 0; s.x = Math.random() * W; } }
+        ctx.globalAlpha = .45 + .45 * Math.sin(s.t);
+        ctx.fillStyle = i % 7 === 0 ? '#ffb3d1' : (i % 5 === 0 ? '#9ff3ea' : '#ffffff');
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.28); ctx.fill();
+      }
+      if (!reduce) requestAnimationFrame(draw);
+    }
+    addEventListener('resize', function () { resize(); if (reduce) draw(); });
+    resize(); draw();
+  })();
+
+  // Aparición al hacer scroll
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .12 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+
+  (function () {
+    var HEX = '0123456789ABCDEF', NOMBRES = ['Ra', 'Bre', 'Mu', 'De', 'O', 'Bo', 'Ste', 'Shi', 'Zi', 'Rey', 'Pi', 'Fin', 'Han', 'Rush', 'Tar', 'Vel'];
+    var $ = function (id) { return document.getElementById(id); };
+    function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+    function glyphImg(ch) {
+      var i = el('img'); i.src = 'img/glifos/' + ch + '.png'; i.alt = 'Glifo ' + ch + ' (' + NOMBRES[HEX.indexOf(ch)] + ')'; i.width = 48; i.height = 48; i.loading = 'lazy'; i.decoding = 'async';
+      return i;
+    }
+    function fecha(iso) {
+      var p = iso.split('-'); var m = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'][Number(p[1]) - 1];
+      return Number(p[2]) + ' ' + m + ' ' + p[0];
+    }
+
+    // Leyenda: 16 glifos con su dígito
+    var lg = $('legend');
+    HEX.split('').forEach(function (ch, i) {
+      var d = el('div'); d.title = NOMBRES[i];
+      d.appendChild(glyphImg(ch)); d.appendChild(el('b', '', ch)); lg.appendChild(d);
+    });
+
+    function copiar(btn, hex) {
+      var ok = function () { btn.textContent = '¡Copiado!'; setTimeout(function () { btn.textContent = 'Copiar'; }, 1600); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(hex).then(ok, function () { btn.textContent = 'Selecciona el código'; });
+      else btn.textContent = 'Selecciona el código';
+    }
+
+    function card(e, opts) {
+      var a = el('article', 'addr');
+      if (opts && opts.imagen) {
+        var s = el('div', 'shot'), im = el('img'); im.src = opts.imagen; im.alt = 'Captura de la nave en ' + e.nombre; im.decoding = 'async';
+        s.appendChild(im); a.appendChild(s);
+      }
+      var b = el('div', 'body');
+      b.appendChild(el('h4', '', e.nombre));
+      b.appendChild(el('div', 'meta', e.galaxia + ' · ' + e.plataforma + ' · ' + fecha(e.fecha)));
+      var g = el('div', 'glyphs'); g.setAttribute('role', 'img'); g.setAttribute('aria-label', 'Glifos de la dirección ' + e.hex);
+      e.hex.split('').forEach(function (ch, i) { var f = el('figure'); f.appendChild(glyphImg(ch)); f.appendChild(el('figcaption', '', String(i + 1))); g.appendChild(f); });
+      b.appendChild(g);
+      var c = el('div', 'code'), code = el('code', '', e.hex), btn = el('button', 'copy', 'Copiar');
+      btn.type = 'button'; btn.setAttribute('aria-label', 'Copiar la dirección ' + e.hex);
+      btn.addEventListener('click', function () { copiar(btn, e.hex); });
+      c.appendChild(code); c.appendChild(btn); b.appendChild(c);
+      var t = el('div', 'tags');
+      ((opts && opts.tipos) || []).forEach(function (x) { t.appendChild(el('span', 'kind', x)); });
+      (e.etiquetas || []).forEach(function (x) { t.appendChild(el('span', '', x)); });
+      if (t.children.length) b.appendChild(t);
+      if (/^https:\/\/portalrepository\.com\//.test(e.url)) {
+        var s2 = el('div', 'src'), l = el('a', '', 'Ver publicación original'); l.href = e.url; l.rel = 'noopener'; l.target = '_blank';
+        s2.appendChild(l); b.appendChild(s2);
+      }
+      a.appendChild(b);
+      return a;
+    }
+
+    function build(d) {
+      var box = $('plantasBox');
+      d.plantas.forEach(function (p) {
+        var s = el('div', 'plant'), h = el('h3', '', p.nombre); h.appendChild(el('span', '', p.bioma));
+        var cs = el('div', 'cards');
+        p.entradas.forEach(function (e) { cs.appendChild(card(e)); });
+        s.appendChild(h); s.appendChild(cs); box.appendChild(s);
+      });
+      var nb = $('navesBox');
+      d.naves.forEach(function (n) { nb.appendChild(card(n, { imagen: n.imagen, tipos: n.tipos })); });
+      $('fuente').textContent = '';
+      $('fuente').appendChild(document.createTextNode('Datos de '));
+      var l = el('a', '', d.fuente.nombre); l.href = d.fuente.url; l.rel = 'noopener'; l.target = '_blank';
+      $('fuente').appendChild(l);
+      $('fuente').appendChild(document.createTextNode(', solo publicaciones del último año. Actualizado el ' + fecha(d.generado) + '. Algunas direcciones pueden dejar de funcionar cuando el juego cambia; si una no lleva a donde debe, prueba con otra de la lista.'));
+    }
+
+    fetch('glifos.json', { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(build)
+      .catch(function () {
+        $('fuente').textContent = location.protocol === 'file:'
+          ? 'Para ver los glifos abre la página con el servidor: ejecuta "node server.js" y entra a http://localhost:8080/glifos.html'
+          : 'No se pudieron cargar los glifos ahora.';
+      });
+  })();
+</script>
+</body>
+</html>

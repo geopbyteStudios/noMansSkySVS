@@ -38,5 +38,6 @@ route('creadores-permiso', ['POST'], 'creadores/permiso', h.permisoSubida);
 route('creadores-registrar', ['POST'], 'creadores/capturas', h.registrar);
 route('creadores-mias', ['GET'], 'creadores/mias', h.misCapturas);
 route('creadores-borrar', ['DELETE'], 'creadores/capturas/{id}', h.borrar);
+route('creadores-editar', ['POST'], 'creadores/capturas/{id}/editar', h.editar);
 route('creadores-aprobar', ['POST'], 'creadores/aprobar', h.aprobar);
 route('capturas-publicas', ['GET'], 'capturas', h.listar);

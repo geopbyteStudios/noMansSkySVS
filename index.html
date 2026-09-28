@@ -188,6 +188,19 @@
   .lb-prev { left: clamp(8px, 2vw, 28px); }
   .lb-next { right: clamp(8px, 2vw, 28px); }
   #lightbox.single .lb-nav { display: none; }
+  /* Acciones de la persona dueña de la captura (editar descripción / borrar) */
+  #lightbox .own { width: min(820px, 100%); display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; cursor: default; }
+  #lightbox .own:empty { display: none; }
+  .own button { padding: 7px 18px; border-radius: 999px; border: 1px solid var(--line); background: rgba(12, 20, 40, .75); color: var(--text); font: inherit; font-size: .85rem; cursor: pointer; transition: border-color .2s, box-shadow .2s, background .2s; }
+  .own button:hover, .own button:focus-visible { border-color: var(--teal); background: rgba(77, 227, 208, .18); box-shadow: 0 0 16px rgba(77, 227, 208, .35); outline: none; }
+  .own button.danger:hover, .own button.danger:focus-visible { border-color: var(--pink); background: rgba(255, 111, 168, .18); box-shadow: 0 0 16px rgba(255, 111, 168, .35); }
+  .own button:disabled { opacity: .55; cursor: wait; }
+  .own .edit { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+  .own textarea { width: 100%; min-height: 96px; resize: vertical; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: rgba(5, 7, 15, .85); color: var(--text); font: inherit; font-size: .9rem; line-height: 1.5; }
+  .own textarea:focus { border-color: var(--teal); outline: none; }
+  .own .row { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
+  .own .msg { font-size: .8rem; color: var(--muted); }
+  .own .msg.err { color: var(--pink); }
   @media (max-width: 600px) { .lb-nav { width: 40px; height: 40px; font-size: 1.6rem; } }
 
   /* Expediciones: escenario con fondo, ficha y tira de insignias (todo se navega sin hacer scroll) */
@@ -299,6 +312,7 @@
     <li><a href="#mision">Misión</a></li>
     <li><a href="#galeria">Galería</a></li>
     <li><a href="#svs">SVS</a></li>
+    <li><a href="#glifos">Glifos</a></li>
     <li><a href="#expediciones">Expediciones</a></li>
     <li><a href="#historia">Historia</a></li>
   </ul>
@@ -430,6 +444,17 @@
     </div>
   </section>
 
+  <section id="glifos">
+    <div class="wrap">
+      <h2 class="reveal">Glifos</h2>
+      <p class="lead reveal">
+        Los <strong>glifos</strong> son los símbolos de los portales: doce de ellos forman una dirección que te lleva al instante a cualquier lugar de la galaxia.
+        Reunimos direcciones recientes de bases para farmear cada planta y de sistemas donde aparecen naves clase S, para que llegues directo.
+      </p>
+      <p class="reveal" style="margin-top:22px"><a class="btn" href="glifos.html">Ver los glifos</a></p>
+    </div>
+  </section>
+
   <section id="expediciones">
     <div class="wrap">
       <h2 class="reveal">Expediciones</h2>
@@ -511,7 +536,7 @@
   <button type="button" class="lb-btn lb-nav lb-prev" aria-label="Imagen anterior">&#8249;</button>
   <button type="button" class="lb-btn lb-nav lb-next" aria-label="Imagen siguiente">&#8250;</button>
   <div class="pos" aria-live="polite"></div>
-  <img alt=""><div class="cap"></div>
+  <img alt=""><div class="cap"></div><div class="own"></div>
 </div>
 
 <script>
@@ -601,14 +626,34 @@
     load(); setInterval(load, 60000);
   })();
 
+  // Sesión de creador (si la hay): permite editar/borrar solo las capturas propias. Sin sesión, o en local, no pasa nada.
+  var svsMe = null;
+  fetch('/api/creadores/yo', { cache: 'no-store' })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (u) { if (u && u.usuario && !u.debeCambiarClave) svsMe = u; })
+    .catch(function () {});
+
   // Galería SVS: lee svs.json (lo genera server.js a partir de img/Players y captions.json; en Azure es un archivo estático)
   (function () {
     var filters = document.getElementById('svsFilters'), grid = document.getElementById('svsGallery'), note = document.getElementById('svsNote');
     var HINT = 'Elige un jugador para ver sus capturas.';
+    function countText(n) { return n + (n === 1 ? ' captura' : ' capturas'); }
+    function refresh(p) {
+      if (p._card) p._card.querySelector('.count').textContent = countText(p.images.length);
+      if (!p.images.length) {
+        if (p._card) p._card.remove();
+        grid.innerHTML = ''; note.textContent = HINT;
+      } else if (p._card && p._card.getAttribute('aria-pressed') === 'true') {
+        note.textContent = p.name + ': ' + countText(p.images.length) + '. Las imágenes son de cada jugador; No Man’s Sky pertenece a Hello Games.';
+      }
+    }
     function show(p) {
       grid.innerHTML = '';
       p.images.forEach(function (im, n) {
         var fig = document.createElement('figure'), img = document.createElement('img'), cap = document.createElement('figcaption');
+        if (im.id) { fig.dataset.id = im.id; fig.dataset.owner = im.usuario || ''; }   // solo las subidas por creadores
+        fig._img = im;
+        fig._removed = function () { p.images.splice(p.images.indexOf(im), 1); refresh(p); };
         img.src = im.thumb; img.loading = 'lazy'; img.decoding = 'async';
         img.alt = im.title ? im.title + ' (captura de ' + p.name + ')' : 'Captura de ' + p.name + ' (' + (n + 1) + ')';
         fig.dataset.view = im.view;
@@ -629,8 +674,9 @@
         b.type = 'button'; b.className = 'player-card'; b.setAttribute('aria-pressed', 'false');
         bg.src = p.cover || p.images[0].thumb; bg.alt = ''; bg.loading = 'lazy'; bg.decoding = 'async';
         who.className = 'who'; nm.className = 'name'; nm.textContent = p.name;
-        ct.className = 'count'; ct.textContent = p.images.length + (p.images.length === 1 ? ' captura' : ' capturas');
+        ct.className = 'count'; ct.textContent = countText(p.images.length);
         who.appendChild(nm); who.appendChild(ct); b.appendChild(bg); b.appendChild(who);
+        p._card = b;
         b.addEventListener('click', function () {
           // Segundo clic sobre el jugador ya abierto: se esconde su galería
           if (b.getAttribute('aria-pressed') === 'true') {
@@ -777,6 +823,7 @@
       lbCap.textContent = c.textContent;
     }
     lbCap.scrollTop = 0;
+    lbActions(f);
     lbPos.textContent = lbList.length > 1 ? (lbIdx + 1) + ' / ' + lbList.length : '';
     lb.classList.toggle('single', lbList.length < 2);
     // Precarga la anterior y la siguiente para que el cambio sea inmediato
@@ -785,7 +832,63 @@
       if (g && g !== f) new Image().src = g.dataset.view || g.querySelector('img').src;
     });
   }
-  function lbClose() { lb.classList.remove('open'); lbImg.removeAttribute('src'); }
+  function lbClose() { lb.classList.remove('open'); lbImg.removeAttribute('src'); lbOwn.textContent = ''; }
+
+  // Editar descripción / borrar: solo si la captura es de quien tiene la sesión iniciada (el servidor lo vuelve a comprobar)
+  var lbOwn = lb.querySelector('.own');
+  function ownBtn(txt, cls, fn) {
+    var b = document.createElement('button'); b.type = 'button'; b.textContent = txt;
+    if (cls) b.className = cls;
+    b.addEventListener('click', fn); return b;
+  }
+  function ownApi(url, opts) {
+    return fetch(url, opts).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (d) { if (!r.ok) throw new Error(d.error || 'No se pudo completar la acción.'); return d; });
+    });
+  }
+  function lbActions(f) {
+    lbOwn.textContent = '';
+    if (!svsMe || !f.dataset.id || f.dataset.owner !== svsMe.usuario) return;
+    lbOwn.appendChild(ownBtn('Editar descripción', '', function () { lbEdit(f); }));
+    lbOwn.appendChild(ownBtn('Borrar imagen', 'danger', function () { lbDelete(f); }));
+  }
+  function lbEdit(f) {
+    var box = document.createElement('div'), ta = document.createElement('textarea'), row = document.createElement('div'), msg = document.createElement('span');
+    box.className = 'edit'; row.className = 'row'; msg.className = 'msg';
+    ta.maxLength = 600; ta.value = f.dataset.auto ? '' : (f.dataset.text || '');
+    ta.placeholder = 'Escribe la descripción de esta captura (máx. 600 caracteres)';
+    ta.setAttribute('aria-label', 'Descripción de la captura');
+    var save = ownBtn('Guardar', '', function () {
+      var txt = ta.value.trim();
+      if (!txt) { msg.className = 'msg err'; msg.textContent = 'La descripción no puede estar vacía.'; return; }
+      save.disabled = true; msg.className = 'msg'; msg.textContent = 'Guardando…';
+      ownApi('/api/creadores/capturas/' + encodeURIComponent(f.dataset.id) + '/editar', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ descripcion: txt }) })
+        .then(function (d) {
+          f.dataset.title = d.titulo; f.dataset.text = d.texto; delete f.dataset.auto;
+          f.querySelector('figcaption').textContent = d.titulo;
+          if (f._img) { f._img.title = d.titulo; f._img.text = d.texto; f._img.auto = false; }
+          lbShow(lbIdx);
+        })
+        .catch(function (err) { save.disabled = false; msg.className = 'msg err'; msg.textContent = err.message; });
+    });
+    var cancel = ownBtn('Cancelar', '', function () { lbActions(f); });
+    row.appendChild(save); row.appendChild(cancel); row.appendChild(msg);
+    box.appendChild(ta); box.appendChild(row);
+    lbOwn.textContent = ''; lbOwn.appendChild(box);
+    ta.focus();
+  }
+  function lbDelete(f) {
+    if (!confirm('¿Borrar esta imagen? No se puede deshacer.')) return;
+    lbOwn.querySelectorAll('button').forEach(function (b) { b.disabled = true; });
+    ownApi('/api/creadores/capturas/' + encodeURIComponent(f.dataset.id) + '?u=' + encodeURIComponent(f.dataset.owner), { method: 'DELETE' })
+      .then(function () {
+        var i = lbList.indexOf(f);
+        f.remove(); if (f._removed) f._removed();
+        lbList.splice(i, 1);
+        if (!lbList.length) lbClose(); else lbShow(Math.min(i, lbList.length - 1));
+      })
+      .catch(function (err) { lbActions(f); alert(err.message); });
+  }
   document.addEventListener('click', function (e) {
     var f = e.target.closest && e.target.closest('.gallery figure');
     if (!f) return;
@@ -800,6 +903,10 @@
   lb.querySelector('.lb-next').addEventListener('click', function () { lbShow(lbIdx + 1); });
   addEventListener('keydown', function (e) {
     if (!lb.classList.contains('open')) return;
+    if (e.target.tagName === 'TEXTAREA') {   // escribiendo: las flechas mueven el cursor y Esc solo cancela la edición
+      if (e.key === 'Escape') { var fig = lbList[lbIdx]; if (fig) lbActions(fig); }
+      return;
+    }
     if (e.key === 'Escape') lbClose();
     else if (e.key === 'ArrowLeft' && lbList.length > 1) lbShow(lbIdx - 1);
     else if (e.key === 'ArrowRight' && lbList.length > 1) lbShow(lbIdx + 1);
@@ -808,6 +915,7 @@
   var tx = 0, ty = 0;
   lb.addEventListener('touchstart', function (e) { tx = e.changedTouches[0].clientX; ty = e.changedTouches[0].clientY; }, { passive: true });
   lb.addEventListener('touchend', function (e) {
+    if (lbOwn.contains(e.target)) return;
     var dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
     if (lbList.length > 1 && Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) lbShow(lbIdx + (dx < 0 ? 1 : -1));
   }, { passive: true });

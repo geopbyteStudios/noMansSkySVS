@@ -181,6 +181,22 @@ async function borrar(req) {
   return out(200, { ok: true });
 }
 
+// Solo la persona dueña de la captura puede cambiar su descripción (el admin modera borrando, no reescribiendo).
+async function editar(req) {
+  const u = await currentUser(req);
+  if (!u) return out(401, { error: 'Sin sesión.' });
+  if (u.claveCambiada !== true) return mustChange();
+  const id = String(req.params.id || '');
+  if (!/^[a-z0-9]{8,30}$/.test(id)) return out(400, { error: 'Solicitud no válida.' });
+  const descripcion = String((req.body && req.body.descripcion) || '').replace(/\s+\n/g, '\n').trim();
+  if (!descripcion) return out(400, { error: 'La descripción no puede estar vacía.' });
+  if (descripcion.length > MAX_DESC) return out(400, { error: `La descripción admite hasta ${MAX_DESC} caracteres.` });
+  const titulo = titleFrom(descripcion);
+  try { await store.clients().shots.updateEntity({ partitionKey: u.rowKey, rowKey: id, titulo, texto: descripcion, generada: false }, 'Merge'); }
+  catch (e) { if (e.statusCode === 404) return out(404, { error: 'La captura ya no existe.' }); throw e; }
+  return out(200, { ok: true, titulo, texto: descripcion, generada: false });
+}
+
 // Solo administradores: publica una captura pendiente. (Rechazar = borrar, que ya existe.)
 async function aprobar(req) {
   const u = await currentUser(req);
@@ -195,4 +211,4 @@ async function aprobar(req) {
   return out(200, { ok: true });
 }
 
-module.exports = { login, logout, yo, cambiarClave, permisoSubida, registrar, listar, misCapturas, borrar, aprobar };
+module.exports = { login, logout, yo, cambiarClave, permisoSubida, registrar, listar, misCapturas, borrar, editar, aprobar };
