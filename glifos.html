@@ -110,7 +110,9 @@
   footer .disclaimer strong:first-child { display: block; margin-bottom: 4px; color: var(--orange); letter-spacing: .1em; text-transform: uppercase; font-size: .8rem; }
   .studio-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; height: 60px; display: flex; align-items: center; justify-content: center; gap: clamp(14px, 3vw, 32px); padding: 0 16px; background: rgba(5, 7, 15, .9); border-top: 1px solid var(--line); backdrop-filter: blur(10px); }
   .studio-bar::before { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 1px; background: linear-gradient(90deg, transparent, var(--teal), var(--pink), transparent); opacity: .7; }
-  .studio-bar .studio-logo { display: block; border-radius: 8px; }
+  .studio-bar .studio-logo { display: flex; align-items: center; gap: 12px; border-radius: 8px; text-decoration: none; }
+  .studio-bar .studio-por { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+  @media (max-width: 1100px) { .studio-bar .studio-por { display: none; } }
   .studio-bar .studio-logo img { display: block; height: 44px; width: auto; opacity: .9; transition: opacity .2s, filter .2s; }
   .studio-bar .studio-logo:hover img, .studio-bar .studio-logo:focus-visible img { opacity: 1; filter: drop-shadow(0 0 12px rgba(77, 227, 208, .5)); }
   .studio-bar .studio-logo:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
@@ -221,7 +223,7 @@
 </footer>
 
 <div class="studio-bar">
-  <a class="studio-logo" href="https://geopbytestudio.com" target="_blank" rel="noopener" aria-label="Geopbyte Studio (abre su sitio)"><img src="img/geopbyte-logo.png" alt="Logo de Geopbyte Studio" width="174" height="44"></a>
+  <a class="studio-logo" href="https://geopbytestudio.com" target="_blank" rel="noopener" aria-label="Sitio creado por Geopbyte Studio (abre su sitio)"><span class="studio-por">Sitio creado por</span><img src="img/geopbyte-logo.png" alt="Logo de Geopbyte Studio" width="174" height="44"></a>
   <span>Fan page no oficial · No Man's Sky es de Hello Games</span>
   <a class="creators-link" href="creadores.html" rel="nofollow">Acceso SVS</a>
 </div>
