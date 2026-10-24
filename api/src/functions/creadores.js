@@ -33,6 +33,7 @@ function route(name, methods, path, handler) {
 route('creadores-login', ['POST'], 'creadores/login', h.login);
 route('creadores-logout', ['POST'], 'creadores/logout', h.logout);
 route('creadores-yo', ['GET'], 'creadores/yo', h.yo);
+route('estadisticas', ['GET'], 'estadisticas', h.estadisticas);
 route('creadores-clave', ['POST'], 'creadores/clave', h.cambiarClave);
 route('creadores-permiso', ['POST'], 'creadores/permiso', h.permisoSubida);
 route('creadores-registrar', ['POST'], 'creadores/capturas', h.registrar);

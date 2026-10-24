@@ -211,4 +211,11 @@ async function aprobar(req) {
   return out(200, { ok: true });
 }
 
-module.exports = { login, logout, yo, cambiarClave, permisoSubida, registrar, listar, misCapturas, borrar, editar, aprobar };
+// Solo para el panel admin.geopbytestudio.com (llave en el App Setting STATS_KEY): total de usuarios, sin datos de nadie.
+async function estadisticas(req) {
+  const k = process.env.STATS_KEY || '', dada = String(req.headers['x-clave-panel'] || '');
+  const ok = k.length >= 32 && dada.length === k.length && crypto.timingSafeEqual(Buffer.from(dada), Buffer.from(k));
+  return ok ? out(200, { cuentas: await store.contarUsuarios() }) : out(401, { error: 'No autorizado.' });
+}
+
+module.exports = { login, logout, yo, cambiarClave, permisoSubida, registrar, listar, misCapturas, borrar, editar, aprobar, estadisticas };

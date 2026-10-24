@@ -45,4 +45,11 @@ async function getUser(usuario) {
   catch (e) { if (e.statusCode === 404) return null; throw e; }
 }
 
-module.exports = { clients, blobUrl, uploadUrl, getUser, CONTAINER };
+// Total de usuarios (activos o no). Solo lee las claves, nunca los datos.
+async function contarUsuarios() {
+  let n = 0;
+  for await (const _ of clients().users.listEntities({ queryOptions: { filter: "PartitionKey eq 'u'", select: ['RowKey'] } })) n++;
+  return n;
+}
+
+module.exports = { clients, blobUrl, uploadUrl, getUser, contarUsuarios, CONTAINER };
