@@ -121,6 +121,23 @@
   .creators-link:hover, .creators-link:focus-visible { color: var(--teal); border-color: var(--teal); box-shadow: 0 0 16px rgba(77, 227, 208, .25); outline: none; }
   @media (max-width: 900px) { .studio-bar span { display: none; } }
   @media (max-width: 520px) { .studio-bar { justify-content: flex-start; } .creators-link { font-size: .68rem; padding: 5px 10px; } }
+  .plant-tabs { display: none; }
+  /* Móvil: cada sección se recorre de lado y las plantas se eligen con pestañas (menos scroll vertical) */
+  @media (max-width: 760px) {
+    .cards, .legend, .slides, .plant-tabs {
+      display: flex; flex-wrap: nowrap; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
+      gap: 14px; padding-bottom: 14px; scrollbar-width: thin; scrollbar-color: var(--line) transparent; -webkit-overflow-scrolling: touch;
+    }
+    .cards > * { flex: 0 0 86%; min-width: 0; scroll-snap-align: start; }
+    .legend { gap: 10px; }
+    .legend > * { flex: 0 0 64px; scroll-snap-align: start; }
+    .slides > * { flex: 0 0 88%; min-width: 0; scroll-snap-align: start; margin: 0 !important; padding: 14px 16px; border-radius: 14px; background: rgba(255, 255, 255, .04); border: 1px solid var(--line); }
+    .plant-tabs { margin-top: 22px; gap: 10px; }
+    .plant-tabs button { flex: 0 0 auto; padding: 8px 18px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--muted); font: inherit; font-size: .9rem; cursor: pointer; }
+    .plant-tabs button[aria-selected="true"] { color: #05070f; background: var(--teal); border-color: var(--teal); font-weight: 600; }
+    .plant:not(.sel) { display: none; }
+    .plant { margin-top: 14px; }
+  }
   @media (max-width: 760px) { nav ul { display: none; } }
 
   .reveal { opacity: 0; transform: translateY(26px); transition: opacity .8s, transform .8s; }
@@ -160,6 +177,7 @@
     <div class="wrap">
       <h2 class="reveal">¿Qué son los glifos?</h2>
       <div class="info reveal">
+        <div class="slides">
         <p>
           Los <strong>glifos</strong> son los <strong>16 símbolos alienígenas</strong> que usan los portales de <em>No Man's Sky</em>.
           Una <strong>dirección de portal</strong> es una secuencia de <strong>12 glifos</strong>: el primero indica el planeta,
@@ -171,6 +189,7 @@
           como 12 caracteres, por ejemplo <code>60E201927EA0</code>. Abajo tienes la equivalencia; en cada tarjeta los glifos ya están dibujados
           en el orden en que debes ponerlos (de 1 a 12).
         </p>
+        </div>
         <div class="legend" id="legend" aria-label="Equivalencia entre dígitos y glifos"></div>
       </div>
     </div>
@@ -183,6 +202,7 @@
         Cada planta crece de forma natural en un tipo de planeta (bioma). Aquí van las direcciones más recientes de bases en planetas de cada bioma,
         para que llegues directo a un lugar donde ya se puede cultivar o recolectar esa planta.
       </p>
+      <div class="plant-tabs" id="plantTabs" role="tablist" aria-label="Elegir planta"></div>
       <div id="plantasBox"></div>
     </div>
   </section>
@@ -323,6 +343,17 @@
         p.entradas.forEach(function (e) { cs.appendChild(card(e)); });
         s.appendChild(h); s.appendChild(cs); box.appendChild(s);
       });
+      // Solo en móvil: pestañas para ver una planta a la vez (en escritorio las pestañas están ocultas y se ven todas)
+      var tabs = $('plantTabs'), plantas = box.querySelectorAll('.plant');
+      d.plantas.forEach(function (p, i) {
+        var t = el('button', '', p.nombre); t.type = 'button'; t.setAttribute('role', 'tab'); t.setAttribute('aria-selected', String(i === 0));
+        t.addEventListener('click', function () {
+          Array.prototype.forEach.call(tabs.children, function (o) { o.setAttribute('aria-selected', String(o === t)); });
+          Array.prototype.forEach.call(plantas, function (s, k) { s.classList.toggle('sel', k === i); });
+        });
+        tabs.appendChild(t);
+      });
+      if (plantas[0]) plantas[0].classList.add('sel');
       var nb = $('navesBox');
       d.naves.forEach(function (n) { nb.appendChild(card(n, { imagen: n.imagen, tipos: n.tipos })); });
       $('fuente').textContent = '';
