@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forsaken · Nueva actualización · No Man's Sky · Fan Page</title>
+<link rel="icon" type="image/png" sizes="48x48" href="img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<meta name="description" content="Forsaken, la actualización 7.10 de No Man's Sky (28 de octubre de 2026): comerciantes, recuerdos macabros, módulos biomecánicos para la corbeta, iOS y más.">
+<style>
+  :root {
+    --bg: #05070f;
+    --bg-2: #0a1020;
+    --panel: rgba(12, 20, 40, .62);
+    --line: rgba(120, 220, 230, .22);
+    --text: #e8f1f5;
+    --muted: #9db3bd;
+    --teal: #4de3d0;
+    --pink: #ff6fa8;
+    --orange: #ffab5e;
+    --radius: 18px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    line-height: 1.65;
+    overflow-x: hidden;
+    padding-bottom: 60px;
+  }
+  .nebula {
+    position: fixed; inset: 0; z-index: -2;
+    background:
+      radial-gradient(60% 50% at 15% 20%, rgba(255, 111, 168, .22), transparent 70%),
+      radial-gradient(55% 45% at 85% 15%, rgba(77, 227, 208, .22), transparent 70%),
+      radial-gradient(70% 55% at 60% 95%, rgba(255, 171, 94, .16), transparent 70%),
+      linear-gradient(180deg, #060a18 0%, #0a1226 55%, #08101e 100%);
+  }
+  #stars { position: fixed; inset: 0; z-index: -1; width: 100%; height: 100%; }
+  a { color: var(--teal); }
+  .wrap { width: min(1100px, 100% - 32px); margin-inline: auto; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px clamp(16px, 4vw, 40px);
+    background: linear-gradient(180deg, rgba(5, 7, 15, .85), transparent);
+    backdrop-filter: blur(6px);
+  }
+  nav .logo { letter-spacing: .28em; font-weight: 600; font-size: .85rem; text-transform: uppercase; color: var(--text); text-decoration: none; }
+  nav ul { display: flex; gap: clamp(12px, 3vw, 28px); list-style: none; }
+  nav a { text-decoration: none; color: var(--muted); font-size: .9rem; transition: color .2s; }
+  nav ul a:hover, nav ul a[aria-current="page"] { color: var(--teal); }
+
+  header.top { padding: 120px 0 10px; text-align: center; }
+  header.top h1 { font-size: clamp(2.2rem, 7vw, 4.6rem); letter-spacing: .18em; font-weight: 300; text-transform: uppercase; text-shadow: 0 0 40px rgba(77, 227, 208, .55), 0 4px 24px rgba(0, 0, 0, .6); }
+  header.top h1 b { font-weight: 700; color: #fff; }
+  header.top p { margin: 12px auto 0; max-width: 680px; color: #d6e8ee; }
+
+  section { padding: clamp(40px, 7vw, 70px) 0; }
+  h2 { font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 300; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 8px; }
+  h2::after { content: ""; display: block; width: 64px; height: 3px; margin-top: 12px; border-radius: 3px; background: linear-gradient(90deg, var(--teal), var(--pink), var(--orange)); }
+  .lead { color: var(--muted); max-width: 760px; margin-top: 18px; }
+  .lead + .lead { margin-top: 10px; }
+
+  /* Página de la actualización: banner, pestañas y tarjetas */
+  .fs-hero { position: relative; margin-top: 8px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); }
+  .fs-hero img { display: block; width: 100%; height: clamp(260px, 38vw, 440px); object-fit: cover; }
+  .fs-hero-txt { position: absolute; inset: auto 0 0 0; padding: clamp(18px, 4vw, 34px); background: linear-gradient(180deg, transparent, rgba(5, 7, 15, .92) 70%); }
+  .fs-hero-txt p { max-width: 720px; color: #cfe0e6; }
+  .pill { display: inline-flex; align-items: center; padding: 5px 14px; border-radius: 999px; font-size: .8rem; border: 1px solid var(--line); color: var(--muted); }
+  .fs-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+  .fs-tabs button { padding: 8px 20px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--muted); font: inherit; font-size: .92rem; cursor: pointer; transition: color .2s, border-color .2s, background .2s; }
+  .fs-tabs button:hover { color: var(--teal); border-color: var(--teal); }
+  .fs-tabs button[aria-selected="true"] { color: #05070f; background: var(--teal); border-color: var(--teal); font-weight: 600; }
+  .fs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(235px, 1fr)); gap: 16px; margin-top: 18px; }
+  .fs-card { border-radius: var(--radius); overflow: hidden; background: var(--panel); border: 1px solid var(--line); backdrop-filter: blur(8px); cursor: zoom-in; transition: transform .25s, border-color .25s, box-shadow .25s; }
+  .fs-card[hidden] { display: none; }
+  .fs-card:hover { transform: translateY(-5px); border-color: var(--teal); box-shadow: 0 12px 40px rgba(77, 227, 208, .18); }
+  .fs-card img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
+  .fs-card figcaption { padding: 14px 16px 18px; }
+  .fs-card h4 { font-weight: 600; letter-spacing: .05em; margin-bottom: 4px; }
+  .fs-card p { color: var(--muted); font-size: .9rem; line-height: 1.5; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .chip { padding: 8px 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); font-size: .9rem; }
+  .btn { display: inline-block; padding: 12px 26px; border-radius: 999px; border: 1px solid var(--teal); color: var(--teal); text-decoration: none; letter-spacing: .08em; transition: background .2s, box-shadow .2s; }
+  .btn:hover { background: rgba(77, 227, 208, .14); box-shadow: 0 0 22px rgba(77, 227, 208, .3); }
+  .links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+  .note { margin-top: 30px; padding: 14px 18px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); font-size: .85rem; color: var(--muted); }
+  @media (max-width: 760px) {
+    .fs-grid, .chips { display: flex; flex-wrap: nowrap; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; gap: 14px; padding-bottom: 14px; scrollbar-width: thin; scrollbar-color: var(--line) transparent; -webkit-overflow-scrolling: touch; }
+    .fs-grid > * { flex: 0 0 80%; min-width: 0; scroll-snap-align: start; }
+    .chips > * { flex: 0 0 auto; scroll-snap-align: start; }
+    .fs-hero img { height: 210px; }
+    .fs-hero-txt { position: static; background: var(--panel); padding: 16px 18px 20px; }
+    .fs-tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+    .fs-tabs button { flex: 0 0 auto; }
+  }
+  #lightbox { position: fixed; inset: 0; z-index: 50; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: rgba(3, 5, 12, .92); padding: 20px; cursor: zoom-out; }
+  #lightbox.open { display: flex; }
+  #lightbox .cap { width: min(820px, 100%); max-height: 28vh; overflow-y: auto; color: var(--muted); font-size: .9rem; text-align: center; cursor: default; }
+  #lightbox .cap:empty { display: none; }
+  #lightbox .cap .who { color: var(--pink); font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; }
+  #lightbox .cap h4 { margin: 2px 0 4px; color: var(--text); font-size: 1.05rem; font-weight: 600; letter-spacing: .04em; }
+  #lightbox .cap p { color: #cfe0e6; line-height: 1.55; }
+  #lightbox .cap .auto { margin-top: 6px; font-size: .72rem; color: var(--muted); font-style: italic; }
+  #lightbox img { max-width: 100%; max-height: 62vh; object-fit: contain; border-radius: 12px; box-shadow: 0 0 80px rgba(77, 227, 208, .3); cursor: default; }
+  #lightbox .pos { position: absolute; top: 24px; left: 24px; color: var(--muted); font-size: .85rem; letter-spacing: .14em; }
+  .lb-btn { position: absolute; z-index: 2; width: 46px; height: 46px; padding: 0 0 4px; border-radius: 50%; border: 1px solid var(--line); background: rgba(12, 20, 40, .75); color: var(--text); font: inherit; font-size: 1.9rem; line-height: 1; cursor: pointer; backdrop-filter: blur(4px); transition: border-color .2s, box-shadow .2s, background .2s; }
+  .lb-btn:hover, .lb-btn:focus-visible { border-color: var(--teal); background: rgba(77, 227, 208, .2); box-shadow: 0 0 20px rgba(77, 227, 208, .4); outline: none; }
+  .lb-close { top: 16px; right: 16px; }
+  .lb-nav { top: 38%; transform: translateY(-50%); }
+  .lb-prev { left: clamp(8px, 2vw, 28px); }
+  .lb-next { right: clamp(8px, 2vw, 28px); }
+  #lightbox.single .lb-nav { display: none; }
+  @media (max-width: 600px) { .lb-nav { width: 40px; height: 40px; font-size: 1.6rem; } }
+  footer { padding: 40px 0 60px; text-align: center; color: var(--muted); font-size: .85rem; border-top: 1px solid var(--line); }
+  footer small { display: block; margin-top: 8px; opacity: .8; }
+  footer .disclaimer { max-width: 760px; margin: 18px auto 0; padding: 16px 20px; border-radius: 14px; border: 1px solid var(--line); background: var(--panel); text-align: left; line-height: 1.6; }
+  footer .disclaimer strong:first-child { display: block; margin-bottom: 4px; color: var(--orange); letter-spacing: .1em; text-transform: uppercase; font-size: .8rem; }
+  .studio-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; height: 60px; display: flex; align-items: center; justify-content: center; gap: clamp(14px, 3vw, 32px); padding: 0 16px; background: rgba(5, 7, 15, .9); border-top: 1px solid var(--line); backdrop-filter: blur(10px); }
+  .studio-bar::before { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 1px; background: linear-gradient(90deg, transparent, var(--teal), var(--pink), transparent); opacity: .7; }
+  .studio-bar .studio-logo { display: flex; align-items: center; gap: 12px; border-radius: 8px; text-decoration: none; }
+  .studio-bar .studio-por { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+  @media (max-width: 1100px) { .studio-bar .studio-por { display: none; } }
+  .studio-bar .studio-logo img { display: block; height: 44px; width: auto; opacity: .9; transition: opacity .2s, filter .2s; }
+  .studio-bar .studio-logo:hover img, .studio-bar .studio-logo:focus-visible img { opacity: 1; filter: drop-shadow(0 0 12px rgba(77, 227, 208, .5)); }
+  .studio-bar .studio-logo:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
+  .studio-bar span { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+  .creators-link { position: absolute; right: clamp(12px, 2.5vw, 28px); padding: 5px 14px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); font-size: .74rem; letter-spacing: .08em; text-decoration: none; white-space: nowrap; transition: color .2s, border-color .2s, box-shadow .2s; }
+  .creators-link:hover, .creators-link:focus-visible { color: var(--teal); border-color: var(--teal); box-shadow: 0 0 16px rgba(77, 227, 208, .25); outline: none; }
+  @media (max-width: 900px) { .studio-bar span { display: none; } }
+  @media (max-width: 520px) { .studio-bar { justify-content: flex-start; } .creators-link { font-size: .68rem; padding: 5px 10px; } }
+  /* Móvil: el menú pasa a una segunda fila con los enlaces deslizables de lado */
+  @media (max-width: 760px) {
+    nav { flex-wrap: wrap; row-gap: 6px; padding-bottom: 8px; background: rgba(5, 7, 15, .94); border-bottom: 1px solid var(--line); }
+    nav ul { order: 3; flex: 0 0 100%; overflow-x: auto; white-space: nowrap; gap: 8px; padding-bottom: 2px; scrollbar-width: none; overscroll-behavior-x: contain; }
+    nav ul::-webkit-scrollbar { display: none; }
+    nav ul a { display: inline-block; padding: 5px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); font-size: .82rem; }
+    nav ul a[aria-current="page"], nav ul a.on { color: #05070f; background: var(--teal); border-color: var(--teal); font-weight: 600; }
+    section[id] { scroll-margin-top: 84px; }
+  }
+
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .8s, transform .8s; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .fs-card, .fs-card:hover { transition: none; transform: none; }
+  }
+</style>
+<script defer src="https://contador.geopbytestudio.com/c.js" data-sitio="nms"></script>
+</head>
+<body>
+<div class="nebula"></div>
+<canvas id="stars"></canvas>
+
+<nav>
+  <a class="logo" href="index.html">No Man's Sky</a>
+  <ul>
+    <li><a href="index.html">Inicio</a></li>
+    <li><a href="actualizacion.html" aria-current="page">Actualización</a></li>
+    <li><a href="#novedades">Novedades</a></li>
+    <li><a href="index.html#expediciones">Expediciones</a></li>
+    <li><a href="glifos.html">Glifos</a></li>
+  </ul>
+</nav>
+
+<header class="top">
+  <div class="wrap">
+    <h1>For<b>saken</b></h1>
+    <p>Update 7.10 · 28 de octubre de 2026 · gratis. La actualización de Halloween de No Man’s Sky.</p>
+  </div>
+</header>
+
+<main>
+  <section id="resumen">
+    <div class="wrap">
+      <div class="fs-hero reveal">
+        <img src="img/forsaken/banner.jpg" alt="Una nave biomecánica vuela junto a restos cubiertos de niebla verde en la actualización Forsaken">
+        <div class="fs-hero-txt">
+          <span class="pill">Actualización gratuita</span>
+          <p style="margin-top:10px">Explora el lado más oscuro del universo: mercaderes misteriosos que cambian recuerdos macabros por módulos biomecánicos para tu corbeta, nuevas cabinas, misiones de mensajería en el espacio profundo y la llegada del juego completo a iOS.</p>
+        </div>
+      </div>
+      <div class="chips reveal" aria-label="Plataformas">
+        <span class="chip">PC (Steam)</span><span class="chip">PlayStation 4 y 5</span><span class="chip">Xbox One y Series X|S</span><span class="chip">Game Pass</span>
+        <span class="chip">Nintendo Switch y Switch 2</span><span class="chip">macOS</span><span class="chip">iPhone y iPad (iOS)</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="novedades">
+    <div class="wrap">
+      <h2 class="reveal">Novedades</h2>
+      <div class="fs-tabs reveal" role="tablist" aria-label="Novedades de Forsaken"><button type="button" role="tab" data-cat="nuevo" aria-selected="true">Lo nuevo</button><button type="button" role="tab" data-cat="corbetas" aria-selected="false">Corbetas</button><button type="button" role="tab" data-cat="juego" aria-selected="false">Jugabilidad</button></div>
+      <div class="fs-grid reveal" id="fsGrid">
+          <figure class="fs-card" data-cat="nuevo" data-view="img/forsaken/comerciantes.jpg"><img src="img/forsaken/comerciantes.jpg" alt="Comerciantes Forsaken" loading="lazy"><figcaption><h4>Comerciantes Forsaken</h4><p>Misteriosos mercaderes que aparecen en las avanzadas espaciales. Aceptan recuerdos a cambio de módulos únicos para tu corbeta.</p></figcaption></figure>
+          <figure class="fs-card" data-cat="nuevo" data-view="img/forsaken/recuerdos.jpg"><img src="img/forsaken/recuerdos.jpg" alt="Recuerdos macabros" loading="lazy"><figcaption><h4>Recuerdos macabros</h4><p>Muestras biológicas escondidas en naves destrozadas, avanzadas infestadas, cargueros abandonados y yacimientos paleontológicos. Atraerlos tiene un precio: los horrores del límite te vigilan.</p></figcaption></figure>
+          <figure class="fs-card" data-cat="nuevo" data-view="img/forsaken/casco.jpg"><img src="img/forsaken/casco.jpg" alt="Casco Larva Tank" loading="lazy"><figcaption><h4>Casco Larva Tank</h4><p>Un casco con una larva parasitaria dentro. Se consigue por tu dedicación a recolectar recuerdos, junto con el título «Mind Harvester».</p></figcaption></figure>
+          <figure class="fs-card" data-cat="nuevo" data-view="img/forsaken/canon.jpg"><img src="img/forsaken/canon.jpg" alt="Cañón de larvas" loading="lazy"><figcaption><h4>Cañón de larvas</h4><p>Nueva multiherramienta con exoesqueleto larval que se obtiene a cambio de larvas conservadas.</p></figcaption></figure>
+          <figure class="fs-card" data-cat="corbetas" hidden data-view="img/forsaken/modulos.jpg"><img src="img/forsaken/modulos.jpg" alt="Módulos siniestros" loading="lazy"><figcaption><h4>Módulos siniestros</h4><p>Una gran variedad de piezas biomecánicas para tu corbeta: estructuras de casco, habitaciones y más, de aspecto inquietante.</p></figcaption></figure>
+          <figure class="fs-card" data-cat="corbetas" hidden data-view="img/forsaken/cabinas1.jpg"><img src="img/forsaken/cabinas1.jpg" alt="Cabinas Vantage y Hornet" loading="lazy"><figcaption><h4>Cabinas Vantage y Hornet</h4><p>La Vantage es ultra ancha, con vista panorámica y un interior minimalista. La Hornet es segmentada, de aspecto insectoide y con tres variantes.</p></figcaption></figure>
+          <figure class="fs-card" data-cat="corbetas" hidden data-view="img/forsaken/cabinas2.jpg"><img src="img/forsaken/cabinas2.jpg" alt="Cabinas Viper y Mantis" loading="lazy"><figcaption><h4>Cabinas Viper y Mantis</h4><p>La Viper lleva paneles de cuero y una «cabeza de serpiente»; la Mantis, paneles cuadrados y barras de titanio. Cada una en tres variantes.</p></figcaption></figure>
+          <figure class="fs-card" data-cat="corbetas" hidden data-view="img/forsaken/interiores.jpg"><img src="img/forsaken/interiores.jpg" alt="Interiores Legion" loading="lazy"><figcaption><h4>Interiores Legion</h4><p>Habitaciones de estilo utilitario, con techos bajos, luces empotradas y ángulos marcados.</p></figcaption></figure>
+          <figure class="fs-card" data-cat="juego" hidden data-view="img/forsaken/ios.jpg"><img src="img/forsaken/ios.jpg" alt="Llega a iOS" loading="lazy"><figcaption><h4>Llega a iOS</h4><p>La experiencia completa de No Man’s Sky en iPhone y iPad, con interfaz táctil y un motor optimizado para cuidar la batería.</p></figcaption></figure>
+          <figure class="fs-card" data-cat="juego" hidden data-view="img/forsaken/hud.jpg"><img src="img/forsaken/hud.jpg" alt="Modo HUD mínimo" loading="lazy"><figcaption><h4>Modo HUD mínimo</h4><p>Oculta la brújula, las barras de protección, los avisos de misión y los marcadores no esenciales para jugar con la pantalla limpia.</p></figcaption></figure>
+          <figure class="fs-card" data-cat="juego" hidden data-view="img/forsaken/mensajeria.jpg"><img src="img/forsaken/mensajeria.jpg" alt="Misiones de mensajería" loading="lazy"><figcaption><h4>Misiones de mensajería</h4><p>Contratos de transporte de larga distancia desde las avanzadas espaciales: entrega los paquetes sanos y salvos.</p></figcaption></figure>
+          <figure class="fs-card" data-cat="juego" hidden data-view="img/forsaken/salto.jpg"><img src="img/forsaken/salto.jpg" alt="Salto estelar continuo" loading="lazy"><figcaption><h4>Salto estelar continuo</h4><p>Selecciona una estrella cercana directamente desde el espacio y viaja hasta ella sin abrir el mapa galáctico.</p></figcaption></figure>
+          <figure class="fs-card" data-cat="juego" hidden data-view="img/forsaken/radial.jpg"><img src="img/forsaken/radial.jpg" alt="Rueda de armas" loading="lazy"><figcaption><h4>Rueda de armas</h4><p>Un selector radial para cambiar rápido entre las armas y utilidades de la multiherramienta.</p></figcaption></figure>
+          <figure class="fs-card" data-cat="juego" hidden data-view="img/forsaken/bases.jpg"><img src="img/forsaken/bases.jpg" alt="Bases espaciales para compartir" loading="lazy"><figcaption><h4>Bases espaciales para compartir</h4><p>Sube tus bases orbitales al servidor para que otros jugadores las visiten.</p></figcaption></figure>
+          <figure class="fs-card" data-cat="juego" hidden data-view="img/forsaken/chatarra.jpg"><img src="img/forsaken/chatarra.jpg" alt="Chatarreo espacial" loading="lazy"><figcaption><h4>Chatarreo espacial</h4><p>Mejor guía para extraer tecnología y minerales de restos de naves y cinturones de asteroides con la bobina Gravitino.</p></figcaption></figure>
+          <figure class="fs-card" data-cat="juego" hidden data-view="img/forsaken/batallas.jpg"><img src="img/forsaken/batallas.jpg" alt="Batallas en el espacio profundo" loading="lazy"><figcaption><h4>Batallas en el espacio profundo</h4><p>Combates de criaturas en la Holo-Arena de las avanzadas espaciales, con nuevos rivales.</p></figcaption></figure>
+      </div>
+      <div class="links reveal">
+        <a class="btn" href="https://www.nomanssky.com/forsaken-update/" target="_blank" rel="noopener">Notas oficiales del parche</a>
+        <a class="btn" href="https://www.nomanssky.com/2026/10/no-mans-sky-forsaken/" target="_blank" rel="noopener">Anuncio oficial</a>
+      </div>
+      <p class="note">Información e imágenes de las notas oficiales de Hello Games. Toca una imagen para verla en grande. Fan page no oficial.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    Hecha con cariño por <strong>Geopbyte Studio</strong>.
+    <div class="disclaimer">
+      <strong>Aviso legal</strong>
+      Esta es únicamente una <strong>fan page no oficial</strong>, creada por un fan y sin fines de lucro. No está afiliada,
+      patrocinada ni respaldada por Hello Games. <em>No Man's Sky</em>, su nombre, los glifos, logotipos, imágenes y demás material
+      pertenecen a sus respectivos dueños (Hello Games Ltd.). Las imágenes y textos de esta página provienen de las notas oficiales de Hello Games.
+      Uso personal y educativo; si eres titular de derechos y quieres que algún contenido se retire, se eliminará.
+    </div>
+    <small>Fuente: nomanssky.com (Hello Games).</small>
+  </div>
+</footer>
+
+<div class="studio-bar">
+  <a class="studio-logo" href="https://geopbytestudio.com" target="_blank" rel="noopener" aria-label="Sitio creado por Geopbyte Studio (abre su sitio)"><span class="studio-por">Sitio creado por</span><img src="img/geopbyte-logo.png" alt="Logo de Geopbyte Studio" width="174" height="44"></a>
+  <span>Fan page no oficial · No Man's Sky es de Hello Games</span>
+  <a class="creators-link" href="creadores.html" rel="nofollow">Acceso SVS</a>
+</div>
+
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Imagen ampliada">
+  <button type="button" class="lb-btn lb-close" aria-label="Cerrar (Esc)">&times;</button>
+  <button type="button" class="lb-btn lb-nav lb-prev" aria-label="Imagen anterior">&#8249;</button>
+  <button type="button" class="lb-btn lb-nav lb-next" aria-label="Imagen siguiente">&#8250;</button>
+  <div class="pos" aria-live="polite"></div>
+  <img alt=""><div class="cap"></div>
+</div>
+
+<script>
+  // Campo de estrellas animado
+  (function () {
+    var canvas = document.getElementById('stars'), ctx = canvas.getContext('2d');
+    var stars = [], W, H, reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function resize() {
+      W = canvas.width = innerWidth; H = canvas.height = innerHeight;
+      stars = [];
+      var n = Math.min(260, Math.floor(W * H / 6500));
+      for (var i = 0; i < n; i++) stars.push({ x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.4 + .2, s: Math.random() * .25 + .03, t: Math.random() * 6.28 });
+    }
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < stars.length; i++) {
+        var s = stars[i];
+        if (!reduce) { s.y += s.s; s.t += .03; if (s.y > H) { s.y = 0; s.x = Math.random() * W; } }
+        ctx.globalAlpha = .45 + .45 * Math.sin(s.t);
+        ctx.fillStyle = i % 7 === 0 ? '#ffb3d1' : (i % 5 === 0 ? '#9ff3ea' : '#ffffff');
+        ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.28); ctx.fill();
+      }
+      if (!reduce) requestAnimationFrame(draw);
+    }
+    addEventListener('resize', function () { resize(); if (reduce) draw(); });
+    resize(); draw();
+  })();
+
+  // Aparición al hacer scroll
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .12 });
+  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+
+  // Pestañas: muestran solo las tarjetas de una categoría
+  (function () {
+    var tabs = document.querySelectorAll('.fs-tabs button'), cards = document.querySelectorAll('#fsGrid .fs-card');
+    tabs.forEach(function (t) {
+      t.addEventListener('click', function () {
+        tabs.forEach(function (o) { o.setAttribute('aria-selected', o === t ? 'true' : 'false'); });
+        cards.forEach(function (c) { c.hidden = c.dataset.cat !== t.dataset.cat; });
+      });
+    });
+  })();
+
+  // Visor de imágenes: botones, flechas del teclado o deslizando
+  (function () {
+    var lb = document.getElementById('lightbox'), img = lb.querySelector('img'), cap = lb.querySelector('.cap'), pos = lb.querySelector('.pos');
+    var lista = [], i = 0;
+    function ver(n) {
+      i = (n + lista.length) % lista.length;
+      var f = lista[i];
+      img.src = f.dataset.view; img.alt = f.querySelector('img').alt;
+      cap.textContent = '';
+      Array.prototype.forEach.call(f.querySelector('figcaption').children, function (x) { cap.appendChild(x.cloneNode(true)); });
+      pos.textContent = (i + 1) + ' / ' + lista.length;
+      lb.classList.toggle('single', lista.length < 2);
+    }
+    function cerrar() { lb.classList.remove('open'); img.removeAttribute('src'); }
+    document.addEventListener('click', function (e) {
+      var f = e.target.closest && e.target.closest('.fs-card');
+      if (!f) return;
+      lista = Array.prototype.filter.call(f.parentElement.children, function (x) { return !x.hidden; });
+      ver(lista.indexOf(f)); lb.classList.add('open');
+    });
+    lb.addEventListener('click', function (e) { if (e.target === lb) cerrar(); });
+    lb.querySelector('.lb-close').addEventListener('click', cerrar);
+    lb.querySelector('.lb-prev').addEventListener('click', function () { ver(i - 1); });
+    lb.querySelector('.lb-next').addEventListener('click', function () { ver(i + 1); });
+    addEventListener('keydown', function (e) {
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape') cerrar(); else if (e.key === 'ArrowLeft') ver(i - 1); else if (e.key === 'ArrowRight') ver(i + 1);
+    });
+    var sx = 0;
+    lb.addEventListener('touchstart', function (e) { sx = e.changedTouches[0].clientX; }, { passive: true });
+    lb.addEventListener('touchend', function (e) { var dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 50 && lista.length > 1) ver(i + (dx < 0 ? 1 : -1)); }, { passive: true });
+  })();
+
+  // Menú: resalta el enlace de la sección visible y lo mantiene a la vista en la tira del móvil
+  (function () {
+    var links = Array.prototype.filter.call(document.querySelectorAll('nav ul a'), function (a) { return a.getAttribute('href').charAt(0) === '#'; });
+    var pares = links.map(function (a) { return [a, document.querySelector(a.getAttribute('href'))]; }).filter(function (p) { return p[1]; });
+    if (!pares.length) return;
+    var actual = null;
+    function marca() {
+      var y = innerHeight * .35, sel = null;
+      pares.forEach(function (p) { if (p[1].getBoundingClientRect().top <= y) sel = p[0]; });
+      if (sel === actual) return;
+      actual = sel;
+      links.forEach(function (a) { a.classList.toggle('on', a === sel); });
+      var ul = sel && sel.closest('ul');
+      if (ul && ul.scrollWidth > ul.clientWidth) ul.scrollTo({ left: sel.offsetLeft - (ul.clientWidth - sel.offsetWidth) / 2, behavior: 'smooth' });
+    }
+    addEventListener('scroll', marca, { passive: true }); marca();
+  })();
+</script>
+</body>
+</html>

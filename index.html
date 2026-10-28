@@ -213,18 +213,9 @@
   .fs-hero-txt { position: absolute; inset: auto 0 0 0; padding: clamp(18px, 4vw, 34px); background: linear-gradient(180deg, transparent, rgba(5, 7, 15, .92) 70%); }
   .fs-hero-txt h3 { margin: 10px 0 6px; font-size: clamp(1.8rem, 5vw, 3rem); letter-spacing: .2em; font-weight: 700; background: linear-gradient(90deg, var(--teal), var(--pink)); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .fs-hero-txt p { max-width: 720px; color: #cfe0e6; }
-  .fs-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
-  .fs-tabs button { padding: 8px 20px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--muted); font: inherit; font-size: .92rem; cursor: pointer; transition: color .2s, border-color .2s, background .2s; }
-  .fs-tabs button:hover { color: var(--teal); border-color: var(--teal); }
-  .fs-tabs button[aria-selected="true"] { color: #05070f; background: var(--teal); border-color: var(--teal); font-weight: 600; }
-  .fs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(235px, 1fr)); gap: 16px; margin-top: 18px; }
-  .fs-card { border-radius: var(--radius); overflow: hidden; background: var(--panel); border: 1px solid var(--line); backdrop-filter: blur(8px); cursor: zoom-in; transition: transform .25s, border-color .25s, box-shadow .25s; }
-  .fs-card[hidden] { display: none; }
-  .fs-card:hover { transform: translateY(-5px); border-color: var(--teal); box-shadow: 0 12px 40px rgba(77, 227, 208, .18); }
-  .fs-card img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
-  .fs-card figcaption { padding: 14px 16px 18px; }
-  .fs-card h4 { font-weight: 600; letter-spacing: .05em; margin-bottom: 4px; }
-  .fs-card p { color: var(--muted); font-size: .9rem; line-height: 1.5; }
+  a.fs-link { display: block; color: inherit; text-decoration: none; transition: transform .25s, border-color .25s, box-shadow .25s; }
+  a.fs-link:hover, a.fs-link:focus-visible { transform: translateY(-4px); border-color: var(--teal); box-shadow: 0 12px 40px rgba(77, 227, 208, .2); outline: none; }
+  .fs-hero-txt .btn { display: inline-block; margin-top: 14px; }
 
   /* Expediciones: escenario con fondo, ficha y tira de insignias (todo se navega sin hacer scroll) */
   #expediciones { padding: 84px 0 36px; }
@@ -319,15 +310,14 @@
   @media (max-width: 760px) {
     .about { grid-template-columns: 1fr; }
     .poster { max-width: 280px; margin-inline: auto; }
-    nav ul { display: none; }
   }
   /* Móvil: cada sección se recorre de lado (deslizando) en vez de alargar la página */
   @media (max-width: 760px) {
-    .pillars, .stats, .gallery, .svs-filters, .fs-grid, .live-grid, .slides, .timeline, #historia .chips {
+    .pillars, .stats, .gallery, .svs-filters, .live-grid, .slides, .timeline, #historia .chips {
       display: flex; flex-wrap: nowrap; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
       gap: 14px; padding-bottom: 14px; scrollbar-width: thin; scrollbar-color: var(--line) transparent; -webkit-overflow-scrolling: touch;
     }
-    .pillars > *, .stats > *, .gallery > *, .svs-filters > *, .fs-grid > *, .live-grid > *, .slides > *, .timeline > *, #historia .chips > * { flex: 0 0 80%; min-width: 0; scroll-snap-align: start; }
+    .pillars > *, .stats > *, .gallery > *, .svs-filters > *, .live-grid > *, .slides > *, .timeline > *, #historia .chips > * { flex: 0 0 80%; min-width: 0; scroll-snap-align: start; }
     .stats > * { flex-basis: 66%; }
     .live-grid > * { flex-basis: 150px; }
     .svs-filters > * { flex-basis: 70%; }
@@ -343,6 +333,15 @@
     .timeline li { margin: 0; padding: 16px 18px; border-radius: var(--radius); background: var(--panel); border: 1px solid var(--line); }
     .timeline li::before { display: none; }
     .timeline b { display: block; }
+  }
+  /* Móvil: el menú pasa a una segunda fila con los enlaces deslizables de lado */
+  @media (max-width: 760px) {
+    nav { flex-wrap: wrap; row-gap: 6px; padding-bottom: 8px; background: rgba(5, 7, 15, .94); border-bottom: 1px solid var(--line); }
+    nav ul { order: 3; flex: 0 0 100%; overflow-x: auto; white-space: nowrap; gap: 8px; padding-bottom: 2px; scrollbar-width: none; overscroll-behavior-x: contain; }
+    nav ul::-webkit-scrollbar { display: none; }
+    nav ul a { display: inline-block; padding: 5px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); font-size: .82rem; }
+    nav ul a[aria-current="page"], nav ul a.on { color: #05070f; background: var(--teal); border-color: var(--teal); font-weight: 600; }
+    section[id] { scroll-margin-top: 84px; }
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
@@ -365,7 +364,7 @@
     <li><a href="#galeria">Galería</a></li>
     <li><a href="#svs">SVS</a></li>
     <li><a href="#glifos">Glifos</a></li>
-    <li><a href="#actualizacion">Actualización</a></li>
+    <li><a href="actualizacion.html">Actualización</a></li>
     <li><a href="#expediciones">Expediciones</a></li>
     <li><a href="#historia">Historia</a></li>
   </ul>
@@ -515,34 +514,15 @@
   <section id="actualizacion">
     <div class="wrap">
       <h2 class="reveal">Nueva actualización</h2>
-      <div class="fs-hero reveal">
+      <a class="fs-hero fs-link reveal" href="actualizacion.html" aria-label="Ver la actualización Forsaken">
         <img src="img/forsaken/banner.jpg" alt="Una nave biomecánica vuela junto a restos cubiertos de niebla verde en la actualización Forsaken">
         <div class="fs-hero-txt">
           <span class="pill">Update 7.10 · 28 de octubre de 2026 · gratis</span>
           <h3>FORSAKEN</h3>
-          <p>La actualización de Halloween de No Man’s Sky: mercaderes misteriosos, recuerdos macabros, módulos biomecánicos para tu corbeta y la llegada del juego completo a iOS.</p>
+          <p>Mercaderes misteriosos, recuerdos macabros, módulos biomecánicos para tu corbeta y el juego completo en iOS.</p>
+          <span class="btn">Ver la actualización</span>
         </div>
-      </div>
-      <div class="fs-tabs reveal" role="tablist" aria-label="Novedades de Forsaken"><button type="button" role="tab" data-cat="nuevo" aria-selected="true">Lo nuevo</button><button type="button" role="tab" data-cat="corbetas" aria-selected="false">Corbetas</button><button type="button" role="tab" data-cat="juego" aria-selected="false">Jugabilidad</button></div>
-      <div class="fs-grid reveal" id="fsGrid">
-          <figure class="fs-card" data-cat="nuevo" data-view="img/forsaken/comerciantes.jpg"><img src="img/forsaken/comerciantes.jpg" alt="Comerciantes Forsaken" loading="lazy"><figcaption><h4>Comerciantes Forsaken</h4><p>Misteriosos mercaderes que aparecen en las avanzadas espaciales. Aceptan recuerdos a cambio de módulos únicos para tu corbeta.</p></figcaption></figure>
-          <figure class="fs-card" data-cat="nuevo" data-view="img/forsaken/recuerdos.jpg"><img src="img/forsaken/recuerdos.jpg" alt="Recuerdos macabros" loading="lazy"><figcaption><h4>Recuerdos macabros</h4><p>Muestras biológicas escondidas en naves destrozadas, avanzadas infestadas, cargueros abandonados y yacimientos paleontológicos. Atraerlos tiene un precio: los horrores del límite te vigilan.</p></figcaption></figure>
-          <figure class="fs-card" data-cat="nuevo" data-view="img/forsaken/casco.jpg"><img src="img/forsaken/casco.jpg" alt="Casco Larva Tank" loading="lazy"><figcaption><h4>Casco Larva Tank</h4><p>Un casco con una larva parasitaria dentro. Se consigue por tu dedicación a recolectar recuerdos, junto con el título «Mind Harvester».</p></figcaption></figure>
-          <figure class="fs-card" data-cat="nuevo" data-view="img/forsaken/canon.jpg"><img src="img/forsaken/canon.jpg" alt="Cañón de larvas" loading="lazy"><figcaption><h4>Cañón de larvas</h4><p>Nueva multiherramienta con exoesqueleto larval que se obtiene a cambio de larvas conservadas.</p></figcaption></figure>
-          <figure class="fs-card" data-cat="corbetas" hidden data-view="img/forsaken/modulos.jpg"><img src="img/forsaken/modulos.jpg" alt="Módulos siniestros" loading="lazy"><figcaption><h4>Módulos siniestros</h4><p>Una gran variedad de piezas biomecánicas para tu corbeta: estructuras de casco, habitaciones y más, de aspecto inquietante.</p></figcaption></figure>
-          <figure class="fs-card" data-cat="corbetas" hidden data-view="img/forsaken/cabinas1.jpg"><img src="img/forsaken/cabinas1.jpg" alt="Cabinas Vantage y Hornet" loading="lazy"><figcaption><h4>Cabinas Vantage y Hornet</h4><p>La Vantage es ultra ancha, con vista panorámica y un interior minimalista. La Hornet es segmentada, de aspecto insectoide y con tres variantes.</p></figcaption></figure>
-          <figure class="fs-card" data-cat="corbetas" hidden data-view="img/forsaken/cabinas2.jpg"><img src="img/forsaken/cabinas2.jpg" alt="Cabinas Viper y Mantis" loading="lazy"><figcaption><h4>Cabinas Viper y Mantis</h4><p>La Viper lleva paneles de cuero y una «cabeza de serpiente»; la Mantis, paneles cuadrados y barras de titanio. Cada una en tres variantes.</p></figcaption></figure>
-          <figure class="fs-card" data-cat="corbetas" hidden data-view="img/forsaken/interiores.jpg"><img src="img/forsaken/interiores.jpg" alt="Interiores Legion" loading="lazy"><figcaption><h4>Interiores Legion</h4><p>Habitaciones de estilo utilitario, con techos bajos, luces empotradas y ángulos marcados.</p></figcaption></figure>
-          <figure class="fs-card" data-cat="juego" hidden data-view="img/forsaken/ios.jpg"><img src="img/forsaken/ios.jpg" alt="Llega a iOS" loading="lazy"><figcaption><h4>Llega a iOS</h4><p>La experiencia completa de No Man’s Sky en iPhone y iPad, con interfaz táctil y un motor optimizado para cuidar la batería.</p></figcaption></figure>
-          <figure class="fs-card" data-cat="juego" hidden data-view="img/forsaken/hud.jpg"><img src="img/forsaken/hud.jpg" alt="Modo HUD mínimo" loading="lazy"><figcaption><h4>Modo HUD mínimo</h4><p>Oculta la brújula, las barras de protección, los avisos de misión y los marcadores no esenciales para jugar con la pantalla limpia.</p></figcaption></figure>
-          <figure class="fs-card" data-cat="juego" hidden data-view="img/forsaken/mensajeria.jpg"><img src="img/forsaken/mensajeria.jpg" alt="Misiones de mensajería" loading="lazy"><figcaption><h4>Misiones de mensajería</h4><p>Contratos de transporte de larga distancia desde las avanzadas espaciales: entrega los paquetes sanos y salvos.</p></figcaption></figure>
-          <figure class="fs-card" data-cat="juego" hidden data-view="img/forsaken/salto.jpg"><img src="img/forsaken/salto.jpg" alt="Salto estelar continuo" loading="lazy"><figcaption><h4>Salto estelar continuo</h4><p>Selecciona una estrella cercana directamente desde el espacio y viaja hasta ella sin abrir el mapa galáctico.</p></figcaption></figure>
-          <figure class="fs-card" data-cat="juego" hidden data-view="img/forsaken/radial.jpg"><img src="img/forsaken/radial.jpg" alt="Rueda de armas" loading="lazy"><figcaption><h4>Rueda de armas</h4><p>Un selector radial para cambiar rápido entre las armas y utilidades de la multiherramienta.</p></figcaption></figure>
-          <figure class="fs-card" data-cat="juego" hidden data-view="img/forsaken/bases.jpg"><img src="img/forsaken/bases.jpg" alt="Bases espaciales para compartir" loading="lazy"><figcaption><h4>Bases espaciales para compartir</h4><p>Sube tus bases orbitales al servidor para que otros jugadores las visiten.</p></figcaption></figure>
-          <figure class="fs-card" data-cat="juego" hidden data-view="img/forsaken/chatarra.jpg"><img src="img/forsaken/chatarra.jpg" alt="Chatarreo espacial" loading="lazy"><figcaption><h4>Chatarreo espacial</h4><p>Mejor guía para extraer tecnología y minerales de restos de naves y cinturones de asteroides con la bobina Gravitino.</p></figcaption></figure>
-          <figure class="fs-card" data-cat="juego" hidden data-view="img/forsaken/batallas.jpg"><img src="img/forsaken/batallas.jpg" alt="Batallas en el espacio profundo" loading="lazy"><figcaption><h4>Batallas en el espacio profundo</h4><p>Combates de criaturas en la Holo-Arena de las avanzadas espaciales, con nuevos rivales.</p></figcaption></figure>
-      </div>
-      <p class="live-note">Información e imágenes de las notas oficiales de Hello Games (<a href="https://www.nomanssky.com/forsaken-update/" target="_blank" rel="noopener">nomanssky.com</a>). Toca una imagen para verla en grande.</p>
+      </a>
     </div>
   </section>
 
@@ -804,17 +784,6 @@
       });
   })();
 
-  // Forsaken: pestañas que muestran solo las tarjetas de una categoría.
-  (function () {
-    var tabs = document.querySelectorAll('.fs-tabs button'), cards = document.querySelectorAll('#fsGrid .fs-card');
-    tabs.forEach(function (t) {
-      t.addEventListener('click', function () {
-        tabs.forEach(function (o) { o.setAttribute('aria-selected', o === t ? 'true' : 'false'); });
-        cards.forEach(function (c) { c.hidden = c.dataset.cat !== t.dataset.cat; });
-      });
-    });
-  })();
-
   // Expediciones: datos en expeditions.json, imágenes en img/expediciones/<carpeta>/ (insignia + capturas).
   // Todo se navega en el mismo lugar: flechas, tira de insignias, teclado o deslizando.
   (function () {
@@ -994,7 +963,7 @@
       .catch(function (err) { lbActions(f); alert(err.message); });
   }
   document.addEventListener('click', function (e) {
-    var f = e.target.closest && e.target.closest('.gallery figure, .fs-card');
+    var f = e.target.closest && e.target.closest('.gallery figure');
     if (!f) return;
     // La "galería" actual son las imágenes visibles junto a la pulsada (p. ej. solo las del jugador elegido)
     lbList = Array.prototype.filter.call(f.parentElement.children, function (el) { return el.tagName === 'FIGURE' && !el.hidden; });
@@ -1023,6 +992,24 @@
     var dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
     if (lbList.length > 1 && Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) lbShow(lbIdx + (dx < 0 ? 1 : -1));
   }, { passive: true });
+
+  // Menú: resalta el enlace de la sección visible y lo mantiene a la vista en la tira del móvil
+  (function () {
+    var links = Array.prototype.filter.call(document.querySelectorAll('nav ul a'), function (a) { return a.getAttribute('href').charAt(0) === '#'; });
+    var pares = links.map(function (a) { return [a, document.querySelector(a.getAttribute('href'))]; }).filter(function (p) { return p[1]; });
+    if (!pares.length) return;
+    var actual = null;
+    function marca() {
+      var y = innerHeight * .35, sel = null;
+      pares.forEach(function (p) { if (p[1].getBoundingClientRect().top <= y) sel = p[0]; });
+      if (sel === actual) return;
+      actual = sel;
+      links.forEach(function (a) { a.classList.toggle('on', a === sel); });
+      var ul = sel && sel.closest('ul');
+      if (ul && ul.scrollWidth > ul.clientWidth) ul.scrollTo({ left: sel.offsetLeft - (ul.clientWidth - sel.offsetWidth) / 2, behavior: 'smooth' });
+    }
+    addEventListener('scroll', marca, { passive: true }); marca();
+  })();
 </script>
 </body>
 </html>

@@ -138,7 +138,15 @@
     .plant:not(.sel) { display: none; }
     .plant { margin-top: 14px; }
   }
-  @media (max-width: 760px) { nav ul { display: none; } }
+  /* Móvil: el menú pasa a una segunda fila con los enlaces deslizables de lado */
+  @media (max-width: 760px) {
+    nav { flex-wrap: wrap; row-gap: 6px; padding-bottom: 8px; background: rgba(5, 7, 15, .94); border-bottom: 1px solid var(--line); }
+    nav ul { order: 3; flex: 0 0 100%; overflow-x: auto; white-space: nowrap; gap: 8px; padding-bottom: 2px; scrollbar-width: none; overscroll-behavior-x: contain; }
+    nav ul::-webkit-scrollbar { display: none; }
+    nav ul a { display: inline-block; padding: 5px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); font-size: .82rem; }
+    nav ul a[aria-current="page"], nav ul a.on { color: #05070f; background: var(--teal); border-color: var(--teal); font-weight: 600; }
+    section[id] { scroll-margin-top: 84px; }
+  }
 
   .reveal { opacity: 0; transform: translateY(26px); transition: opacity .8s, transform .8s; }
   .reveal.in { opacity: 1; transform: none; }
@@ -158,6 +166,7 @@
   <a class="logo" href="index.html">No Man's Sky</a>
   <ul>
     <li><a href="index.html">Inicio</a></li>
+    <li><a href="actualizacion.html">Actualización</a></li>
     <li><a href="#que-son">¿Qué son?</a></li>
     <li><a href="#plantas">Plantas</a></li>
     <li><a href="#naves">Naves</a></li>
@@ -371,6 +380,24 @@
           ? 'Para ver los glifos abre la página con el servidor: ejecuta "node server.js" y entra a http://localhost:8080/glifos.html'
           : 'No se pudieron cargar los glifos ahora.';
       });
+  })();
+
+  // Menú: resalta el enlace de la sección visible y lo mantiene a la vista en la tira del móvil
+  (function () {
+    var links = Array.prototype.filter.call(document.querySelectorAll('nav ul a'), function (a) { return a.getAttribute('href').charAt(0) === '#'; });
+    var pares = links.map(function (a) { return [a, document.querySelector(a.getAttribute('href'))]; }).filter(function (p) { return p[1]; });
+    if (!pares.length) return;
+    var actual = null;
+    function marca() {
+      var y = innerHeight * .35, sel = null;
+      pares.forEach(function (p) { if (p[1].getBoundingClientRect().top <= y) sel = p[0]; });
+      if (sel === actual) return;
+      actual = sel;
+      links.forEach(function (a) { a.classList.toggle('on', a === sel); });
+      var ul = sel && sel.closest('ul');
+      if (ul && ul.scrollWidth > ul.clientWidth) ul.scrollTo({ left: sel.offsetLeft - (ul.clientWidth - sel.offsetWidth) / 2, behavior: 'smooth' });
+    }
+    addEventListener('scroll', marca, { passive: true }); marca();
   })();
 </script>
 </body>
