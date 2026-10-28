@@ -321,6 +321,29 @@
     .poster { max-width: 280px; margin-inline: auto; }
     nav ul { display: none; }
   }
+  /* Móvil: cada sección se recorre de lado (deslizando) en vez de alargar la página */
+  @media (max-width: 760px) {
+    .pillars, .stats, .gallery, .svs-filters, .fs-grid, .live-grid, .slides, .timeline, #historia .chips {
+      display: flex; flex-wrap: nowrap; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
+      gap: 14px; padding-bottom: 14px; scrollbar-width: thin; scrollbar-color: var(--line) transparent; -webkit-overflow-scrolling: touch;
+    }
+    .pillars > *, .stats > *, .gallery > *, .svs-filters > *, .fs-grid > *, .live-grid > *, .slides > *, .timeline > *, #historia .chips > * { flex: 0 0 80%; min-width: 0; scroll-snap-align: start; }
+    .stats > * { flex-basis: 66%; }
+    .live-grid > * { flex-basis: 150px; }
+    .svs-filters > * { flex-basis: 70%; }
+    .gallery > * { align-self: flex-start; }
+    #historia .chips > * { flex: 0 0 auto; }
+    .about > * { min-width: 0; }
+    .poster { max-width: 190px; }
+    .slides > * { flex-basis: 88%; margin: 0 !important; padding: 16px 18px; border-radius: var(--radius); background: var(--panel); border: 1px solid var(--line); }
+    .slides > .quote { border-left: 3px solid var(--pink); }
+    .rss .slides { margin-top: 14px; }
+    .rss .slides > p { color: #cfe0e6; }
+    .timeline { border-left: 0; padding-left: 0; }
+    .timeline li { margin: 0; padding: 16px 18px; border-radius: var(--radius); background: var(--panel); border: 1px solid var(--line); }
+    .timeline li::before { display: none; }
+    .timeline b { display: block; }
+  }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .reveal { opacity: 1; transform: none; transition: none; }
@@ -364,6 +387,7 @@
       <div class="poster reveal"><img src="img/portada.jpg" alt="Portada oficial de No Man's Sky"></div>
       <div class="reveal">
         <h2>¿De qué trata?</h2>
+        <div class="slides">
         <p style="margin-top:18px">
           <strong>No Man's Sky</strong> es un juego de exploración y supervivencia desarrollado y publicado por el estudio
           independiente <strong>Hello Games</strong>. Despiertas como un viajero solo, junto a una nave averiada, en un planeta
@@ -381,6 +405,7 @@
         </p>
         <div class="quote">
           Su creador, Sean Murray, quería capturar la sensación de asombro y optimismo de la ciencia ficción de los años 70 y 80.
+        </div>
         </div>
       </div>
     </div>
@@ -453,6 +478,7 @@
             <span class="chip">Comunidad hispanohablante</span><span class="chip">+4.500 miembros</span><span class="chip">Estatus Nexus</span><span class="chip">Discord</span>
           </div>
         </div>
+        <div class="slides">
         <p>
           La RSS es una comunidad reconocida como <strong>HUB de Espacio Civilizado</strong>: un refugio y una guía para viajeros
           hispanohablantes, tanto nuevos como veteranos. Tiene presencia en la galaxia Euclides, Eissentam, la Dimensión Hilbert y otras,
@@ -463,6 +489,7 @@
           y una gran base de conocimiento. En agosto de 2025 alcanzó el <strong>estatus Nexus</strong> al registrar 100 bases de sus miembros,
           y su canal oficial de comunicación es un servidor de Discord.
         </p>
+        </div>
         <p class="live-note">Datos tomados de la <a href="https://nomanssky.fandom.com/wiki/Royal_Space_Society" target="_blank" rel="noopener">wiki de No Man's Sky</a>; las cifras pueden haber cambiado. No somos el sitio oficial de la RSS.</p>
       </aside>
 
