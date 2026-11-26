@@ -217,6 +217,18 @@
   a.fs-link:hover, a.fs-link:focus-visible { transform: translateY(-4px); border-color: var(--teal); box-shadow: 0 12px 40px rgba(77, 227, 208, .2); outline: none; }
   .fs-hero-txt .btn { display: inline-block; margin-top: 14px; }
 
+  /* Herramientas: tarjeta ancha que lleva a utilidades externas de la comunidad */
+  #herramientas { padding: 36px 0; }
+  a.tool { display: grid; grid-template-columns: auto 1fr; gap: clamp(16px, 3vw, 30px); align-items: center; margin-top: 28px; padding: clamp(20px, 4vw, 34px); border-radius: var(--radius); background: var(--panel); border: 1px solid var(--line); backdrop-filter: blur(8px); color: inherit; text-decoration: none; transition: transform .25s, border-color .25s, box-shadow .25s; }
+  a.tool:hover, a.tool:focus-visible { transform: translateY(-4px); border-color: var(--teal); box-shadow: 0 12px 40px rgba(77, 227, 208, .2); outline: none; }
+  .tool-ico { display: grid; place-items: center; width: clamp(64px, 12vw, 96px); aspect-ratio: 1; border-radius: 22px; font-size: clamp(2rem, 6vw, 3rem); background: radial-gradient(circle at 30% 25%, rgba(77, 227, 208, .35), rgba(255, 111, 168, .18) 70%); border: 1px solid var(--line); }
+  .tool h3 { margin: 8px 0 6px; font-size: clamp(1.4rem, 3.4vw, 2rem); letter-spacing: .06em; background: linear-gradient(90deg, var(--teal), var(--pink)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .tool p { color: #cfe0e6; max-width: 760px; }
+  .tool .chips { margin-top: 12px; }
+  .tool .btn { display: inline-block; margin-top: 16px; }
+  .tool-note { margin-top: 12px; }
+  @media (max-width: 760px) { a.tool { grid-template-columns: 1fr; } .tool-ico { width: 64px; } }
+
   /* Expediciones: escenario con fondo, ficha y tira de insignias (todo se navega sin hacer scroll) */
   #expediciones { padding: 84px 0 36px; }
   #expediciones .lead { max-width: 1000px; }
@@ -364,6 +376,7 @@
     <li><a href="#galeria">Galería</a></li>
     <li><a href="#svs">SVS</a></li>
     <li><a href="#glifos">Glifos</a></li>
+    <li><a href="#herramientas">Herramientas</a></li>
     <li><a href="actualizacion.html">Actualización</a></li>
     <li><a href="#expediciones">Expediciones</a></li>
     <li><a href="#historia">Historia</a></li>
@@ -508,6 +521,28 @@
         Reunimos direcciones recientes de bases para farmear cada planta y de sistemas donde aparecen naves clase S, para que llegues directo.
       </p>
       <p class="reveal" style="margin-top:22px"><a class="btn" href="glifos.html">Ver los glifos</a></p>
+    </div>
+  </section>
+
+  <section id="herramientas">
+    <div class="wrap">
+      <h2 class="reveal">Herramientas</h2>
+      <p class="lead reveal">Utilidades de la comunidad para jugar mejor, a un clic de distancia.</p>
+      <a class="tool reveal" href="https://nms-optimizer.app/?platform=standard" target="_blank" rel="noopener" aria-label="Abrir NMS Optimizer, sitio externo (se abre en una pestaña nueva)">
+        <div class="tool-ico" aria-hidden="true">🧩</div>
+        <div>
+          <span class="pill ok"><i></i>Gratis · sin registro · sin anuncios</span>
+          <h3>NMS Optimizer</h3>
+          <p>
+            Acomoda por ti los módulos de tecnología de tu <strong>nave, multiherramienta, exovehículo, nave capital o corbeta</strong> para sacarles
+            el máximo: calcula la mejor posición de cada módulo para aprovechar los bonos de adyacencia y las casillas supercargadas.
+            Marcas tus casillas, eliges los módulos, pulsas «resolver» y reproduces la distribución en tu partida.
+          </p>
+          <div class="chips"><span class="chip">Naves</span><span class="chip">Multiherramienta</span><span class="chip">Exovehículos</span><span class="chip">Corbetas</span><span class="chip">Guarda y comparte tu diseño</span></div>
+          <span class="btn">Abrir el optimizador ↗</span>
+        </div>
+      </a>
+      <p class="live-note tool-note reveal">Sitio externo hecho por la comunidad; no es nuestro ni de Hello Games. Se abre en una pestaña nueva.</p>
     </div>
   </section>
 
